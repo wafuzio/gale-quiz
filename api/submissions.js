@@ -1,6 +1,43 @@
+var createClient = require("redis").createClient;
+
 function json(res, status, payload) {
   res.status(status).setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
+}
+
+var redisClientPromise;
+
+function hasRedisUrl() {
+  return Boolean(process.env.REDIS_URL);
+}
+
+function getRedisClient() {
+  if (!hasRedisUrl()) return Promise.resolve(null);
+  if (!redisClientPromise) {
+    var client = createClient({ url: process.env.REDIS_URL });
+    client.on("error", function() {});
+    redisClientPromise = client.connect().then(function() { return client; });
+  }
+  return redisClientPromise;
+}
+
+async function redisAppendSubmission(record) {
+  var client = await getRedisClient();
+  if (!client) throw new Error("Missing REDIS_URL");
+  await client.rPush("galeQuizSubmissions", JSON.stringify(record));
+}
+
+async function redisGetSubmissions() {
+  var client = await getRedisClient();
+  if (!client) throw new Error("Missing REDIS_URL");
+  var rows = await client.lRange("galeQuizSubmissions", 0, -1);
+  return rows.map(function(item) {
+    try {
+      return JSON.parse(item);
+    } catch (e) {
+      return null;
+    }
+  }).filter(Boolean);
 }
 
 async function kvGet(key) {
@@ -58,10 +95,14 @@ module.exports = async function handler(req, res) {
         payload: body
       };
 
-      var all = await kvGet("galeQuizSubmissions");
-      var submissions = Array.isArray(all) ? all : [];
-      submissions.push(record);
-      await kvSet("galeQuizSubmissions", submissions);
+      if (hasRedisUrl()) {
+        await redisAppendSubmission(record);
+      } else {
+        var all = await kvGet("galeQuizSubmissions");
+        var submissions = Array.isArray(all) ? all : [];
+        submissions.push(record);
+        await kvSet("galeQuizSubmissions", submissions);
+      }
 
       return json(res, 200, { ok: true, id: id });
     } catch (err) {
@@ -82,7 +123,7 @@ module.exports = async function handler(req, res) {
         }
       }
 
-      var allData = await kvGet("galeQuizSubmissions");
+      var allData = hasRedisUrl() ? await redisGetSubmissions() : await kvGet("galeQuizSubmissions");
       var rows = Array.isArray(allData) ? allData : [];
       return json(res, 200, { count: rows.length, submissions: rows });
     } catch (err2) {
