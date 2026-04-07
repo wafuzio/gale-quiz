@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>GALE Quiz App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&family=Roboto:wght@100&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #080808;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 36px 24px 100px;
+    }
+    .app-shell { max-width: 980px; margin: 0 auto; }
+    .gale-wordmark {
+      width: 112px;
+      height: auto;
+      margin-bottom: 28px;
+      display: block;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      color: rgba(255,255,255,0.75);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .slide-index {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #FD6453;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .slide-index::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: #FD6453;
+    }
+    #saveStatus {
+      display: none;
+    }
+    .preview-wrap {
+      background: #080808;
+      border: 1px solid rgba(255,255,255,0.09);
+      padding: clamp(24px, 5vw, 56px);
+      min-height: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+    .watermark-num {
+      position: absolute;
+      bottom: 16px;
+      right: 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(58px, 14vw, 120px);
+      color: #fff;
+      opacity: 0.05;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .accent-bar { width: 40px; height: 2px; background: #FD6453; margin-bottom: 18px; }
+    .style-display {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 6vw, 84px);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .style-section {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(30px, 4vw, 60px);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .style-label-tag {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FD6453;
+      margin-bottom: 10px;
+    }
+    .style-body {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.95);
+      max-width: 760px;
+    }
+    .option-list {
+      margin-top: 24px;
+      display: grid;
+      gap: 10px;
+      max-width: 760px;
+    }
+    .option-list.usage-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 920px;
+    }
+    .option-btn,
+    .check-item {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: #101010;
+      color: #fff;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 15px;
+      line-height: 1.45;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      cursor: pointer;
+      width: 100%;
+    }
+    .option-btn[aria-pressed="true"],
+    .check-item.active {
+      border-color: #FD6453;
+      background: rgba(253,100,83,0.14);
+    }
+    .option-btn:hover,
+    .check-item:hover {
+      border-color: rgba(253,100,83,0.75);
+      background: rgba(253,100,83,0.08);
+    }
+    .check-item input { margin-right: 10px; accent-color: #FD6453; }
+    .check-item label { cursor: pointer; display: flex; align-items: flex-start; }
+    .nav-row {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-group { display: flex; gap: 10px; }
+    .btn {
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: #fff;
+      padding: 10px 16px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+    .btn.primary { border-color: #FD6453; background: #FD6453; color: #080808; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .status-line { font-size: 12px; color: rgba(255,255,255,0.7); min-height: 18px; }
+    .result-panel {
+      margin-top: 22px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #0f0f0f;
+      padding: 16px;
+    }
+    .result-panel pre {
+      margin-top: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      color: rgba(255,255,255,0.88);
+    }
+    .result-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .progress-track {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      z-index: 200;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: #FD6453;
+      transition: width 0.22s ease;
+    }
+    .followup-area {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .score-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .score-cell {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #101010;
+      padding: 12px;
+      text-align: center;
+    }
+    .score-cell .sc-label {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 6px;
+    }
+    .score-cell .sc-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: #FD6453;
+    }
+    .flag-list {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .flag-tag {
+      font-size: 12px;
+      padding: 5px 10px;
+      border: 1px solid rgba(253,100,83,0.4);
+      background: rgba(253,100,83,0.08);
+      color: #FD6453;
+      letter-spacing: 0.04em;
+    }
+    .subtag-tag {
+      font-size: 12px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.04em;
+    }
+    .intro-copy {
+      font-family: 'Roboto', sans-serif;
+      font-size: clamp(24px, 3.8vw, 42px);
+      line-height: 1.35;
+      font-weight: 100;
+      max-width: 860px;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+    .intro-copy p + p {
+      margin-top: 16px;
+    }
+    .intro-nav {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .intro-arrow {
+      border: 1px solid rgba(255,255,255,0.2);
+      background: #101010;
+      color: #fff;
+      font-size: 20px;
+      width: 42px;
+      height: 42px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .intro-arrow:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .intro-step {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-left: 6px;
+    }
+    .merge-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(253,180,50,0.4);
+      background: rgba(253,180,50,0.08);
+      color: rgba(253,220,100,0.95);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    @media (max-width: 760px) {
+      body { padding: 24px 14px 88px; }
+      .nav-row { flex-direction: column; align-items: stretch; }
+      .nav-group { width: 100%; }
+      .btn { flex: 1; }
+      .option-list.usage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      .option-list.usage-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <img class="gale-wordmark" src="608c6a3b589f3737b86b883c_GALE%20Logo.svg" alt="GALE">
+    <div class="meta-row">
+      <span>AI SKILLS - FOCUS CONTENT CALIBRATION</span>
+      <span id="saveStatus">Not saved yet</span>
+    </div>
+    <section id="slideSection">
+      <div id="slideIndex" class="slide-index">Loading</div>
+      <div class="preview-wrap" id="slideCard"></div>
+      <div class="nav-row">
+        <div class="status-line" id="statusLine"></div>
+        <div class="nav-group">
+          <button class="btn" id="backBtn" type="button">Back</button>
+          <button class="btn primary" id="nextBtn" type="button">Next</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+  <script>
+    var DRAFT_KEY = "galeQuizDraftV5";
+    var SUBMISSION_KEY = "galeQuizSubmissionsV5";
+    var SUBMISSION_API_ENDPOINT = "/api/submissions";
+
+    var coreQuestions = [
+      {
+        id: "q1", stage: "Core Skills", area: "Basic Usage",
+        prompt: "Do you use AI tools like ChatGPT, Claude, or Copilot for work tasks at least a few times a month?",
+        followup: {
+          id: "q1a",
+          prompt: "Which best describes where you are?",
+          options: [
+            { text: "I haven\u2019t really had the chance to try AI tools yet", points: 0 },
+            { text: "I\u2019ve tried them a couple of times but they didn\u2019t stick", points: 1.5 },
+            { text: "I use them for personal stuff but not for work", points: 1 }
+          ]
+        }
+      },
+      {
+        id: "q3", stage: "Core Skills", area: "Iterative Refinement",
+        prompt: "When AI gives you a weak result, do you rewrite your prompt — changing what you asked for or how you asked it — rather than just trying again?",
+        mainOptions: ["Yes", "Sometimes", "No"],
+        followup: {
+          id: "q3a",
+          prompt: "What do you usually do with a bad result?",
+          options: [
+            { text: "I mostly accept what I get or give up", points: 0 },
+            { text: "I try again with roughly the same request", points: 1 },
+            { text: "I make small changes but I\u2019m not sure what actually helps", points: 1.5 }
+          ]
+        }
+      },
+      {
+        id: "q4", stage: "Core Skills", area: "Document & Data Work",
+        prompt: "Have you given AI a document, spreadsheet, or dataset and used the output in actual work — not just tested it?",
+        followup: {
+          id: "q4a",
+          prompt: "Which is closest?",
+          options: [
+            { text: "I just haven’t prioritized it against what I already know works", points: 0 },
+            { text: "I’ve thought about it but haven’t had the right use case", points: 1 },
+            { text: "I tried but the output wasn’t good enough to use", points: 1.5 }
+          ]
+        }
+      },
+      {
+        id: "q5", stage: "Core Skills", area: "Multi-Step Prompting",
+        prompt: "Have you intentionally broken a complex task into multiple prompt steps — feeding the output from one step into the next — to get a better result?",
+        followup: {
+          id: "q5a",
+          prompt: "Which sounds most like you?",
+          options: [
+            { text: "I handle everything in a single prompt", points: 0 },
+            { text: "I\u2019ve gone back and forth with AI but not in a deliberate, structured way", points: 1.5 },
+            { text: "I didn\u2019t know that was a technique", points: 0 }
+          ]
+        }
+      },
+      {
+        id: "q6", stage: "Core Skills", area: "Automation & Integration",
+        prompt: "Have you connected AI to other tools or workflows — through APIs, automation platforms like Zapier or Make, or custom code?",
+        followup: {
+          id: "q6a",
+          prompt: "Which is closest?",
+          options: [
+            { text: "I\u2019m not sure what that means technically", points: 0 },
+            { text: "I know it\u2019s possible but it\u2019s beyond my current skills", points: 1 },
+            { text: "I\u2019ve explored it but haven\u2019t built anything yet", points: 1.5 }
+          ]
+        }
+      }
+    ];
+
+    var usageAreas = [
+      "Q and A",
+      "Research",
+      "Analytics",
+      "Strategy",
+      "Computation",
+      "Automation",
+      "Content Creation",
+      "Communication",
+      "Ideation"
+    ];
+
+    var usageQuestions = [
+      {
+        id: "q2", stage: "Core Skills", type: "multi",
+        prompt: "Which of these areas do you currently use AI for? (Select all that apply)",
+        options: usageAreas
+      },
+      {
+        id: "q2b", stage: "Core Skills", type: "multi",
+        prompt: "Which of these do you generally already feel comfortable using in your daily work life? (Select all that apply)",
+        options: usageAreas
+      },
+      {
+        id: "q2c", stage: "Core Skills", type: "multi",
+        prompt: "Which of these areas feel like blind spots that you want to learn first? (Select all that apply)",
+        options: usageAreas
+      }
+    ];
+
+    var calibrationQuestions = [
+      {
+        id: "c1", stage: "Calibration", type: "multi",
+        prompt: "Which of these describe your current AI use? (Select all that apply)",
+        options: [
+          "I use AI for quick drafting and first-pass outputs",
+          "I provide structured prompts with role, audience, and constraints",
+          "I regularly use AI with documents or data as part of real work",
+          "I use AI in recurring workflows across projects",
+          "I connect AI to other systems, tools, or automations"
+        ]
+      },
+      {
+        id: "c2", stage: "Calibration", type: "single",
+        prompt: "When AI output is wrong or made-up, which best describes your current practice?",
+        options: [
+          "I usually catch it early and verify before I use it",
+          "I catch some issues, but not consistently",
+          "I often realize it later or after it is already shared"
+        ]
+      },
+      {
+        id: "c3", stage: "Calibration", type: "multi",
+        prompt: "Before using AI output in real work, what checks do you usually do? (Select all that apply)",
+        options: [
+          "Use it mostly as-is",
+          "Give it a quick read-through",
+          "Check specific facts, tone, or accuracy",
+          "Verify against original sources before using anything"
+        ]
+      }
+    ];
+
+    var signalQuestions = [
+      {
+        id: "s1", stage: "Qualifying Signals", type: "multi",
+        prompt: "Which of these have you done?",
+        options: [
+          "Given AI specific examples before asking it to generate something similar",
+          "Assigned AI a role or persona (e.g., \u201cAct as a senior editor...\u201d)",
+          "Created a reusable prompt template you use more than once",
+          "None of these"
+        ]
+      },
+      {
+        id: "s2", stage: "Qualifying Signals", type: "multi",
+        prompt: "Which of these have you done with data or documents?",
+        options: [
+          "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+          "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+          "Used AI-generated output to create a deliverable you shared with others",
+          "None of these"
+        ]
+      },
+      {
+        id: "s3", stage: "Qualifying Signals", type: "multi",
+        prompt: "Which of these have you done?",
+        options: [
+          "Used AI as a regular part of a recurring workflow",
+          "Connected AI to other tools through an automation platform",
+          "Written code that calls an AI API",
+          "Built a custom tool or app powered by AI",
+          "None of these"
+        ]
+      }
+    ];
+
+    var slideOrder = ["intro", "q1", "q2", "q2b", "q2c", "q3", "q4", "q5", "q6", "c1", "c2", "c3", "s1", "s2", "s3", "summary"];
+    var introSlides = [
+      'This 5-minute quiz helps us understand how you use AI today — so we can offer training that actually fits where you are.',
+      'WE ARE ASKING ABOUT WHAT YOU HAVE ACTUALLY DONE, NOT WHAT YOU\'VE HEARD ABOUT OR WANT TO LEARN.',
+      'Your honest responses tell us where to focus, not where you are lacking.<br>Results stay with the training team.'
+    ];
+
+    /* Question IDs in presentation order (excludes intro and summary) */
+    var questionSlideIds = slideOrder.filter(function(s) { return s !== "intro" && s !== "summary"; });
+    var TOTAL_QUESTIONS = questionSlideIds.length; /* 14 */
+
+    function getQuestionNumber(slideId) {
+      var idx = questionSlideIds.indexOf(slideId);
+      return idx >= 0 ? idx + 1 : 0;
+    }
+
+    function zeroPad(n) {
+      return n < 10 ? "0" + n : "" + n;
+    }
+
+    var coreMap = {};
+    coreQuestions.forEach(function(q) { coreMap[q.id] = q; });
+    var usageMap = {};
+    usageQuestions.forEach(function(q) { usageMap[q.id] = q; });
+    var calMap = {};
+    calibrationQuestions.forEach(function(q) { calMap[q.id] = q; });
+    var sigMap = {};
+    signalQuestions.forEach(function(q) { sigMap[q.id] = q; });
+
+    var state = {
+      currentSlide: "intro",
+      history: [],
+      responses: {},
+      lastResult: null,
+      introStep: 0
+    };
+
+    var slideCard = document.getElementById("slideCard");
+    var slideIndex = document.getElementById("slideIndex");
+    var statusLine = document.getElementById("statusLine");
+    var saveStatus = document.getElementById("saveStatus");
+    var progressFill = document.getElementById("progressFill");
+    var backBtn = document.getElementById("backBtn");
+    var nextBtn = document.getElementById("nextBtn");
+
+    function loadDraft() {
+      var raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      try {
+        var parsed = JSON.parse(raw);
+        state.responses = parsed.responses || {};
+        state.history = parsed.history || [];
+        state.currentSlide = parsed.currentSlide || "intro";
+        state.introStep = typeof parsed.introStep === "number" ? parsed.introStep : 0;
+        saveStatus.textContent = parsed.updatedAt ? "Draft saved " + new Date(parsed.updatedAt).toLocaleTimeString() : "Draft loaded";
+      } catch (e) {
+        saveStatus.textContent = "Draft unreadable";
+      }
+    }
+
+    function saveDraft() {
+      var payload = {
+        currentSlide: state.currentSlide,
+        introStep: state.introStep,
+        history: state.history,
+        responses: state.responses,
+        updatedAt: new Date().toISOString()
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+      saveStatus.textContent = "Draft saved " + new Date(payload.updatedAt).toLocaleTimeString();
+      updateProgress();
+    }
+
+    function getNextSlide(slideId) {
+      var idx = slideOrder.indexOf(slideId);
+      if (idx < 0 || idx >= slideOrder.length - 1) return "summary";
+      return slideOrder[idx + 1];
+    }
+
+    function isSlideAnswered(slideId) {
+      if (slideId === "intro" || slideId === "summary") return true;
+      var usage = usageMap[slideId];
+      if (usage) {
+        var usageVal = state.responses[usage.id];
+        return Array.isArray(usageVal) && usageVal.length > 0;
+      }
+      var core = coreMap[slideId];
+      if (core) {
+        var mainAns = state.responses[core.id];
+        if (!mainAns) return false;
+        if (mainAns === "No") {
+          return Boolean(state.responses[core.followup.id]);
+        }
+        return true;
+      }
+      var cal = calMap[slideId];
+      if (cal) {
+        if (cal.type === "multi") {
+          var calVal = state.responses[cal.id];
+          return Array.isArray(calVal) && calVal.length > 0;
+        }
+        return Boolean(state.responses[cal.id]);
+      }
+      var sig = sigMap[slideId];
+      if (sig) {
+        var val = state.responses[sig.id];
+        return Array.isArray(val) && val.length > 0;
+      }
+      return true;
+    }
+
+    function computeScore() {
+      var total = 0;
+      var breakdown = {};
+      var coreWeights = {
+        q1: 1,
+        q3: 2,
+        q4: 1,
+        q5: 3,
+        q6: 3
+      };
+
+      coreQuestions.forEach(function(q) {
+        var ans = state.responses[q.id];
+        var weight = coreWeights[q.id] || 1;
+        if (ans === "Yes") {
+          breakdown[q.id] = weight;
+          total += weight;
+        } else if (ans === "No") {
+          var fuAns = state.responses[q.followup.id];
+          var pts = 0;
+          if (fuAns) {
+            q.followup.options.forEach(function(opt) {
+              if (opt.text === fuAns) {
+                var normalized = Math.max(0, Math.min(1, opt.points / 1.5));
+                pts = Math.round((normalized * weight * 0.65) * 10) / 10;
+              }
+            });
+          }
+          breakdown[q.id] = pts;
+          total += pts;
+        } else {
+          breakdown[q.id] = 0;
+        }
+      });
+
+      var q2Used = Array.isArray(state.responses.q2) ? state.responses.q2 : [];
+      var q2Comfort = Array.isArray(state.responses.q2b) ? state.responses.q2b : [];
+      var q2Blind = Array.isArray(state.responses.q2c) ? state.responses.q2c : [];
+      var comfortScore = Math.min(3.2, q2Comfort.length * 0.55);
+      var usageBreadthScore = Math.min(1.8, q2Used.length * 0.2);
+      var blindGapCount = q2Blind.filter(function(area) { return q2Comfort.indexOf(area) < 0; }).length;
+      var blindSpotPenalty = Math.min(2.6, blindGapCount * 0.45);
+      var q2ProfileScore = Math.round((comfortScore + usageBreadthScore - blindSpotPenalty) * 10) / 10;
+      breakdown.q2_profile = q2ProfileScore;
+      total += q2ProfileScore;
+
+      var c2ScoreMap = {
+        "I usually catch it early and verify before I use it": 1.5,
+        "I catch some issues, but not consistently": 0.8,
+        "I often realize it later or after it is already shared": 0
+      };
+      total += c2ScoreMap[state.responses.c2] || 0;
+
+      var c3 = Array.isArray(state.responses.c3) ? state.responses.c3 : [];
+      if (c3.indexOf("Give it a quick read-through") >= 0) total += 0.5;
+      if (c3.indexOf("Check specific facts, tone, or accuracy") >= 0) total += 1.1;
+      if (c3.indexOf("Verify against original sources before using anything") >= 0) total += 1.4;
+      if (c3.length === 1 && c3[0] === "Use it mostly as-is") {
+        total += 0;
+      }
+
+      var s1 = Array.isArray(state.responses.s1) ? state.responses.s1.filter(function(e) { return e !== "None of these"; }) : [];
+      if (s1.length >= 2) total += 1.2;
+      else if (s1.length === 1) total += 0.6;
+
+      var s2 = Array.isArray(state.responses.s2) ? state.responses.s2 : [];
+      var s2Map = {
+        "Pasted raw data (spreadsheet, CSV) into AI for analysis": 0.8,
+        "Asked AI to synthesize multiple messy sources into a usable brief with recommendations": 1.2,
+        "Used AI-generated output to create a deliverable you shared with others": 1.4
+      };
+      var s2Pts = 0;
+      s2.forEach(function(opt) {
+        if (s2Map[opt]) s2Pts += s2Map[opt];
+      });
+      total += Math.min(2.2, s2Pts);
+
+      var s3 = Array.isArray(state.responses.s3) ? state.responses.s3 : [];
+      var s3Map = {
+        "Used AI as a regular part of a recurring workflow": 0.8,
+        "Connected AI to other tools through an automation platform": 1.6,
+        "Written code that calls an AI API": 1.8,
+        "Built a custom tool or app powered by AI": 2.2
+      };
+      var s3Pts = 0;
+      s3.forEach(function(opt) {
+        if (s3Map[opt]) s3Pts += s3Map[opt];
+      });
+      total += Math.min(3.2, s3Pts);
+
+      return { total: Math.round(total * 10) / 10, breakdown: breakdown };
+    }
+
+    function computeTier(score) {
+      if (score >= 18) {
+        return {
+          name: "Tier 3",
+          label: "Ready to fully integrate rich experience into GALE systems",
+          desc: "Strong evidence of advanced application, automation depth, and reliable quality controls"
+        };
+      }
+      if (score >= 12) {
+        return {
+          name: "Tier 2",
+          label: "Ready to expand current use cases",
+          desc: "Consistent practical usage with room to scale into stronger cross-team and system-level workflows"
+        };
+      }
+      return {
+        name: "Tier 1",
+        label: "Ready to apply the fundamentals",
+        desc: "Can execute solid core workflows and should focus on repeatable quality and verification habits"
+      };
+    }
+
+    function toTierNumber(tierName) {
+      var map = { "Tier 1": 1, "Tier 2": 2, "Tier 3": 3 };
+      return map[tierName] || 1;
+    }
+
+    function computeFlags(tierName) {
+      var flags = [];
+      var a = state.responses;
+      var tierNum = toTierNumber(tierName);
+
+      /* Self-placement calibration (c1) */
+      var selfPlacementMap = {
+        "I use AI for quick drafting and first-pass outputs": 1,
+        "I provide structured prompts with role, audience, and constraints": 1,
+        "I regularly use AI with documents or data as part of real work": 2,
+        "I use AI in recurring workflows across projects": 2,
+        "I connect AI to other systems, tools, or automations": 3
+      };
+      var c1Answers = Array.isArray(a.c1) ? a.c1 : [];
+      var selfTier = 1;
+      c1Answers.forEach(function(opt) {
+        var mapped = selfPlacementMap[opt] || 1;
+        if (mapped > selfTier) selfTier = mapped;
+      });
+      if (selfTier && selfTier >= tierNum + 1) flags.push("Self-assessment may be ahead of observed behavior");
+      if (selfTier && selfTier <= tierNum - 1) flags.push("Potentially underselling current readiness");
+
+      /* Hallucination awareness (c2) */
+      if (tierNum >= 2 && a.c2 === "I often realize it later or after it is already shared") flags.push("Prioritize output verification skills");
+
+      /* Review habits (c3) */
+      var c3Answers = Array.isArray(a.c3) ? a.c3 : [];
+      if (tierNum >= 2 && c3Answers.indexOf("Use it mostly as-is") >= 0) flags.push("Prioritize quality review habits");
+      if (tierNum >= 3 && c3Answers.indexOf("Verify against original sources before using anything") < 0) {
+        flags.push("High priority: verification practices for advanced deployment");
+      }
+
+      return flags;
+    }
+
+    function computeSubtags() {
+      var tags = [];
+      var s1 = Array.isArray(state.responses.s1) ? state.responses.s1 : [];
+      var s2 = Array.isArray(state.responses.s2) ? state.responses.s2 : [];
+      var s3 = Array.isArray(state.responses.s3) ? state.responses.s3 : [];
+      var s1Real = s1.filter(function(e) { return e !== "None of these"; });
+      var s2Real = s2.filter(function(e) { return e !== "None of these"; });
+
+      if (s1Real.length >= 2) tags.push("Prompting depth");
+      if (s2Real.length >= 2) tags.push("Data & documents depth");
+
+      var wfOpts = [signalQuestions[2].options[0], signalQuestions[2].options[1]];
+      var codeOpts = [signalQuestions[2].options[2], signalQuestions[2].options[3]];
+      if (s3.some(function(e) { return wfOpts.indexOf(e) >= 0; })) tags.push("Workflow depth");
+      if (s3.some(function(e) { return codeOpts.indexOf(e) >= 0; })) tags.push("Code & API depth");
+
+      return tags;
+    }
+
+    function computeMergeRecommendation() {
+      var all = getStoredSubmissions();
+      var tier4Count = 0;
+      all.forEach(function(entry) {
+        if (entry.tier === "Tier 3") tier4Count++;
+      });
+      return tier4Count > 0 && tier4Count < 5;
+    }
+
+    function submitResults() {
+      var scoreData = computeScore();
+      var tier = computeTier(scoreData.total);
+      var flags = computeFlags(tier.name);
+      var subtags = computeSubtags();
+      var payload = {
+        submittedAt: new Date().toISOString(),
+        score: scoreData.total,
+        scoreBreakdown: scoreData.breakdown,
+        tier: tier.name,
+        tierLabel: tier.label,
+        tierDesc: tier.desc,
+        flags: flags,
+        subtags: subtags,
+        mergeRecommendation: false,
+        responses: state.responses
+      };
+      var existing = JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
+      existing.push(payload);
+      localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
+
+      /* Recompute merge recommendation now that this submission is stored */
+      var shouldMerge = computeMergeRecommendation();
+      payload.mergeRecommendation = shouldMerge;
+      /* Update the stored copy with the recommendation */
+      existing[existing.length - 1].mergeRecommendation = shouldMerge;
+      localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
+
+      sendSubmissionToApi(payload)
+        .then(function(resp) {
+          if (resp && resp.id) {
+            payload.remoteId = resp.id;
+            existing[existing.length - 1].remoteId = resp.id;
+            localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
+          }
+        })
+        .catch(function(err) {
+          console.error("Remote submission failed:", err);
+        });
+
+      state.lastResult = payload;
+      saveDraft();
+      return payload;
+    }
+
+    function csvEscape(value) {
+      var str = value == null ? "" : String(value);
+      if (/[",\n]/.test(str)) return '"' + str.replace(/"/g, '""') + '"';
+      return str;
+    }
+
+    function downloadTextFile(filename, content, contentType) {
+      var blob = new Blob([content], { type: contentType });
+      var url = URL.createObjectURL(blob);
+      var anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function getStoredSubmissions() {
+      return JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
+    }
+
+    function sendSubmissionToApi(payload) {
+      return fetch(SUBMISSION_API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function(res) {
+        if (!res.ok) {
+          return res.json().catch(function() { return {}; }).then(function(errBody) {
+            var message = errBody && errBody.error ? errBody.error : "Submission API request failed";
+            throw new Error(message);
+          });
+        }
+        return res.json().catch(function() { return {}; });
+      });
+    }
+
+    function downloadJsonSubmissions() {
+      var all = getStoredSubmissions();
+      var ts = new Date().toISOString().replace(/[:.]/g, "-");
+      downloadTextFile("gale-submissions-" + ts + ".json", JSON.stringify(all, null, 2), "application/json;charset=utf-8");
+    }
+
+    function downloadCsvSubmissions() {
+      var all = getStoredSubmissions();
+      if (!all.length) {
+        statusLine.textContent = "No submissions found yet to export.";
+        return;
+      }
+      var headers = [
+        "submittedAt", "score", "tier", "tierLabel", "mergeRecommendation", "flags", "subtags",
+        "q1", "q1a", "q2", "q2b", "q2c", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
+        "c1", "c2", "c3", "s1", "s2", "s3"
+      ];
+      var lines = [headers.join(",")];
+      all.forEach(function(entry) {
+        var r = entry.responses || {};
+        var row = {
+          submittedAt: entry.submittedAt,
+          score: entry.score,
+          tier: entry.tier,
+          tierLabel: entry.tierLabel,
+          mergeRecommendation: entry.mergeRecommendation ? "true" : "false",
+          flags: Array.isArray(entry.flags) ? entry.flags.join(" | ") : "",
+          subtags: Array.isArray(entry.subtags) ? entry.subtags.join(" | ") : "",
+          q1: r.q1 || "", q1a: r.q1a || "",
+          q2: Array.isArray(r.q2) ? r.q2.join(" | ") : (r.q2 || ""),
+          q2b: Array.isArray(r.q2b) ? r.q2b.join(" | ") : (r.q2b || ""),
+          q2c: Array.isArray(r.q2c) ? r.q2c.join(" | ") : (r.q2c || ""),
+          q3: r.q3 || "", q3a: r.q3a || "",
+          q4: r.q4 || "", q4a: r.q4a || "",
+          q5: r.q5 || "", q5a: r.q5a || "",
+          q6: r.q6 || "", q6a: r.q6a || "",
+          c1: Array.isArray(r.c1) ? r.c1.join(" | ") : (r.c1 || ""),
+          c2: r.c2 || "",
+          c3: Array.isArray(r.c3) ? r.c3.join(" | ") : (r.c3 || ""),
+          s1: Array.isArray(r.s1) ? r.s1.join(" | ") : "",
+          s2: Array.isArray(r.s2) ? r.s2.join(" | ") : "",
+          s3: Array.isArray(r.s3) ? r.s3.join(" | ") : ""
+        };
+        lines.push(headers.map(function(key) { return csvEscape(row[key]); }).join(","));
+      });
+      var ts = new Date().toISOString().replace(/[:.]/g, "-");
+      downloadTextFile("gale-submissions-" + ts + ".csv", lines.join("\n"), "text/csv;charset=utf-8");
+    }
+
+    function renderIntro() {
+      var step = Math.max(0, Math.min(state.introStep, introSlides.length - 1));
+      var copy = introSlides[step];
+      slideIndex.textContent = "";
+      slideIndex.style.display = "none";
+      slideCard.innerHTML =
+        '<span class="watermark-num">01</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="intro-copy"><p>' + copy + '</p></div>' +
+        '<div class="intro-nav">' +
+          '<button class="intro-arrow" type="button" data-intro-action="prev" ' + (step === 0 ? 'disabled' : '') + '>←</button>' +
+          '<button class="intro-arrow" type="button" data-intro-action="next">→</button>' +
+          '<span class="intro-step">Click anywhere or press any key to continue</span>' +
+        '</div>';
+      statusLine.textContent = step === introSlides.length - 1 ? "Any click or key starts the quiz." : "Any click or key moves to the next intro slide.";
+    }
+
+    function renderCoreQuestion(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var mainVal = state.responses[q.id];
+      var fuVal = state.responses[q.followup.id];
+
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list">' +
+          (q.mainOptions || ["Yes", "No"]).map(function(opt) {
+            return '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (mainVal === opt) + '">' + opt + '</button>';
+          }).join("") +
+        '</div>';
+
+      if (mainVal === "No") {
+        html += '<div class="followup-area">' +
+          '<div class="style-label-tag">Tell us more</div>' +
+          '<div class="style-body">' + q.followup.prompt + '</div>' +
+          '<div class="option-list">';
+        q.followup.options.forEach(function(opt) {
+          html += '<button class="option-btn" data-qid="' + q.followup.id + '" data-val="' + encodeURIComponent(opt.text) + '" aria-pressed="' + (fuVal === opt.text) + '">' + opt.text + '</button>';
+        });
+        html += '</div></div>';
+      }
+
+      slideCard.innerHTML = html;
+
+      if (!mainVal) {
+        statusLine.textContent = "Select an answer to continue.";
+      } else if (mainVal === "No" && !fuVal) {
+        statusLine.textContent = "Tell us a bit more, then continue.";
+      } else {
+        statusLine.textContent = "";
+      }
+    }
+
+    function renderCalibration(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = q.type === "multi" ? (Array.isArray(state.responses[q.id]) ? state.responses[q.id] : []) : state.responses[q.id];
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list">';
+      if (q.type === "multi") {
+        q.options.forEach(function(opt) {
+          var checked = val.indexOf(opt) >= 0;
+          html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
+        });
+      } else {
+        q.options.forEach(function(opt) {
+          html += '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (val === opt) + '">' + opt + '</button>';
+        });
+      }
+      html += '</div>';
+      slideCard.innerHTML = html;
+      statusLine.textContent = q.type === "multi" ? (val.length > 0 ? "" : "Select one or more options, then click Next.") : (val ? "" : "Select an answer to continue.");
+    }
+
+    function renderUsageQuestion(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list usage-grid">';
+
+      q.options.forEach(function(opt) {
+        var checked = val.indexOf(opt) >= 0;
+        html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
+      });
+
+      html += '</div>';
+      slideCard.innerHTML = html;
+      statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+    }
+
+    function renderSignal(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + ' <em>(select all that apply)</em></div>' +
+        '<div class="option-list">';
+      q.options.forEach(function(opt) {
+        var checked = val.indexOf(opt) >= 0;
+        html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
+      });
+      html += '</div>';
+      slideCard.innerHTML = html;
+      statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+    }
+
+    function renderSummary() {
+      slideIndex.textContent = "Submitted";
+
+      if (!state.lastResult) state.lastResult = submitResults();
+
+      slideCard.innerHTML =
+        '<span class="watermark-num">DONE</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-display">Thank You</div>' +
+        '<div class="style-section">Submission Received</div>' +
+        '<div class="style-body">Your responses were submitted successfully. We will use them to plan practical AI training tracks across GALE.</div>' +
+        '<div class="result-panel">' +
+          '<div class="style-label-tag">What Happens Next</div>' +
+          '<div class="style-body">The training team reviews responses in aggregate and maps participants into learning groups. Individual readiness placement is shared through training coordination, not this form.</div>' +
+        '</div>';
+
+      statusLine.textContent = "You can close this tab or select Restart to collect another response.";
+    }
+
+    function render() {
+      backBtn.disabled = state.currentSlide === "intro" ? state.introStep === 0 : state.history.length === 0;
+      var s = state.currentSlide;
+
+      if (s !== "intro") {
+        slideIndex.style.display = "flex";
+      }
+
+      if (s === "intro") {
+        nextBtn.textContent = "Begin";
+        renderIntro();
+      } else if (s === "summary") {
+        nextBtn.textContent = "Restart";
+        renderSummary();
+      } else if (usageMap[s]) {
+        nextBtn.textContent = "Next";
+        renderUsageQuestion(usageMap[s]);
+      } else if (coreMap[s]) {
+        nextBtn.textContent = "Next";
+        renderCoreQuestion(coreMap[s]);
+      } else if (calMap[s]) {
+        nextBtn.textContent = "Next";
+        renderCalibration(calMap[s]);
+      } else if (sigMap[s]) {
+        nextBtn.textContent = "Next";
+        renderSignal(sigMap[s]);
+      }
+
+      wireInteractions();
+      updateProgress();
+    }
+
+    function wireInteractions() {
+      slideCard.onclick = null;
+      if (state.currentSlide === "intro") {
+        slideCard.onclick = function(evt) {
+          if (evt.target.closest('[data-intro-action]')) return;
+          goToNextSlide(true);
+        };
+      }
+
+      slideCard.querySelectorAll("[data-intro-action]").forEach(function(btn) {
+        btn.addEventListener("click", function(evt) {
+          evt.stopPropagation();
+          var action = btn.getAttribute("data-intro-action");
+          if (action === "prev") {
+            if (state.introStep > 0) {
+              state.introStep -= 1;
+              saveDraft();
+              render();
+            }
+            return;
+          }
+          goToNextSlide(true);
+        });
+      });
+
+      slideCard.querySelectorAll(".option-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var qid = btn.getAttribute("data-qid");
+          var val = decodeURIComponent(btn.getAttribute("data-val"));
+
+          var core = coreMap[qid];
+          if (core) {
+            var old = state.responses[qid];
+            state.responses[qid] = val;
+            if (old && old !== val) {
+              delete state.responses[core.followup.id];
+            }
+            if (val !== "No") {
+              delete state.responses[core.followup.id];
+            }
+            state.lastResult = null;
+            saveDraft();
+            if (val !== "No") {
+              goToNextSlide(true);
+            } else {
+              render();
+            }
+            return;
+          }
+
+          var parentCore = coreQuestions.find(function(q) { return q.followup.id === qid; });
+          if (parentCore) {
+            state.responses[qid] = val;
+            state.lastResult = null;
+            saveDraft();
+            goToNextSlide(true);
+            return;
+          }
+
+          if (calMap[qid] && calMap[qid].type !== "multi") {
+            state.responses[qid] = val;
+            state.lastResult = null;
+            saveDraft();
+            goToNextSlide(true);
+            return;
+          }
+        });
+      });
+
+      slideCard.querySelectorAll(".check-item[data-qid]").forEach(function(item) {
+        item.addEventListener("click", function() {
+          var qid = item.getAttribute("data-qid");
+          var val = decodeURIComponent(item.getAttribute("data-val"));
+          var current = Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : [];
+          var exists = current.indexOf(val) >= 0;
+          var updated;
+
+          if (val === "None of these") {
+            updated = exists ? [] : ["None of these"];
+          } else {
+            updated = exists ? current.filter(function(x) { return x !== val; }) : current.concat([val]);
+            updated = updated.filter(function(e) { return e !== "None of these"; });
+          }
+
+          state.responses[qid] = updated;
+          state.lastResult = null;
+          saveDraft();
+          render();
+        });
+      });
+
+      var jsonBtn = document.getElementById("downloadJsonBtn");
+      if (jsonBtn) {
+        jsonBtn.addEventListener("click", function() {
+          downloadJsonSubmissions();
+          statusLine.textContent = "JSON export downloaded.";
+        });
+      }
+      var csvBtn = document.getElementById("downloadCsvBtn");
+      if (csvBtn) {
+        csvBtn.addEventListener("click", function() {
+          downloadCsvSubmissions();
+          if (getStoredSubmissions().length) statusLine.textContent = "CSV export downloaded.";
+        });
+      }
+    }
+
+    function updateProgress() {
+      var total = TOTAL_QUESTIONS;
+      var answered = 0;
+      usageQuestions.forEach(function(q) {
+        var v = state.responses[q.id];
+        if (Array.isArray(v) && v.length > 0) answered++;
+      });
+      coreQuestions.forEach(function(q) {
+        if (isSlideAnswered(q.id)) answered++;
+      });
+      calibrationQuestions.forEach(function(q) {
+        if (q.type === "multi") {
+          var c = state.responses[q.id];
+          if (Array.isArray(c) && c.length > 0) answered++;
+        } else if (state.responses[q.id]) {
+          answered++;
+        }
+      });
+      signalQuestions.forEach(function(q) {
+        var v = state.responses[q.id];
+        if (Array.isArray(v) && v.length > 0) answered++;
+      });
+      var pct = Math.round((answered / total) * 100);
+      progressFill.style.width = Math.min(100, Math.max(0, pct)) + "%";
+    }
+
+    function goToNextSlide(skipCheck) {
+      if (state.currentSlide === "intro" && state.introStep < introSlides.length - 1) {
+        state.introStep += 1;
+        saveDraft();
+        render();
+        return;
+      }
+      if (state.currentSlide === "summary") {
+        state = { currentSlide: "intro", history: [], responses: {}, lastResult: null, introStep: 0 };
+        localStorage.removeItem(DRAFT_KEY);
+        saveStatus.textContent = "Draft cleared";
+        render();
+        return;
+      }
+      if (!skipCheck && !isSlideAnswered(state.currentSlide)) {
+        statusLine.textContent = "Please answer before continuing.";
+        return;
+      }
+      statusLine.textContent = "";
+      var next = getNextSlide(state.currentSlide);
+      state.history.push(state.currentSlide);
+      state.currentSlide = next;
+      if (next === "summary" && !state.lastResult) {
+        state.lastResult = submitResults();
+      } else {
+        saveDraft();
+      }
+      render();
+    }
+
+    backBtn.addEventListener("click", function() {
+      if (state.currentSlide === "intro" && state.introStep > 0) {
+        state.introStep -= 1;
+        saveDraft();
+        render();
+        return;
+      }
+      if (!state.history.length) return;
+      state.currentSlide = state.history.pop();
+      saveDraft();
+      render();
+    });
+
+    nextBtn.addEventListener("click", function() {
+      goToNextSlide(false);
+    });
+
+    document.addEventListener("keydown", function(evt) {
+      if (state.currentSlide !== "intro") return;
+      if (evt.repeat) return;
+      if (evt.key === "Shift" || evt.key === "Control" || evt.key === "Alt" || evt.key === "Meta") return;
+      goToNextSlide(true);
+    });
+
+    loadDraft();
+    render();
+  </script>
+</body>
+</html>
