@@ -1,0 +1,51 @@
+name: Sync Quiz Submissions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch submissions JSON
+        env:
+          SUBMISSIONS_API_URL: ${{ secrets.SUBMISSIONS_API_URL }}
+          SUBMISSIONS_ADMIN_KEY: ${{ secrets.SUBMISSIONS_ADMIN_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -z "${SUBMISSIONS_API_URL:-}" ]; then
+            echo "Missing secret: SUBMISSIONS_API_URL"
+            exit 1
+          fi
+
+          if [ -n "${SUBMISSIONS_ADMIN_KEY:-}" ]; then
+            FETCH_URL="${SUBMISSIONS_API_URL}?key=${SUBMISSIONS_ADMIN_KEY}"
+          else
+            FETCH_URL="${SUBMISSIONS_API_URL}"
+          fi
+
+          curl -fsSL "$FETCH_URL" -o data/submissions.json
+          jq . data/submissions.json > data/submissions.pretty.json
+          mv data/submissions.pretty.json data/submissions.json
+
+      - name: Commit changes
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/submissions.json; then
+            echo "No submission updates"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/submissions.json
+          git commit -m "Sync quiz submissions"
+          git push
