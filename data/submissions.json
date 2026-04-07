@@ -1,4 +1,330 @@
 {
-  "count": 0,
-  "submissions": []
+  "count": 4,
+  "submissions": [
+    {
+      "id": "mnp3z5vb-i3zb68",
+      "receivedAt": "2026-04-07T21:05:37.655Z",
+      "payload": {
+        "submittedAt": "2026-04-07T21:05:37.372Z",
+        "score": 20.6,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q3": 0,
+          "q4": 1,
+          "q5": 3,
+          "q6": 3,
+          "q2_profile": 2.2
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [],
+        "subtags": [
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Code & API depth"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Q and A",
+            "Research",
+            "Analytics",
+            "Computation",
+            "Automation",
+            "Strategy"
+          ],
+          "q2b": [
+            "Q and A",
+            "Research",
+            "Analytics",
+            "Automation",
+            "Computation"
+          ],
+          "q2c": [
+            "Content Creation",
+            "Communication",
+            "Ideation",
+            "Strategy"
+          ],
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "Yes",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I provide structured prompts with role, audience, and constraints",
+            "I regularly use AI with documents or data as part of real work",
+            "I use AI in recurring workflows across projects",
+            "I connect AI to other systems, tools, or automations"
+          ],
+          "c2": "I catch some issues, but not consistently",
+          "c3": [
+            "Give it a quick read-through",
+            "Check specific facts, tone, or accuracy",
+            "Verify against original sources before using anything"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar",
+            "Assigned AI a role or persona (e.g., “Act as a senior editor...”)",
+            "Created a reusable prompt template you use more than once"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "Used AI as a regular part of a recurring workflow",
+            "Connected AI to other tools through an automation platform",
+            "Written code that calls an AI API",
+            "Built a custom tool or app powered by AI"
+          ]
+        }
+      }
+    },
+    {
+      "id": "mnp496it-78acxw",
+      "receivedAt": "2026-04-07T21:13:25.061Z",
+      "payload": {
+        "submittedAt": "2026-04-07T21:13:23.992Z",
+        "score": 23.1,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q3": 2,
+          "q4": 1,
+          "q5": 3,
+          "q6": 3,
+          "q2_profile": 3.9
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "High priority: verification practices for advanced deployment"
+        ],
+        "subtags": [
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Code & API depth"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Research",
+            "Analytics",
+            "Strategy",
+            "Automation",
+            "Content Creation",
+            "Communication",
+            "Ideation",
+            "Q and A"
+          ],
+          "q2b": [
+            "Q and A",
+            "Research",
+            "Strategy",
+            "Content Creation",
+            "Communication",
+            "Ideation"
+          ],
+          "q2c": [
+            "Automation",
+            "Computation"
+          ],
+          "q3": "Yes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "Yes",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I connect AI to other systems, tools, or automations",
+            "I use AI in recurring workflows across projects",
+            "I regularly use AI with documents or data as part of real work",
+            "I provide structured prompts with role, audience, and constraints"
+          ],
+          "c2": "I usually catch it early and verify before I use it",
+          "c3": [
+            "Check specific facts, tone, or accuracy"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar",
+            "Assigned AI a role or persona (e.g., “Act as a senior editor...”)",
+            "Created a reusable prompt template you use more than once"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "Used AI as a regular part of a recurring workflow",
+            "Connected AI to other tools through an automation platform",
+            "Written code that calls an AI API",
+            "Built a custom tool or app powered by AI"
+          ]
+        }
+      }
+    },
+    {
+      "id": "mnp4e3ah-6vagpn",
+      "receivedAt": "2026-04-07T21:17:14.153Z",
+      "payload": {
+        "submittedAt": "2026-04-07T21:17:13.439Z",
+        "score": 15.6,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q3": 0,
+          "q4": 0.7,
+          "q5": 3,
+          "q6": 1.3,
+          "q2_profile": 4.2
+        },
+        "tier": "Tier 2",
+        "tierLabel": "Ready to expand current use cases",
+        "tierDesc": "Consistent practical usage with room to scale into stronger cross-team and system-level workflows",
+        "flags": [
+          "Potentially underselling current readiness"
+        ],
+        "subtags": [
+          "Data & documents depth"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Q and A",
+            "Research",
+            "Communication",
+            "Ideation",
+            "Strategy",
+            "Computation",
+            "Analytics"
+          ],
+          "q2b": [
+            "Q and A",
+            "Research",
+            "Analytics",
+            "Strategy",
+            "Computation",
+            "Communication",
+            "Ideation"
+          ],
+          "q2c": [
+            "Automation"
+          ],
+          "q3": "Sometimes",
+          "q4": "No",
+          "q4a": "I tried but the output wasn’t good enough to use",
+          "q5": "Yes",
+          "q6": "No",
+          "q6a": "I know it’s possible but it’s beyond my current skills",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I provide structured prompts with role, audience, and constraints"
+          ],
+          "c2": "I usually catch it early and verify before I use it",
+          "c3": [
+            "Check specific facts, tone, or accuracy"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "None of these"
+          ]
+        }
+      }
+    },
+    {
+      "id": "mnp5f55z-9ei2wj",
+      "receivedAt": "2026-04-07T21:46:02.855Z",
+      "payload": {
+        "submittedAt": "2026-04-07T21:46:01.797Z",
+        "score": 19.9,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q3": 2,
+          "q4": 1,
+          "q5": 3,
+          "q6": 2,
+          "q2_profile": 4.4
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "Potentially underselling current readiness",
+          "High priority: verification practices for advanced deployment"
+        ],
+        "subtags": [
+          "Prompting depth",
+          "Data & documents depth"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Q and A",
+            "Research",
+            "Analytics",
+            "Strategy",
+            "Automation",
+            "Content Creation",
+            "Communication",
+            "Ideation"
+          ],
+          "q2b": [
+            "Research",
+            "Analytics",
+            "Q and A",
+            "Strategy",
+            "Content Creation",
+            "Communication",
+            "Ideation"
+          ],
+          "q2c": [
+            "Automation"
+          ],
+          "q3": "Yes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "No",
+          "q6a": "I’ve explored it but haven’t built anything yet",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I provide structured prompts with role, audience, and constraints",
+            "I regularly use AI with documents or data as part of real work"
+          ],
+          "c2": "I usually catch it early and verify before I use it",
+          "c3": [
+            "Give it a quick read-through",
+            "Check specific facts, tone, or accuracy"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar",
+            "Assigned AI a role or persona (e.g., “Act as a senior editor...”)",
+            "Created a reusable prompt template you use more than once"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "None of these"
+          ]
+        }
+      }
+    }
+  ]
 }
