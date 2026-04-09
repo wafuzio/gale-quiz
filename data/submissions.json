@@ -1,5 +1,5 @@
 {
-  "count": 7,
+  "count": 9,
   "submissions": [
     {
       "id": "mnp3z5vb-i3zb68",
@@ -523,6 +523,176 @@
           "Code & API depth"
         ],
         "mergeRecommendation": true,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Research",
+            "Analytics",
+            "Strategy",
+            "Automation",
+            "Content Creation",
+            "Communication",
+            "Ideation",
+            "Q and A"
+          ],
+          "q2b": [
+            "Q and A",
+            "Research",
+            "Strategy",
+            "Content Creation",
+            "Communication",
+            "Ideation"
+          ],
+          "q2c": [
+            "Automation",
+            "Computation"
+          ],
+          "q3": "Yes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "Yes",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I connect AI to other systems, tools, or automations",
+            "I use AI in recurring workflows across projects",
+            "I regularly use AI with documents or data as part of real work",
+            "I provide structured prompts with role, audience, and constraints"
+          ],
+          "c2": "I usually catch it early and verify before I use it",
+          "c3": [
+            "Check specific facts, tone, or accuracy"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar",
+            "Assigned AI a role or persona (e.g., “Act as a senior editor...”)",
+            "Created a reusable prompt template you use more than once"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "Used AI as a regular part of a recurring workflow",
+            "Connected AI to other tools through an automation platform",
+            "Written code that calls an AI API",
+            "Built a custom tool or app powered by AI"
+          ]
+        }
+      }
+    },
+    {
+      "id": "mnrqlke5-ypcqqa",
+      "receivedAt": "2026-04-09T17:14:26.813Z",
+      "payload": {
+        "submittedAt": "2026-04-09T17:14:25.350Z",
+        "score": 23.1,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q3": 2,
+          "q4": 1,
+          "q5": 3,
+          "q6": 3,
+          "q2_profile": 3.9
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "High priority: verification practices for advanced deployment"
+        ],
+        "subtags": [
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Code & API depth"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Research",
+            "Analytics",
+            "Strategy",
+            "Automation",
+            "Content Creation",
+            "Communication",
+            "Ideation",
+            "Q and A"
+          ],
+          "q2b": [
+            "Q and A",
+            "Research",
+            "Strategy",
+            "Content Creation",
+            "Communication",
+            "Ideation"
+          ],
+          "q2c": [
+            "Automation",
+            "Computation"
+          ],
+          "q3": "Yes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "Yes",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I connect AI to other systems, tools, or automations",
+            "I use AI in recurring workflows across projects",
+            "I regularly use AI with documents or data as part of real work",
+            "I provide structured prompts with role, audience, and constraints"
+          ],
+          "c2": "I usually catch it early and verify before I use it",
+          "c3": [
+            "Check specific facts, tone, or accuracy"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar",
+            "Assigned AI a role or persona (e.g., “Act as a senior editor...”)",
+            "Created a reusable prompt template you use more than once"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "Used AI as a regular part of a recurring workflow",
+            "Connected AI to other tools through an automation platform",
+            "Written code that calls an AI API",
+            "Built a custom tool or app powered by AI"
+          ]
+        }
+      }
+    },
+    {
+      "id": "mnrrdoyu-0dwki8",
+      "receivedAt": "2026-04-09T17:36:19.110Z",
+      "payload": {
+        "submittedAt": "2026-04-09T17:36:18.108Z",
+        "score": 23.1,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q3": 2,
+          "q4": 1,
+          "q5": 3,
+          "q6": 3,
+          "q2_profile": 3.9
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "High priority: verification practices for advanced deployment"
+        ],
+        "subtags": [
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Code & API depth"
+        ],
+        "mergeRecommendation": false,
         "responses": {
           "q1": "Yes",
           "q2": [
