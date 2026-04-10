@@ -277,7 +277,7 @@
 
         var contentCreators = domainRows.filter(function(r) {
           var q2 = Array.isArray(r.responses.q2) ? r.responses.q2 : [];
-          return q2.indexOf("Content Creation") >= 0;
+          return q2.indexOf("Content drafting & generation") >= 0;
         }).length;
         if (contentCreators / domainRows.length >= 0.5 && /programmatic|engineering|marketing|communications/i.test(domain)) {
           insights.push(domain + " shows stronger-than-expected content generation use in day-to-day workflows.");
