@@ -1568,7 +1568,7 @@
       }
 
       if (s === "intro") {
-        nextBtn.textContent = "Begin";
+        nextBtn.textContent = state.introStep >= introSlides.length - 1 ? "Start Quiz" : "Continue";
         renderIntro();
       } else if (s === "astro") {
         nextBtn.textContent = "Submit";
@@ -1605,6 +1605,13 @@
           if (evt.target.closest('[data-intro-action]')) return;
           goToNextSlide(true);
         };
+      } else if (state.currentSlide !== "summary") {
+        slideCard.onclick = function(evt) {
+          if (evt.target.closest('.option-btn, .check-item, textarea, input, button, [data-intro-action], [data-astro-feedback], [data-edit-resubmit]')) return;
+          if (isSlideAnswered(state.currentSlide)) {
+            goToNextSlide(true);
+          }
+        };
       }
 
       slideCard.querySelectorAll("[data-intro-action]").forEach(function(btn) {
@@ -1631,7 +1638,6 @@
           var core = coreMap[qid];
           if (core) {
             var old = state.responses[qid];
-            var isRepeatCoreClick = old === val;
             state.responses[qid] = val;
             if (old && old !== val) {
               delete state.responses[core.followup.id];
@@ -1644,54 +1650,32 @@
             }
             state.lastResult = null;
             saveDraft();
-            if (isRepeatCoreClick && isSlideAnswered(state.currentSlide)) {
-              goToNextSlide(true);
-            } else {
-              render();
-            }
+            render();
             return;
           }
 
           var parentCore = coreQuestions.find(function(q) { return q.followup.id === qid; });
           if (parentCore) {
-            var oldFollowup = state.responses[qid];
-            var isRepeatFollowupClick = oldFollowup === val;
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            if (isRepeatFollowupClick && isSlideAnswered(state.currentSlide)) {
-              goToNextSlide(true);
-            } else {
-              render();
-            }
+            render();
             return;
           }
 
           if (calMap[qid] && calMap[qid].type !== "multi") {
-            var oldCalVal = state.responses[qid];
-            var isRepeatCalClick = oldCalVal === val;
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            if (isRepeatCalClick && isSlideAnswered(state.currentSlide)) {
-              goToNextSlide(true);
-            } else {
-              render();
-            }
+            render();
             return;
           }
 
           if (domainMap[qid]) {
-            var oldDomainVal = state.responses[qid];
-            var isRepeatDomainClick = oldDomainVal === val;
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            if (isRepeatDomainClick && isSlideAnswered(state.currentSlide)) {
-              goToNextSlide(true);
-            } else {
-              render();
-            }
+            render();
             return;
           }
         });
