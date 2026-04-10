@@ -575,7 +575,7 @@
       "Research synthesis",
       "Data analysis",
       "Strategic planning",
-      "Calculation / computation",
+      "Calculation / computation (e.g., summarize metrics, compute growth rates, estimate budget scenarios)",
       "Workflow automation",
       "Content drafting & generation",
       "Communication / messaging",
@@ -590,7 +590,7 @@
       },
       {
         id: "q2b", stage: "Core Skills", type: "multi",
-        prompt: "Which of these do you generally already feel comfortable using in your daily work life? (Select all that apply)",
+        prompt: "From the areas you selected above, which do you generally already feel comfortable using in your daily work life? (Select all that apply)",
         options: usageAreas
       },
       {
@@ -802,6 +802,14 @@
       var idx = slideOrder.indexOf(slideId);
       if (idx < 0 || idx >= slideOrder.length - 1) return "summary";
       return slideOrder[idx + 1];
+    }
+
+    function getUsageOptions(q) {
+      if (q && q.id === "q2b") {
+        var selected = Array.isArray(state.responses.q2) ? state.responses.q2 : [];
+        return selected.length ? selected : q.options;
+      }
+      return q && Array.isArray(q.options) ? q.options : [];
     }
 
     function openAdminModal() {
@@ -1408,13 +1416,14 @@
       var num = getQuestionNumber(q.id);
       slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
       var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+      var opts = getUsageOptions(q);
       var html =
         '<span class="watermark-num">' + zeroPad(num) + '</span>' +
         '<div class="accent-bar"></div>' +
         '<div class="style-body">' + q.prompt + '</div>' +
         '<div class="option-list usage-grid">';
 
-      q.options.forEach(function(opt) {
+      opts.forEach(function(opt) {
         var checked = val.indexOf(opt) >= 0;
         html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
       });
@@ -1422,7 +1431,11 @@
       html += '</div>';
       html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
-      statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+      if (q.id === "q2b" && (!opts || !opts.length)) {
+        statusLine.textContent = "Select at least one area in the previous question first.";
+      } else {
+        statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+      }
     }
 
     function renderDomainQuestion(q) {
@@ -1686,6 +1699,12 @@
           }
 
           state.responses[qid] = updated;
+          if (qid === "q2") {
+            var q2bCurrent = Array.isArray(state.responses.q2b) ? state.responses.q2b : [];
+            state.responses.q2b = q2bCurrent.filter(function(choice) {
+              return updated.indexOf(choice) >= 0;
+            });
+          }
           state.lastResult = null;
           saveDraft();
           render();
