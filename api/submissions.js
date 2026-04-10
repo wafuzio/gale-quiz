@@ -1,4 +1,8 @@
 var createClient = require("redis").createClient;
+var createHash = require("crypto").createHash;
+var STORE_KEY = "galeQuizSubmissions";
+var DEDUPE_WINDOW_MS = 24 * 60 * 60 * 1000;
+var DEFAULT_ADMIN_KEY = "gimmethosetokens";
 
 function json(res, status, payload) {
   res.status(status).setHeader("Content-Type", "application/json");
@@ -24,13 +28,13 @@ function getRedisClient() {
 async function redisAppendSubmission(record) {
   var client = await getRedisClient();
   if (!client) throw new Error("Missing REDIS_URL");
-  await client.rPush("galeQuizSubmissions", JSON.stringify(record));
+  await client.rPush(STORE_KEY, JSON.stringify(record));
 }
 
 async function redisGetSubmissions() {
   var client = await getRedisClient();
   if (!client) throw new Error("Missing REDIS_URL");
-  var rows = await client.lRange("galeQuizSubmissions", 0, -1);
+  var rows = await client.lRange(STORE_KEY, 0, -1);
   return rows.map(function(item) {
     try {
       return JSON.parse(item);
@@ -38,6 +42,16 @@ async function redisGetSubmissions() {
       return null;
     }
   }).filter(Boolean);
+}
+
+async function redisSetSubmissions(records) {
+  var client = await getRedisClient();
+  if (!client) throw new Error("Missing REDIS_URL");
+  await client.del(STORE_KEY);
+  if (Array.isArray(records) && records.length) {
+    var encoded = records.map(function(r) { return JSON.stringify(r); });
+    await client.rPush(STORE_KEY, encoded);
+  }
 }
 
 async function kvGet(key) {
@@ -80,6 +94,75 @@ async function kvSet(key, value) {
   }
 }
 
+function normalizeRespondentKey(value) {
+  if (typeof value !== "string") return "";
+  var trimmed = value.trim();
+  return trimmed.slice(0, 128);
+}
+
+function toIsoNow() {
+  return new Date().toISOString();
+}
+
+function normalizeKey(value) {
+  if (typeof value !== "string") return "";
+  return value.trim().toLowerCase();
+}
+
+function getEffectiveAdminKey() {
+  var configured = process.env.SUBMISSIONS_ADMIN_KEY;
+  if (typeof configured === "string" && configured.trim()) {
+    return configured.trim();
+  }
+  return DEFAULT_ADMIN_KEY;
+}
+
+function createResponseFingerprint(responses) {
+  var normalized = {};
+  var source = responses && typeof responses === "object" ? responses : {};
+  Object.keys(source).sort().forEach(function(key) {
+    var val = source[key];
+    if (Array.isArray(val)) {
+      normalized[key] = val.slice().sort();
+    } else {
+      normalized[key] = val;
+    }
+  });
+  return createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
+}
+
+function getRecordTimestamp(record) {
+  var maybeTs = record && (record.updatedAt || record.receivedAt || record.createdAt);
+  var ms = Date.parse(maybeTs || "");
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+function findExistingIndex(submissions, respondentKey, fingerprint) {
+  if (respondentKey) {
+    var byKey = submissions.findIndex(function(r) { return r && r.respondentKey === respondentKey; });
+    if (byKey >= 0) return byKey;
+  }
+  var now = Date.now();
+  return submissions.findIndex(function(r) {
+    if (!r || r.fingerprint !== fingerprint) return false;
+    var ts = getRecordTimestamp(r);
+    return ts > 0 && (now - ts) <= DEDUPE_WINDOW_MS;
+  });
+}
+
+async function loadSubmissions() {
+  var allData = hasRedisUrl() ? await redisGetSubmissions() : await kvGet(STORE_KEY);
+  return Array.isArray(allData) ? allData : [];
+}
+
+async function saveSubmissions(rows) {
+  if (hasRedisUrl()) {
+    await redisSetSubmissions(rows);
+    return;
+  }
+  await kvSet(STORE_KEY, rows);
+}
+
 module.exports = async function handler(req, res) {
   if (req.method === "POST") {
     try {
@@ -88,23 +171,32 @@ module.exports = async function handler(req, res) {
         return json(res, 400, { error: "Invalid submission payload" });
       }
 
-      var id = Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+      var respondentKey = normalizeRespondentKey(body.respondentKey);
+      var fingerprint = createResponseFingerprint(body.responses);
+      var submissions = await loadSubmissions();
+      var existingIndex = findExistingIndex(submissions, respondentKey, fingerprint);
+      var nowIso = toIsoNow();
+      var isUpdate = existingIndex >= 0;
+      var existing = isUpdate ? submissions[existingIndex] : null;
+      var id = existing && existing.id ? existing.id : (Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8));
       var record = {
         id: id,
-        receivedAt: new Date().toISOString(),
+        respondentKey: respondentKey || (existing && existing.respondentKey) || "",
+        fingerprint: fingerprint,
+        createdAt: existing && existing.createdAt ? existing.createdAt : nowIso,
+        updatedAt: nowIso,
+        receivedAt: nowIso,
         payload: body
       };
 
-      if (hasRedisUrl()) {
-        await redisAppendSubmission(record);
+      if (isUpdate) {
+        submissions[existingIndex] = record;
       } else {
-        var all = await kvGet("galeQuizSubmissions");
-        var submissions = Array.isArray(all) ? all : [];
         submissions.push(record);
-        await kvSet("galeQuizSubmissions", submissions);
       }
+      await saveSubmissions(submissions);
 
-      return json(res, 200, { ok: true, id: id });
+      return json(res, 200, { ok: true, id: id, replaced: isUpdate });
     } catch (err) {
       return json(res, 500, {
         error: "Submission storage failed",
@@ -115,16 +207,13 @@ module.exports = async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      var adminKey = process.env.SUBMISSIONS_ADMIN_KEY;
-      if (adminKey) {
-        var supplied = req.headers["x-admin-key"] || req.query.key;
-        if (supplied !== adminKey) {
-          return json(res, 401, { error: "Unauthorized" });
-        }
+      var adminKey = getEffectiveAdminKey();
+      var supplied = req.headers["x-admin-key"] || req.query.key;
+      if (normalizeKey(supplied) !== normalizeKey(adminKey)) {
+        return json(res, 401, { error: "Unauthorized" });
       }
 
-      var allData = hasRedisUrl() ? await redisGetSubmissions() : await kvGet("galeQuizSubmissions");
-      var rows = Array.isArray(allData) ? allData : [];
+      var rows = await loadSubmissions();
       return json(res, 200, { count: rows.length, submissions: rows });
     } catch (err2) {
       return json(res, 500, {

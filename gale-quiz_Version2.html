@@ -202,6 +202,32 @@
       border-top: 1px solid rgba(255,255,255,0.08);
       animation: fadeIn 0.25s ease;
     }
+    .clarify-area {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .clarify-input {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 92px;
+      resize: vertical;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    .clarify-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .clarify-input:focus {
+      outline: none;
+      border-color: rgba(253,100,83,0.7);
+      box-shadow: 0 0 0 1px rgba(253,100,83,0.25);
+    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -339,6 +365,7 @@
     var DRAFT_KEY = "galeQuizDraftV5";
     var SUBMISSION_KEY = "galeQuizSubmissionsV5";
     var SUBMISSION_API_ENDPOINT = "/api/submissions";
+    var RESPONDENT_KEY_STORAGE = "galeQuizRespondentKeyV1";
 
     var coreQuestions = [
       {
@@ -351,6 +378,20 @@
             { text: "I haven\u2019t really had the chance to try AI tools yet", points: 0 },
             { text: "I\u2019ve tried them a couple of times but they didn\u2019t stick", points: 1.5 },
             { text: "I use them for personal stuff but not for work", points: 1 }
+          ]
+        }
+      },
+      {
+        id: "q2a", stage: "Core Skills", area: "Prompt Structure",
+        prompt: "When you ask AI for important work output, do you usually provide structured instructions (goal, context, constraints, format) instead of a short one-line ask?",
+        mainOptions: ["Yes", "Sometimes", "No"],
+        followup: {
+          id: "q2a1",
+          prompt: "Which sounds most like your current prompting style?",
+          options: [
+            { text: "I usually keep prompts short and unstructured", points: 0 },
+            { text: "I add some detail, but not consistently", points: 1 },
+            { text: "I include some structure, but I’m still refining what works", points: 1.5 }
           ]
         }
       },
@@ -441,72 +482,84 @@
 
     var calibrationQuestions = [
       {
-        id: "c1", stage: "Calibration", type: "multi",
-        prompt: "Which of these describe your current AI use? (Select all that apply)",
+        id: "c1", stage: "Calibration", type: "single",
+        prompt: "Which statement best matches your current AI working level?",
         options: [
-          "I use AI for quick drafting and first-pass outputs",
-          "I provide structured prompts with role, audience, and constraints",
-          "I regularly use AI with documents or data as part of real work",
-          "I use AI in recurring workflows across projects",
-          "I connect AI to other systems, tools, or automations"
+          "I mostly use AI for basic drafts and quick answers",
+          "I use structured prompts and review outputs before sharing",
+          "I regularly use AI with documents/data in real workflows",
+          "I use AI in recurring, cross-tool, or automated workflows"
         ]
       },
       {
-        id: "c2", stage: "Calibration", type: "single",
-        prompt: "When AI output is wrong or made-up, which best describes your current practice?",
+        id: "c2", stage: "Calibration", type: "multi",
+        prompt: "Which quality habits are part of how you work today? (Select all that apply)",
         options: [
-          "I usually catch it early and verify before I use it",
-          "I catch some issues, but not consistently",
-          "I often realize it later or after it is already shared"
-        ]
-      },
-      {
-        id: "c3", stage: "Calibration", type: "multi",
-        prompt: "Before using AI output in real work, what checks do you usually do? (Select all that apply)",
-        options: [
-          "Use it mostly as-is",
-          "Give it a quick read-through",
-          "Check specific facts, tone, or accuracy",
-          "Verify against original sources before using anything"
+          "Verify key facts before using or sharing output",
+          "Compare against original sources/documents when it matters",
+          "Refine prompts and rerun when quality is weak",
+          "I often use output mostly as-is"
         ]
       }
     ];
 
     var signalQuestions = [
       {
-        id: "s1", stage: "Qualifying Signals", type: "multi",
-        prompt: "Which of these have you done?",
+        id: "s0", stage: "Applied Signals", type: "multi",
+        prompt: "Which GALE-relevant work outputs have you used AI to help produce in real work? (Select all that apply)",
         options: [
-          "Given AI specific examples before asking it to generate something similar",
-          "Assigned AI a role or persona (e.g., \u201cAct as a senior editor...\u201d)",
-          "Created a reusable prompt template you use more than once",
-          "None of these"
+          "Media brief or creative brief",
+          "Competitive or market research synthesis",
+          "Campaign reporting or performance summary",
+          "Audience segmentation or persona draft",
+          "None of these yet"
         ]
       },
       {
-        id: "s2", stage: "Qualifying Signals", type: "multi",
-        prompt: "Which of these have you done with data or documents?",
+        id: "s1", stage: "Applied Signals", type: "multi",
+        prompt: "Which of these applied AI activities have you done in real work? (Select all that apply)",
         options: [
-          "Pasted raw data (spreadsheet, CSV) into AI for analysis",
-          "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
-          "Used AI-generated output to create a deliverable you shared with others",
-          "None of these"
+          "Use role/context-rich prompts (beyond basic ask/answer)",
+          "Use AI with documents or data to produce analysis or recommendations",
+          "Turn AI output into deliverables shared with others",
+          "Use AI as part of recurring workflows",
+          "Connect AI to other tools or automations",
+          "Write code that calls AI APIs",
+          "Build custom tools/apps powered by AI",
+          "None of these yet"
         ]
       },
       {
-        id: "s3", stage: "Qualifying Signals", type: "multi",
-        prompt: "Which of these have you done?",
+        id: "s2", stage: "Content Sorting", type: "multi",
+        prompt: "What support would be most useful next? (Select up to 2)",
         options: [
-          "Used AI as a regular part of a recurring workflow",
-          "Connected AI to other tools through an automation platform",
-          "Written code that calls an AI API",
-          "Built a custom tool or app powered by AI",
-          "None of these"
+          "Prompting and instruction design",
+          "Working with documents and data",
+          "Quality verification and trust",
+          "Workflow automation",
+          "Technical/API implementation"
         ]
       }
     ];
 
-    var slideOrder = ["intro", "q1", "q2", "q2b", "q2c", "q3", "q4", "q5", "q6", "c1", "c2", "c3", "s1", "s2", "s3", "summary"];
+    var domainQuestion = {
+      id: "d1", stage: "Content Sorting", type: "single",
+      prompt: "What domain are you in?",
+      options: [
+        "Marketing & Communications",
+        "Operations & Process",
+        "Sales & Business Development",
+        "Product & Design",
+        "Data & Analytics",
+        "Engineering / IT",
+        "People / HR / Talent",
+        "Finance / Legal / Compliance",
+        "Leadership / Strategy",
+        "Other"
+      ]
+    };
+
+    var slideOrder = ["intro", "q1", "q2", "q2b", "q2c", "q2a", "q3", "q4", "q5", "q6", "c1", "c2", "s0", "s1", "s2", "d1", "summary"];
     var introSlides = [
       'This 5-minute quiz helps us understand how you use AI today — so we can offer training that actually fits where you are.',
       'WE ARE ASKING ABOUT WHAT YOU HAVE ACTUALLY DONE, NOT WHAT YOU\'VE HEARD ABOUT OR WANT TO LEARN.',
@@ -515,7 +568,7 @@
 
     /* Question IDs in presentation order (excludes intro and summary) */
     var questionSlideIds = slideOrder.filter(function(s) { return s !== "intro" && s !== "summary"; });
-    var TOTAL_QUESTIONS = questionSlideIds.length; /* 14 */
+    var TOTAL_QUESTIONS = questionSlideIds.length; /* 15 */
 
     function getQuestionNumber(slideId) {
       var idx = questionSlideIds.indexOf(slideId);
@@ -526,6 +579,41 @@
       return n < 10 ? "0" + n : "" + n;
     }
 
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function noteKeyFor(questionId) {
+      return questionId + "_note";
+    }
+
+    function createRandomKey() {
+      return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
+    }
+
+    function getRespondentKey() {
+      var existing = localStorage.getItem(RESPONDENT_KEY_STORAGE);
+      if (existing) return existing;
+      var created = createRandomKey();
+      localStorage.setItem(RESPONDENT_KEY_STORAGE, created);
+      return created;
+    }
+
+    function renderClarifyField(questionId) {
+      var noteKey = noteKeyFor(questionId);
+      var noteVal = state.responses[noteKey] || "";
+      return '' +
+        '<div class="clarify-area">' +
+          '<div class="style-label-tag">Optional Clarification</div>' +
+          '<textarea class="clarify-input" data-clarify-qid="' + questionId + '" placeholder="Anything else you want us to know about this answer?">' + escapeHtml(noteVal) + '</textarea>' +
+        '</div>';
+    }
+
     var coreMap = {};
     coreQuestions.forEach(function(q) { coreMap[q.id] = q; });
     var usageMap = {};
@@ -534,6 +622,8 @@
     calibrationQuestions.forEach(function(q) { calMap[q.id] = q; });
     var sigMap = {};
     signalQuestions.forEach(function(q) { sigMap[q.id] = q; });
+    var domainMap = {};
+    domainMap[domainQuestion.id] = domainQuestion;
 
     var state = {
       currentSlide: "intro",
@@ -614,6 +704,10 @@
         var val = state.responses[sig.id];
         return Array.isArray(val) && val.length > 0;
       }
+      var domain = domainMap[slideId];
+      if (domain) {
+        return Boolean(state.responses[domain.id]);
+      }
       return true;
     }
 
@@ -622,6 +716,7 @@
       var breakdown = {};
       var coreWeights = {
         q1: 1,
+        q2a: 2,
         q3: 2,
         q4: 1,
         q5: 3,
@@ -634,6 +729,10 @@
         if (ans === "Yes") {
           breakdown[q.id] = weight;
           total += weight;
+        } else if (ans === "Sometimes") {
+          var half = Math.round((weight * 0.5) * 10) / 10;
+          breakdown[q.id] = half;
+          total += half;
         } else if (ans === "No") {
           var fuAns = state.responses[q.followup.id];
           var pts = 0;
@@ -658,59 +757,58 @@
       var comfortScore = Math.min(3.2, q2Comfort.length * 0.55);
       var usageBreadthScore = Math.min(1.8, q2Used.length * 0.2);
       var blindGapCount = q2Blind.filter(function(area) { return q2Comfort.indexOf(area) < 0; }).length;
-      var blindSpotPenalty = Math.min(2.6, blindGapCount * 0.45);
-      var q2ProfileScore = Math.round((comfortScore + usageBreadthScore - blindSpotPenalty) * 10) / 10;
+      var q2ProfileScore = Math.round((comfortScore + usageBreadthScore) * 10) / 10;
       breakdown.q2_profile = q2ProfileScore;
+      breakdown.q2_blind_gap_count = blindGapCount;
       total += q2ProfileScore;
 
-      var c2ScoreMap = {
-        "I usually catch it early and verify before I use it": 1.5,
-        "I catch some issues, but not consistently": 0.8,
-        "I often realize it later or after it is already shared": 0
+      var c2 = Array.isArray(state.responses.c2) ? state.responses.c2 : [];
+      if (c2.indexOf("Verify key facts before using or sharing output") >= 0) total += 0.8;
+      if (c2.indexOf("Compare against original sources/documents when it matters") >= 0) total += 1.1;
+      if (c2.indexOf("Refine prompts and rerun when quality is weak") >= 0) total += 0.8;
+      if (c2.indexOf("I often use output mostly as-is") >= 0) total -= 0.6;
+
+      var s1 = Array.isArray(state.responses.s1) ? state.responses.s1 : [];
+      var s0 = Array.isArray(state.responses.s0) ? state.responses.s0 : [];
+      var s0Map = {
+        "Media brief or creative brief": 0.7,
+        "Competitive or market research synthesis": 0.8,
+        "Campaign reporting or performance summary": 0.8,
+        "Audience segmentation or persona draft": 0.7,
+        "None of these yet": 0
       };
-      total += c2ScoreMap[state.responses.c2] || 0;
-
-      var c3 = Array.isArray(state.responses.c3) ? state.responses.c3 : [];
-      if (c3.indexOf("Give it a quick read-through") >= 0) total += 0.5;
-      if (c3.indexOf("Check specific facts, tone, or accuracy") >= 0) total += 1.1;
-      if (c3.indexOf("Verify against original sources before using anything") >= 0) total += 1.4;
-      if (c3.length === 1 && c3[0] === "Use it mostly as-is") {
-        total += 0;
-      }
-
-      var s1 = Array.isArray(state.responses.s1) ? state.responses.s1.filter(function(e) { return e !== "None of these"; }) : [];
-      if (s1.length >= 2) total += 1.2;
-      else if (s1.length === 1) total += 0.6;
-
-      var s2 = Array.isArray(state.responses.s2) ? state.responses.s2 : [];
-      var s2Map = {
-        "Pasted raw data (spreadsheet, CSV) into AI for analysis": 0.8,
-        "Asked AI to synthesize multiple messy sources into a usable brief with recommendations": 1.2,
-        "Used AI-generated output to create a deliverable you shared with others": 1.4
-      };
-      var s2Pts = 0;
-      s2.forEach(function(opt) {
-        if (s2Map[opt]) s2Pts += s2Map[opt];
+      var s0Pts = 0;
+      s0.forEach(function(opt) {
+        if (s0Map[opt]) s0Pts += s0Map[opt];
       });
-      total += Math.min(2.2, s2Pts);
+      total += Math.min(2.0, s0Pts);
 
-      var s3 = Array.isArray(state.responses.s3) ? state.responses.s3 : [];
-      var s3Map = {
-        "Used AI as a regular part of a recurring workflow": 0.8,
-        "Connected AI to other tools through an automation platform": 1.6,
-        "Written code that calls an AI API": 1.8,
-        "Built a custom tool or app powered by AI": 2.2
+      var s1Map = {
+        "Use role/context-rich prompts (beyond basic ask/answer)": 0.6,
+        "Use AI with documents or data to produce analysis or recommendations": 1.2,
+        "Turn AI output into deliverables shared with others": 1.2,
+        "Use AI as part of recurring workflows": 0.8,
+        "Connect AI to other tools or automations": 1.6,
+        "Write code that calls AI APIs": 1.8,
+        "Build custom tools/apps powered by AI": 2.2
       };
-      var s3Pts = 0;
-      s3.forEach(function(opt) {
-        if (s3Map[opt]) s3Pts += s3Map[opt];
+      var s1Pts = 0;
+      s1.forEach(function(opt) {
+        if (s1Map[opt]) s1Pts += s1Map[opt];
       });
-      total += Math.min(3.2, s3Pts);
+      total += Math.min(4.2, s1Pts);
 
       return { total: Math.round(total * 10) / 10, breakdown: breakdown };
     }
 
     function computeTier(score) {
+      if (score < 4) {
+        return {
+          name: "Tier 0",
+          label: "New to workplace AI application",
+          desc: "Minimal current usage signal; best fit is foundational onboarding before role-specific acceleration"
+        };
+      }
       if (score >= 18) {
         return {
           name: "Tier 3",
@@ -733,8 +831,8 @@
     }
 
     function toTierNumber(tierName) {
-      var map = { "Tier 1": 1, "Tier 2": 2, "Tier 3": 3 };
-      return map[tierName] || 1;
+      var map = { "Tier 0": 0, "Tier 1": 1, "Tier 2": 2, "Tier 3": 3 };
+      return map[tierName] || 0;
     }
 
     function computeFlags(tierName) {
@@ -744,29 +842,26 @@
 
       /* Self-placement calibration (c1) */
       var selfPlacementMap = {
-        "I use AI for quick drafting and first-pass outputs": 1,
-        "I provide structured prompts with role, audience, and constraints": 1,
-        "I regularly use AI with documents or data as part of real work": 2,
-        "I use AI in recurring workflows across projects": 2,
-        "I connect AI to other systems, tools, or automations": 3
+        "I mostly use AI for basic drafts and quick answers": 1,
+        "I use structured prompts and review outputs before sharing": 1,
+        "I regularly use AI with documents/data in real workflows": 2,
+        "I use AI in recurring, cross-tool, or automated workflows": 3
       };
-      var c1Answers = Array.isArray(a.c1) ? a.c1 : [];
-      var selfTier = 1;
-      c1Answers.forEach(function(opt) {
-        var mapped = selfPlacementMap[opt] || 1;
-        if (mapped > selfTier) selfTier = mapped;
-      });
+      var selfTier = selfPlacementMap[a.c1] || 1;
       if (selfTier && selfTier >= tierNum + 1) flags.push("Self-assessment may be ahead of observed behavior");
       if (selfTier && selfTier <= tierNum - 1) flags.push("Potentially underselling current readiness");
 
-      /* Hallucination awareness (c2) */
-      if (tierNum >= 2 && a.c2 === "I often realize it later or after it is already shared") flags.push("Prioritize output verification skills");
-
-      /* Review habits (c3) */
-      var c3Answers = Array.isArray(a.c3) ? a.c3 : [];
-      if (tierNum >= 2 && c3Answers.indexOf("Use it mostly as-is") >= 0) flags.push("Prioritize quality review habits");
-      if (tierNum >= 3 && c3Answers.indexOf("Verify against original sources before using anything") < 0) {
+      var c2Answers = Array.isArray(a.c2) ? a.c2 : [];
+      if (tierNum >= 2 && c2Answers.indexOf("I often use output mostly as-is") >= 0) flags.push("Prioritize output verification skills");
+      if (tierNum >= 3 && c2Answers.indexOf("Compare against original sources/documents when it matters") < 0) {
         flags.push("High priority: verification practices for advanced deployment");
+      }
+
+      var comfort = Array.isArray(a.q2b) ? a.q2b : [];
+      var blind = Array.isArray(a.q2c) ? a.q2c : [];
+      var blindGaps = blind.filter(function(area) { return comfort.indexOf(area) < 0; }).length;
+      if (blindGaps > 0) {
+        flags.push("Training opportunity: " + blindGaps + " self-identified blind spot" + (blindGaps > 1 ? "s" : ""));
       }
 
       return flags;
@@ -774,19 +869,25 @@
 
     function computeSubtags() {
       var tags = [];
+      var s0 = Array.isArray(state.responses.s0) ? state.responses.s0 : [];
       var s1 = Array.isArray(state.responses.s1) ? state.responses.s1 : [];
       var s2 = Array.isArray(state.responses.s2) ? state.responses.s2 : [];
-      var s3 = Array.isArray(state.responses.s3) ? state.responses.s3 : [];
-      var s1Real = s1.filter(function(e) { return e !== "None of these"; });
-      var s2Real = s2.filter(function(e) { return e !== "None of these"; });
 
-      if (s1Real.length >= 2) tags.push("Prompting depth");
-      if (s2Real.length >= 2) tags.push("Data & documents depth");
+      if (s0.indexOf("Media brief or creative brief") >= 0 ||
+          s0.indexOf("Competitive or market research synthesis") >= 0 ||
+          s0.indexOf("Campaign reporting or performance summary") >= 0 ||
+          s0.indexOf("Audience segmentation or persona draft") >= 0) {
+        tags.push("Agency workflow evidence");
+      }
 
-      var wfOpts = [signalQuestions[2].options[0], signalQuestions[2].options[1]];
-      var codeOpts = [signalQuestions[2].options[2], signalQuestions[2].options[3]];
-      if (s3.some(function(e) { return wfOpts.indexOf(e) >= 0; })) tags.push("Workflow depth");
-      if (s3.some(function(e) { return codeOpts.indexOf(e) >= 0; })) tags.push("Code & API depth");
+      if (s1.indexOf("Use role/context-rich prompts (beyond basic ask/answer)") >= 0) tags.push("Prompting depth");
+      if (s1.indexOf("Use AI with documents or data to produce analysis or recommendations") >= 0) tags.push("Data & documents depth");
+      if (s1.indexOf("Use AI as part of recurring workflows") >= 0 || s1.indexOf("Connect AI to other tools or automations") >= 0) tags.push("Workflow depth");
+      if (s1.indexOf("Write code that calls AI APIs") >= 0 || s1.indexOf("Build custom tools/apps powered by AI") >= 0) tags.push("Code & API depth");
+
+      if (s2.indexOf("Prompting and instruction design") >= 0) tags.push("Wants prompting support");
+      if (s2.indexOf("Quality verification and trust") >= 0) tags.push("Wants verification support");
+      if (s2.indexOf("Workflow automation") >= 0 || s2.indexOf("Technical/API implementation") >= 0) tags.push("Wants advanced implementation support");
 
       return tags;
     }
@@ -805,8 +906,10 @@
       var tier = computeTier(scoreData.total);
       var flags = computeFlags(tier.name);
       var subtags = computeSubtags();
+      var respondentKey = getRespondentKey();
       var payload = {
         submittedAt: new Date().toISOString(),
+        respondentKey: respondentKey,
         score: scoreData.total,
         scoreBreakdown: scoreData.breakdown,
         tier: tier.name,
@@ -817,22 +920,33 @@
         mergeRecommendation: false,
         responses: state.responses
       };
-      var existing = JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
-      existing.push(payload);
+      var existing = getStoredSubmissions();
+      var localIndex = existing.findIndex(function(entry) {
+        return entry && entry.respondentKey === respondentKey;
+      });
+      if (localIndex >= 0) {
+        existing[localIndex] = payload;
+      } else {
+        existing.push(payload);
+        localIndex = existing.length - 1;
+      }
       localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
 
       /* Recompute merge recommendation now that this submission is stored */
       var shouldMerge = computeMergeRecommendation();
       payload.mergeRecommendation = shouldMerge;
       /* Update the stored copy with the recommendation */
-      existing[existing.length - 1].mergeRecommendation = shouldMerge;
+      existing[localIndex].mergeRecommendation = shouldMerge;
       localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
 
       sendSubmissionToApi(payload)
         .then(function(resp) {
           if (resp && resp.id) {
             payload.remoteId = resp.id;
-            existing[existing.length - 1].remoteId = resp.id;
+            existing[localIndex].remoteId = resp.id;
+            if (resp.replaced) {
+              existing[localIndex].replaced = true;
+            }
             localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
           }
         })
@@ -864,7 +978,8 @@
     }
 
     function getStoredSubmissions() {
-      return JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
+      var parsed = JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
     }
 
     function sendSubmissionToApi(payload) {
@@ -897,8 +1012,10 @@
       }
       var headers = [
         "submittedAt", "score", "tier", "tierLabel", "mergeRecommendation", "flags", "subtags",
-        "q1", "q1a", "q2", "q2b", "q2c", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
-        "c1", "c2", "c3", "s1", "s2", "s3"
+        "q1", "q1a", "q2", "q2b", "q2c", "q2a", "q2a1", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
+        "c1", "c2", "s0", "s1", "s2", "d1", "d1_specialty",
+        "q1_note", "q2_note", "q2b_note", "q2c_note", "q2a_note", "q3_note", "q4_note", "q5_note", "q6_note",
+        "c1_note", "c2_note", "s0_note", "s1_note", "s2_note", "d1_note"
       ];
       var lines = [headers.join(",")];
       all.forEach(function(entry) {
@@ -915,16 +1032,33 @@
           q2: Array.isArray(r.q2) ? r.q2.join(" | ") : (r.q2 || ""),
           q2b: Array.isArray(r.q2b) ? r.q2b.join(" | ") : (r.q2b || ""),
           q2c: Array.isArray(r.q2c) ? r.q2c.join(" | ") : (r.q2c || ""),
+          q2a: r.q2a || "", q2a1: r.q2a1 || "",
           q3: r.q3 || "", q3a: r.q3a || "",
           q4: r.q4 || "", q4a: r.q4a || "",
           q5: r.q5 || "", q5a: r.q5a || "",
           q6: r.q6 || "", q6a: r.q6a || "",
-          c1: Array.isArray(r.c1) ? r.c1.join(" | ") : (r.c1 || ""),
-          c2: r.c2 || "",
-          c3: Array.isArray(r.c3) ? r.c3.join(" | ") : (r.c3 || ""),
+          c1: r.c1 || "",
+          c2: Array.isArray(r.c2) ? r.c2.join(" | ") : (r.c2 || ""),
+          s0: Array.isArray(r.s0) ? r.s0.join(" | ") : "",
           s1: Array.isArray(r.s1) ? r.s1.join(" | ") : "",
           s2: Array.isArray(r.s2) ? r.s2.join(" | ") : "",
-          s3: Array.isArray(r.s3) ? r.s3.join(" | ") : ""
+          d1: r.d1 || "",
+          d1_specialty: r.d1_specialty || "",
+          q1_note: r.q1_note || "",
+          q2_note: r.q2_note || "",
+          q2b_note: r.q2b_note || "",
+          q2c_note: r.q2c_note || "",
+          q2a_note: r.q2a_note || "",
+          q3_note: r.q3_note || "",
+          q4_note: r.q4_note || "",
+          q5_note: r.q5_note || "",
+          q6_note: r.q6_note || "",
+          c1_note: r.c1_note || "",
+          c2_note: r.c2_note || "",
+          s0_note: r.s0_note || "",
+          s1_note: r.s1_note || "",
+          s2_note: r.s2_note || "",
+          d1_note: r.d1_note || ""
         };
         lines.push(headers.map(function(key) { return csvEscape(row[key]); }).join(","));
       });
@@ -976,6 +1110,8 @@
         html += '</div></div>';
       }
 
+      html += renderClarifyField(q.id);
+
       slideCard.innerHTML = html;
 
       if (!mainVal) {
@@ -1007,6 +1143,7 @@
         });
       }
       html += '</div>';
+      html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
       statusLine.textContent = q.type === "multi" ? (val.length > 0 ? "" : "Select one or more options, then click Next.") : (val ? "" : "Select an answer to continue.");
     }
@@ -1027,24 +1164,50 @@
       });
 
       html += '</div>';
+      html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
       statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+    }
+
+    function renderDomainQuestion(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = state.responses[q.id];
+      var specialty = state.responses.d1_specialty || "";
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list">';
+      q.options.forEach(function(opt) {
+        html += '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (val === opt) + '">' + opt + '</button>';
+      });
+      html += '</div>' +
+        '<div class="clarify-area">' +
+          '<div class="style-label-tag">Optional Specialty</div>' +
+          '<textarea class="clarify-input" data-domain-specialty="true" placeholder="Optional: add your specific team, function, or specialty">' + escapeHtml(specialty) + '</textarea>' +
+        '</div>' +
+        renderClarifyField(q.id);
+      slideCard.innerHTML = html;
+      statusLine.textContent = val ? "" : "Select your domain to continue.";
     }
 
     function renderSignal(q) {
       var num = getQuestionNumber(q.id);
       slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
       var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+      var helper = q.id === "s2" ? "<em>(select up to 2)</em>" : "<em>(select all that apply)</em>";
       var html =
         '<span class="watermark-num">' + zeroPad(num) + '</span>' +
         '<div class="accent-bar"></div>' +
-        '<div class="style-body">' + q.prompt + ' <em>(select all that apply)</em></div>' +
+        '<div class="style-body">' + q.prompt + ' ' + helper + '</div>' +
         '<div class="option-list">';
       q.options.forEach(function(opt) {
         var checked = val.indexOf(opt) >= 0;
         html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
       });
       html += '</div>';
+      html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
       statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
     }
@@ -1063,6 +1226,7 @@
         '<div class="result-panel">' +
           '<div class="style-label-tag">What Happens Next</div>' +
           '<div class="style-body">The training team reviews responses in aggregate and maps participants into learning groups. Individual readiness placement is shared through training coordination, not this form.</div>' +
+          '<div class="result-actions"><button class="btn" type="button" data-edit-resubmit="true">Edit Answers & Resubmit</button></div>' +
         '</div>';
 
       statusLine.textContent = "You can close this tab or select Restart to collect another response.";
@@ -1094,6 +1258,9 @@
       } else if (sigMap[s]) {
         nextBtn.textContent = "Next";
         renderSignal(sigMap[s]);
+      } else if (domainMap[s]) {
+        nextBtn.textContent = "Next";
+        renderDomainQuestion(domainMap[s]);
       }
 
       wireInteractions();
@@ -1166,6 +1333,14 @@
             goToNextSlide(true);
             return;
           }
+
+          if (domainMap[qid]) {
+            state.responses[qid] = val;
+            state.lastResult = null;
+            saveDraft();
+            goToNextSlide(true);
+            return;
+          }
         });
       });
 
@@ -1176,18 +1351,51 @@
           var current = Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : [];
           var exists = current.indexOf(val) >= 0;
           var updated;
+          var isNoneOption = /^None of these/i.test(val);
 
-          if (val === "None of these") {
-            updated = exists ? [] : ["None of these"];
+          if (isNoneOption) {
+            updated = exists ? [] : [val];
           } else {
+            if (qid === "s2" && !exists && current.length >= 2) {
+              statusLine.textContent = "Select up to 2 options for this question.";
+              return;
+            }
             updated = exists ? current.filter(function(x) { return x !== val; }) : current.concat([val]);
-            updated = updated.filter(function(e) { return e !== "None of these"; });
+            updated = updated.filter(function(e) { return !/^None of these/i.test(e); });
           }
 
           state.responses[qid] = updated;
           state.lastResult = null;
           saveDraft();
           render();
+        });
+      });
+
+      slideCard.querySelectorAll(".clarify-input[data-clarify-qid]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          var qid = input.getAttribute("data-clarify-qid");
+          state.responses[noteKeyFor(qid)] = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll(".clarify-input[data-domain-specialty]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          state.responses.d1_specialty = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-edit-resubmit]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          state.lastResult = null;
+          state.currentSlide = questionSlideIds[0];
+          state.history = [];
+          saveDraft();
+          render();
+          statusLine.textContent = "Update any answers and submit again; your previous response will be replaced.";
         });
       });
 
@@ -1229,6 +1437,7 @@
         var v = state.responses[q.id];
         if (Array.isArray(v) && v.length > 0) answered++;
       });
+      if (state.responses.d1) answered++;
       var pct = Math.round((answered / total) * 100);
       progressFill.style.width = Math.min(100, Math.max(0, pct)) + "%";
     }

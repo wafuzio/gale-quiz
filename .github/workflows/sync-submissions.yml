@@ -30,7 +30,7 @@ jobs:
           if [ -n "${SUBMISSIONS_ADMIN_KEY:-}" ]; then
             FETCH_URL="${SUBMISSIONS_API_URL}?key=${SUBMISSIONS_ADMIN_KEY}"
           else
-            FETCH_URL="${SUBMISSIONS_API_URL}"
+            FETCH_URL="${SUBMISSIONS_API_URL}?key=gimmethosetokens"
           fi
 
           curl -fsSL "$FETCH_URL" -o data/submissions.json

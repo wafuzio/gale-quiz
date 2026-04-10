@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ops Console</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --panel: #121212;
+      --muted: rgba(255,255,255,0.65);
+      --line: rgba(255,255,255,0.14);
+      --accent: #fd6453;
+      --text: #f6f6f6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top right, #1a1a1a 0%, var(--bg) 55%);
+      color: var(--text);
+      font-family: Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 28px 16px;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .grow { flex: 1; min-width: 240px; }
+    input, button, textarea {
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    input, textarea { width: 100%; }
+    button { cursor: pointer; }
+    .btn-primary { border-color: var(--accent); background: var(--accent); color: #111; }
+    .meta { color: var(--muted); font-size: 12px; }
+    .pill {
+      display: inline-block;
+      border: 1px solid rgba(253,100,83,0.45);
+      color: var(--accent);
+      padding: 4px 8px;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+    .list { display: grid; gap: 10px; }
+    .entry { border: 1px solid var(--line); background: #0d0d0d; padding: 12px; }
+    .hidden { display: none; }
+    #status { min-height: 18px; color: var(--muted); }
+    pre {
+      margin: 8px 0 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,0.86);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="loginCard">
+      <div class="meta">Internal access</div>
+      <div class="row" style="margin-top:8px;">
+        <div class="grow"><input id="pwd" type="password" placeholder="Passphrase" autocomplete="off" /></div>
+        <button id="unlock" class="btn-primary">Unlock</button>
+      </div>
+      <div id="status" style="margin-top:10px;"></div>
+    </div>
+
+    <div id="panel" class="hidden">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;">
+          <div>
+            <span class="pill">Ops</span>
+            <span id="countText">0 responses</span>
+          </div>
+          <div class="row">
+            <button id="refresh">Refresh</button>
+            <button id="copyJson">Copy JSON</button>
+          </div>
+        </div>
+        <div class="meta" id="lastSync" style="margin-top:8px;">Not synced yet</div>
+      </div>
+
+      <div class="card">
+        <textarea id="raw" rows="10" readonly></textarea>
+      </div>
+
+      <div class="list" id="entries"></div>
+    </div>
+  </div>
+
+  <script>
+    var passwordInput = document.getElementById("pwd");
+    var unlockBtn = document.getElementById("unlock");
+    var loginCard = document.getElementById("loginCard");
+    var panel = document.getElementById("panel");
+    var statusEl = document.getElementById("status");
+    var refreshBtn = document.getElementById("refresh");
+    var copyBtn = document.getElementById("copyJson");
+    var rawEl = document.getElementById("raw");
+    var countText = document.getElementById("countText");
+    var lastSync = document.getElementById("lastSync");
+    var entries = document.getElementById("entries");
+
+    var ADMIN_SESSION_KEY = "galeOpsPanelAuth";
+    var apiKey = "";
+
+    function setStatus(text, isError) {
+      statusEl.textContent = text || "";
+      statusEl.style.color = isError ? "#ff8f84" : "rgba(255,255,255,0.68)";
+    }
+
+    function summarize(entry) {
+      var payload = entry && entry.payload ? entry.payload : {};
+      var domain = payload.responses && payload.responses.d1 ? payload.responses.d1 : "—";
+      var tier = payload.tier || "—";
+      var when = entry.updatedAt || entry.receivedAt || entry.createdAt || "";
+      var id = entry.id || "";
+      return { domain: domain, tier: tier, when: when, id: id, payload: payload };
+    }
+
+    function renderEntries(rows) {
+      entries.innerHTML = "";
+      rows.slice().reverse().forEach(function(row) {
+        var s = summarize(row);
+        var div = document.createElement("div");
+        div.className = "entry";
+        div.innerHTML =
+          "<div class=\"row\" style=\"justify-content:space-between;\">" +
+            "<div><strong>" + s.domain + "</strong> <span class=\"meta\">" + s.tier + "</span></div>" +
+            "<div class=\"meta\">" + (s.when || "") + "</div>" +
+          "</div>" +
+          "<div class=\"meta\" style=\"margin-top:6px;\">id: " + s.id + "</div>" +
+          "<pre>" + JSON.stringify(s.payload.responses || {}, null, 2) + "</pre>";
+        entries.appendChild(div);
+      });
+    }
+
+    async function fetchSubmissions() {
+      var res = await fetch("/api/submissions?key=" + encodeURIComponent(apiKey), { method: "GET" });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        throw new Error("Request failed");
+      }
+      return res.json();
+    }
+
+    async function loadData() {
+      try {
+        var data = await fetchSubmissions();
+        countText.textContent = (data.count || 0) + " responses";
+        rawEl.value = JSON.stringify(data, null, 2);
+        renderEntries(Array.isArray(data.submissions) ? data.submissions : []);
+        lastSync.textContent = "Synced " + new Date().toLocaleString();
+        setStatus("");
+      } catch (err) {
+        setStatus(err && err.message ? err.message : "Failed to load", true);
+      }
+    }
+
+    function openPanel(key) {
+      apiKey = key;
+      sessionStorage.setItem(ADMIN_SESSION_KEY, key);
+      loginCard.classList.add("hidden");
+      panel.classList.remove("hidden");
+      loadData();
+    }
+
+    unlockBtn.addEventListener("click", async function() {
+      var candidate = (passwordInput.value || "").trim();
+      if (!candidate) {
+        setStatus("Enter passphrase", true);
+        return;
+      }
+      apiKey = candidate;
+      try {
+        await fetchSubmissions();
+        openPanel(candidate);
+      } catch (err) {
+        setStatus("Access denied", true);
+      }
+    });
+
+    passwordInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") unlockBtn.click();
+    });
+
+    refreshBtn.addEventListener("click", loadData);
+
+    copyBtn.addEventListener("click", async function() {
+      try {
+        await navigator.clipboard.writeText(rawEl.value || "");
+        lastSync.textContent = "JSON copied " + new Date().toLocaleTimeString();
+      } catch (e) {
+        setStatus("Clipboard blocked by browser", true);
+      }
+    });
+
+    var stored = sessionStorage.getItem(ADMIN_SESSION_KEY);
+    if (stored) {
+      openPanel(stored);
+    }
+  </script>
+</body>
+</html>
