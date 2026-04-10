@@ -632,6 +632,7 @@
       lastResult: null,
       introStep: 0
     };
+    var summaryFeedbackSyncTimer = null;
 
     var slideCard = document.getElementById("slideCard");
     var slideIndex = document.getElementById("slideIndex");
@@ -906,6 +907,81 @@
       return tier4Count > 0 && tier4Count < 5;
     }
 
+    function buildAiAstrologyRead(result) {
+      var responses = (result && result.responses) || {};
+      var tier = result && result.tier ? result.tier : "Tier 1";
+      var s0 = Array.isArray(responses.s0) ? responses.s0 : [];
+      var s2 = Array.isArray(responses.s2) ? responses.s2 : [];
+      var flags = Array.isArray(result && result.flags) ? result.flags : [];
+      var domain = responses.d1 || "Generalist Orbit";
+
+      var sign = "The Pattern Scout";
+      var signature = "You’re building practical AI instincts and already spotting where better prompting can improve outcomes.";
+
+      if (tier === "Tier 0") {
+        sign = "The Curious Spark";
+        signature = "Your profile suggests strong curiosity and high momentum once a few repeatable workflows click into place.";
+      } else if (tier === "Tier 1") {
+        sign = "The Pattern Scout";
+        signature = "You’re building practical AI instincts and already spotting where better prompting can improve outcomes.";
+      } else if (tier === "Tier 2") {
+        sign = "The Systems Navigator";
+        signature = "Your pattern shows steady practical use with clear potential to scale what already works.";
+      } else if (tier === "Tier 3") {
+        sign = "The Workflow Architect";
+        signature = "Your answers show a systems mindset: you tend to turn one-off wins into repeatable ways of working.";
+      }
+
+      if (responses.q3 === "Yes" || responses.q2a === "Yes") {
+        signature += " Your prompt-refinement signal is strong.";
+      } else if (responses.q3 === "Sometimes" || responses.q2a === "Sometimes") {
+        signature += " You’re in the high-upside middle where small prompt upgrades can create outsized gains.";
+      }
+
+      if (s0.length > 0 && s0.indexOf("None of these yet") < 0) {
+        signature += " You already show real agency-use evidence, which is a strong readiness marker.";
+      }
+
+      var rising = s2[0] || "Prompting and instruction design";
+      var watchout = flags[0] || "Keep strengthening verification habits as your use scales.";
+
+      return {
+        sign: sign,
+        signature: signature,
+        rising: rising,
+        domain: domain,
+        watchout: watchout
+      };
+    }
+
+    function syncSummaryFeedbackToSubmission() {
+      if (!state.lastResult) return;
+      state.lastResult.responses = state.responses;
+      state.lastResult.aiProfile = buildAiAstrologyRead(state.lastResult);
+
+      var all = getStoredSubmissions();
+      var idx = all.findIndex(function(entry) {
+        return entry && entry.respondentKey === state.lastResult.respondentKey;
+      });
+      if (idx >= 0) {
+        all[idx] = state.lastResult;
+      } else {
+        all.push(state.lastResult);
+      }
+      localStorage.setItem(SUBMISSION_KEY, JSON.stringify(all));
+
+      sendSubmissionToApi(state.lastResult).catch(function(err) {
+        console.error("Summary feedback sync failed:", err);
+      });
+    }
+
+    function queueSummaryFeedbackSync() {
+      if (summaryFeedbackSyncTimer) clearTimeout(summaryFeedbackSyncTimer);
+      summaryFeedbackSyncTimer = setTimeout(function() {
+        syncSummaryFeedbackToSubmission();
+      }, 450);
+    }
+
     function submitResults() {
       var scoreData = computeScore();
       var tier = computeTier(scoreData.total);
@@ -925,6 +1001,7 @@
         mergeRecommendation: false,
         responses: state.responses
       };
+      payload.aiProfile = buildAiAstrologyRead(payload);
       var existing = getStoredSubmissions();
       var localIndex = existing.findIndex(function(entry) {
         return entry && entry.respondentKey === respondentKey;
@@ -1019,6 +1096,7 @@
         "submittedAt", "score", "tier", "tierLabel", "mergeRecommendation", "flags", "subtags",
         "q1", "q1a", "q2", "q2b", "q2c", "q2a", "q2a1", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
         "c1", "c2", "s0", "s1", "s2", "d1", "d1_specialty",
+        "astro_feedback_choice", "astro_feedback_note",
         "q1_note", "q2_note", "q2b_note", "q2c_note", "q2a_note", "q3_note", "q4_note", "q5_note", "q6_note",
         "c1_note", "c2_note", "s0_note", "s1_note", "s2_note", "d1_note"
       ];
@@ -1049,6 +1127,8 @@
           s2: Array.isArray(r.s2) ? r.s2.join(" | ") : "",
           d1: r.d1 || "",
           d1_specialty: r.d1_specialty || "",
+          astro_feedback_choice: r.astro_feedback_choice || "",
+          astro_feedback_note: r.astro_feedback_note || "",
           q1_note: r.q1_note || "",
           q2_note: r.q2_note || "",
           q2b_note: r.q2b_note || "",
@@ -1221,6 +1301,11 @@
       slideIndex.textContent = "Submitted";
 
       if (!state.lastResult) state.lastResult = submitResults();
+      var profile = state.lastResult.aiProfile || buildAiAstrologyRead(state.lastResult);
+      var astroChoice = state.responses.astro_feedback_choice || "";
+      var astroNote = state.responses.astro_feedback_note || "";
+      var nailedActive = astroChoice === "nailed_it";
+      var notQuiteActive = astroChoice === "not_quite";
 
       slideCard.innerHTML =
         '<span class="watermark-num">DONE</span>' +
@@ -1228,6 +1313,22 @@
         '<div class="style-display">Thank You</div>' +
         '<div class="style-section">Submission Received</div>' +
         '<div class="style-body">Your responses were submitted successfully. We will use them to plan practical AI training tracks across GALE.</div>' +
+        '<div class="result-panel">' +
+          '<div class="style-label-tag">AI Astrology Read ✦</div>' +
+          '<div class="style-body"><strong>' + escapeHtml(profile.sign) + '</strong> — ' + escapeHtml(profile.signature) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;">Current vibe: <strong>' + escapeHtml(profile.rising) + '</strong> · ' + escapeHtml(profile.domain) + '</div>' +
+          '<div class="style-body" style="margin-top:10px;">Did this read feel accurate?</div>' +
+          '<div class="result-actions" style="margin-top:8px;">' +
+            '<button class="btn" type="button" data-astro-feedback="nailed_it" aria-pressed="' + nailedActive + '">Nailed it</button>' +
+            '<button class="btn" type="button" data-astro-feedback="not_quite" aria-pressed="' + notQuiteActive + '">Not quite</button>' +
+          '</div>' +
+          (notQuiteActive ?
+            '<div class="clarify-area" style="margin-top:10px;">' +
+              '<div class="style-label-tag">Tell us what missed</div>' +
+              '<textarea class="clarify-input" data-astro-feedback-note="true" placeholder="Optional: what felt off or what should be emphasized?">' + escapeHtml(astroNote) + '</textarea>' +
+            '</div>' :
+            '') +
+        '</div>' +
         '<div class="result-panel">' +
           '<div class="style-label-tag">What Happens Next</div>' +
           '<div class="style-body">The training team reviews responses in aggregate and maps participants into learning groups. Individual readiness placement is shared through training coordination, not this form.</div>' +
@@ -1401,6 +1502,29 @@
           saveDraft();
           render();
           statusLine.textContent = "Update any answers and submit again; your previous response will be replaced.";
+        });
+      });
+
+      slideCard.querySelectorAll("[data-astro-feedback]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var choice = btn.getAttribute("data-astro-feedback");
+          state.responses.astro_feedback_choice = choice;
+          if (choice !== "not_quite") {
+            delete state.responses.astro_feedback_note;
+          }
+          state.lastResult = null;
+          saveDraft();
+          if (!state.lastResult) state.lastResult = submitResults();
+          queueSummaryFeedbackSync();
+          render();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-astro-feedback-note]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          state.responses.astro_feedback_note = input.value;
+          saveDraft();
+          queueSummaryFeedbackSync();
         });
       });
 

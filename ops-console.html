@@ -8,6 +8,7 @@
     :root {
       --bg: #0a0a0a;
       --panel: #121212;
+      --panel-soft: #171717;
       --muted: rgba(255,255,255,0.65);
       --line: rgba(255,255,255,0.14);
       --accent: #fd6453;
@@ -52,18 +53,60 @@
       text-transform: uppercase;
       margin-right: 8px;
     }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .stat {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .stat-value { margin-top: 4px; font-size: 24px; font-weight: 600; }
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .panel-soft {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .list-inline {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .list-inline li { margin: 6px 0; }
     .list { display: grid; gap: 10px; }
     .entry { border: 1px solid var(--line); background: #0d0d0d; padding: 12px; }
+    .entry-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .entry-title { font-size: 16px; font-weight: 600; }
+    .entry-meta { color: var(--muted); font-size: 12px; }
+    .entry-detail {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      display: none;
+    }
+    .entry-detail.open { display: block; }
+    .doc-section { margin-top: 10px; }
+    .doc-section-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .doc-section p { margin: 6px 0; line-height: 1.35; }
     .hidden { display: none; }
     #status { min-height: 18px; color: var(--muted); }
-    pre {
-      margin: 8px 0 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
-      color: rgba(255,255,255,0.86);
-    }
+    .raw-wrap { margin-top: 10px; }
+    #raw { min-height: 180px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
   </style>
 </head>
 <body>
@@ -87,12 +130,37 @@
           <div class="row">
             <button id="refresh">Refresh</button>
             <button id="copyJson">Copy JSON</button>
+            <button id="downloadJson">Download JSON</button>
+            <button id="toggleRaw">Show Raw</button>
           </div>
         </div>
         <div class="meta" id="lastSync" style="margin-top:8px;">Not synced yet</div>
+
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-label">Submissions</div><div id="statSubmissions" class="stat-value">0</div></div>
+          <div class="stat"><div class="stat-label">Average Score</div><div id="statAvgScore" class="stat-value">0.0</div></div>
+          <div class="stat"><div class="stat-label">Most Common Tier</div><div id="statTopTier" class="stat-value">—</div></div>
+          <div class="stat"><div class="stat-label">Most Common Domain</div><div id="statTopDomain" class="stat-value">—</div></div>
+        </div>
+
+        <div class="split">
+          <div class="panel-soft">
+            <div class="stat-label">Tier Breakdown</div>
+            <ul id="tierBreakdown" class="list-inline"></ul>
+          </div>
+          <div class="panel-soft">
+            <div class="stat-label">Domain Breakdown</div>
+            <ul id="domainBreakdown" class="list-inline"></ul>
+          </div>
+        </div>
+
+        <div class="panel-soft" style="margin-top:10px;">
+          <div class="stat-label">Interesting Insights (Auto)</div>
+          <ul id="insights" class="list-inline"></ul>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card raw-wrap hidden" id="rawWrap">
         <textarea id="raw" rows="10" readonly></textarea>
       </div>
 
@@ -108,42 +176,265 @@
     var statusEl = document.getElementById("status");
     var refreshBtn = document.getElementById("refresh");
     var copyBtn = document.getElementById("copyJson");
+    var downloadBtn = document.getElementById("downloadJson");
+    var toggleRawBtn = document.getElementById("toggleRaw");
     var rawEl = document.getElementById("raw");
+    var rawWrap = document.getElementById("rawWrap");
     var countText = document.getElementById("countText");
     var lastSync = document.getElementById("lastSync");
     var entries = document.getElementById("entries");
+    var statSubmissions = document.getElementById("statSubmissions");
+    var statAvgScore = document.getElementById("statAvgScore");
+    var statTopTier = document.getElementById("statTopTier");
+    var statTopDomain = document.getElementById("statTopDomain");
+    var tierBreakdown = document.getElementById("tierBreakdown");
+    var domainBreakdown = document.getElementById("domainBreakdown");
+    var insightsEl = document.getElementById("insights");
 
     var ADMIN_SESSION_KEY = "galeOpsPanelAuth";
     var apiKey = "";
+    var latestData = { count: 0, submissions: [] };
+    var entryOpenState = {};
 
     function setStatus(text, isError) {
       statusEl.textContent = text || "";
       statusEl.style.color = isError ? "#ff8f84" : "rgba(255,255,255,0.68)";
     }
 
-    function summarize(entry) {
-      var payload = entry && entry.payload ? entry.payload : {};
-      var domain = payload.responses && payload.responses.d1 ? payload.responses.d1 : "—";
-      var tier = payload.tier || "—";
-      var when = entry.updatedAt || entry.receivedAt || entry.createdAt || "";
-      var id = entry.id || "";
-      return { domain: domain, tier: tier, when: when, id: id, payload: payload };
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatValue(val) {
+      if (Array.isArray(val)) return val.length ? val.join("; ") : "—";
+      if (val == null || val === "") return "—";
+      return String(val);
+    }
+
+    function normalizeSubmission(entry, index) {
+      var payload = entry && entry.payload ? entry.payload : (entry || {});
+      var responses = payload.responses && typeof payload.responses === "object" ? payload.responses : {};
+      var id = (entry && entry.id) || payload.remoteId || payload.respondentKey || ("submission-" + index);
+      return {
+        id: id,
+        score: Number(payload.score || 0),
+        tier: payload.tier || "—",
+        when: payload.submittedAt || (entry && (entry.updatedAt || entry.receivedAt || entry.createdAt)) || "",
+        domain: responses.d1 || "Unknown",
+        payload: payload,
+        responses: responses
+      };
+    }
+
+    function tallyBy(items, keyGetter) {
+      var out = {};
+      items.forEach(function(item) {
+        var key = keyGetter(item);
+        out[key] = (out[key] || 0) + 1;
+      });
+      return out;
+    }
+
+    function topKey(counts) {
+      var best = "—";
+      var max = -1;
+      Object.keys(counts).forEach(function(k) {
+        if (counts[k] > max) {
+          max = counts[k];
+          best = k;
+        }
+      });
+      return best;
+    }
+
+    function renderBreakdownList(el, counts) {
+      var keys = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      el.innerHTML = keys.length ? "" : "<li>No data yet.</li>";
+      keys.forEach(function(k) {
+        var li = document.createElement("li");
+        li.textContent = k + ": " + counts[k];
+        el.appendChild(li);
+      });
+    }
+
+    function buildInsights(rows, tierCounts, domainCounts) {
+      var insights = [];
+      var total = rows.length || 1;
+
+      Object.keys(domainCounts).forEach(function(domain) {
+        var domainRows = rows.filter(function(r) { return r.domain === domain; });
+        if (!domainRows.length) return;
+        var early = domainRows.filter(function(r) { return r.tier === "Tier 0" || r.tier === "Tier 1"; }).length;
+        var earlyRatio = early / domainRows.length;
+        if (earlyRatio >= 0.65 && /people|hr/i.test(domain)) {
+          insights.push(domain + " currently skews beginner-heavy, suggesting high upside from foundational training tracks.");
+        }
+
+        var contentCreators = domainRows.filter(function(r) {
+          var q2 = Array.isArray(r.responses.q2) ? r.responses.q2 : [];
+          return q2.indexOf("Content Creation") >= 0;
+        }).length;
+        if (contentCreators / domainRows.length >= 0.5 && /programmatic|engineering|marketing|communications/i.test(domain)) {
+          insights.push(domain + " shows stronger-than-expected content generation use in day-to-day workflows.");
+        }
+      });
+
+      var promptingNeed = rows.filter(function(r) {
+        var s2 = Array.isArray(r.responses.s2) ? r.responses.s2 : [];
+        return s2.indexOf("Prompting and instruction design") >= 0;
+      }).length;
+      if (promptingNeed / total >= 0.4) {
+        insights.push("Prompting support is a frequent request; a focused instruction-design module would likely have broad impact.");
+      }
+
+      var verificationNeed = rows.filter(function(r) {
+        var s2 = Array.isArray(r.responses.s2) ? r.responses.s2 : [];
+        return s2.indexOf("Quality verification and trust") >= 0;
+      }).length;
+      if (verificationNeed / total >= 0.35) {
+        insights.push("Trust and verification appears repeatedly, indicating appetite for practical QA checklists and review habits.");
+      }
+
+      var topDomain = topKey(domainCounts);
+      if (topDomain !== "—" && domainCounts[topDomain] / total >= 0.3) {
+        insights.push(topDomain + " is currently the largest response segment; consider making this your first domain-specific pilot cohort.");
+      }
+
+      if (!insights.length) {
+        insights.push("More submissions will sharpen pattern detection. Current data is still too sparse for strong directional insights.");
+      }
+
+      return insights.slice(0, 5);
+    }
+
+    function renderDashboard(rows) {
+      var tierCounts = tallyBy(rows, function(r) { return r.tier || "Unknown"; });
+      var domainCounts = tallyBy(rows, function(r) { return r.domain || "Unknown"; });
+      var scoreSum = rows.reduce(function(sum, r) { return sum + (isFinite(r.score) ? r.score : 0); }, 0);
+      var avg = rows.length ? (scoreSum / rows.length) : 0;
+
+      statSubmissions.textContent = String(rows.length);
+      statAvgScore.textContent = avg.toFixed(1);
+      statTopTier.textContent = topKey(tierCounts);
+      statTopDomain.textContent = topKey(domainCounts);
+
+      renderBreakdownList(tierBreakdown, tierCounts);
+      renderBreakdownList(domainBreakdown, domainCounts);
+
+      var insights = buildInsights(rows, tierCounts, domainCounts);
+      insightsEl.innerHTML = "";
+      insights.forEach(function(text) {
+        var li = document.createElement("li");
+        li.textContent = text;
+        insightsEl.appendChild(li);
+      });
+    }
+
+    function renderDocSection(title, pairs) {
+      var html = '<div class="doc-section"><div class="doc-section-title">' + escapeHtml(title) + '</div>';
+      pairs.forEach(function(pair) {
+        html += '<p><strong>' + escapeHtml(pair.label) + ':</strong> ' + escapeHtml(formatValue(pair.value)) + '</p>';
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function buildSubmissionDoc(row) {
+      var r = row.responses;
+      var profile = row.payload.aiProfile || {};
+      return '' +
+        renderDocSection("Roll-up", [
+          { label: "Submitted", value: row.when || "—" },
+          { label: "Score", value: row.score },
+          { label: "Tier", value: row.tier },
+          { label: "Domain", value: row.domain },
+          { label: "Submission ID", value: row.id }
+        ]) +
+        renderDocSection("AI Profile Read", [
+          { label: "Profile", value: profile.sign || "—" },
+          { label: "Summary", value: profile.signature || "—" },
+          { label: "Rising Signal", value: profile.rising || "—" },
+          { label: "Watchout", value: profile.watchout || "—" }
+        ]) +
+        renderDocSection("Core Answers", [
+          { label: "Q1", value: r.q1 },
+          { label: "Q1 Follow-up", value: r.q1a },
+          { label: "Q2 Areas Used", value: r.q2 },
+          { label: "Q2 Comfortable", value: r.q2b },
+          { label: "Q2 Blind Spots", value: r.q2c },
+          { label: "Q2 Prompt Structure", value: r.q2a },
+          { label: "Q2 Prompt Follow-up", value: r.q2a1 },
+          { label: "Q3", value: r.q3 },
+          { label: "Q3 Follow-up", value: r.q3a },
+          { label: "Q4", value: r.q4 },
+          { label: "Q4 Follow-up", value: r.q4a },
+          { label: "Q5", value: r.q5 },
+          { label: "Q5 Follow-up", value: r.q5a },
+          { label: "Q6", value: r.q6 },
+          { label: "Q6 Follow-up", value: r.q6a }
+        ]) +
+        renderDocSection("Calibration & Signals", [
+          { label: "C1", value: r.c1 },
+          { label: "C2", value: r.c2 },
+          { label: "S0", value: r.s0 },
+          { label: "S1", value: r.s1 },
+          { label: "S2", value: r.s2 },
+          { label: "Domain Specialty", value: r.d1_specialty },
+          { label: "Astrology Feedback", value: r.astro_feedback_choice },
+          { label: "Astrology Feedback Note", value: r.astro_feedback_note }
+        ]) +
+        renderDocSection("Clarifications", [
+          { label: "Q1 Note", value: r.q1_note },
+          { label: "Q2 Note", value: r.q2_note },
+          { label: "Q2b Note", value: r.q2b_note },
+          { label: "Q2c Note", value: r.q2c_note },
+          { label: "Q2a Note", value: r.q2a_note },
+          { label: "Q3 Note", value: r.q3_note },
+          { label: "Q4 Note", value: r.q4_note },
+          { label: "Q5 Note", value: r.q5_note },
+          { label: "Q6 Note", value: r.q6_note },
+          { label: "C1 Note", value: r.c1_note },
+          { label: "C2 Note", value: r.c2_note },
+          { label: "S0 Note", value: r.s0_note },
+          { label: "S1 Note", value: r.s1_note },
+          { label: "S2 Note", value: r.s2_note },
+          { label: "Domain Note", value: r.d1_note }
+        ]);
     }
 
     function renderEntries(rows) {
       entries.innerHTML = "";
       rows.slice().reverse().forEach(function(row) {
-        var s = summarize(row);
+        var normalized = normalizeSubmission(row, entries.children.length + 1);
+        var open = Boolean(entryOpenState[normalized.id]);
         var div = document.createElement("div");
         div.className = "entry";
         div.innerHTML =
-          "<div class=\"row\" style=\"justify-content:space-between;\">" +
-            "<div><strong>" + s.domain + "</strong> <span class=\"meta\">" + s.tier + "</span></div>" +
-            "<div class=\"meta\">" + (s.when || "") + "</div>" +
+          "<div class=\"entry-head\">" +
+            "<div>" +
+              "<div class=\"entry-title\">" + escapeHtml(normalized.domain) + "</div>" +
+              "<div class=\"entry-meta\">Score " + escapeHtml(normalized.score.toFixed(1)) + " · " + escapeHtml(normalized.tier) + " · " + escapeHtml(normalized.when || "") + "</div>" +
+            "</div>" +
+            "<button type=\"button\" data-toggle-entry=\"" + escapeHtml(normalized.id) + "\">" + (open ? "Collapse" : "Expand") + "</button>" +
           "</div>" +
-          "<div class=\"meta\" style=\"margin-top:6px;\">id: " + s.id + "</div>" +
-          "<pre>" + JSON.stringify(s.payload.responses || {}, null, 2) + "</pre>";
+          "<div class=\"entry-detail" + (open ? " open" : "") + "\" data-entry-detail=\"" + escapeHtml(normalized.id) + "\">" +
+            buildSubmissionDoc(normalized) +
+          "</div>" +
+          "<div class=\"entry-meta\" style=\"margin-top:8px;\">ID: " + escapeHtml(normalized.id) + "</div>";
         entries.appendChild(div);
+      });
+
+      entries.querySelectorAll("[data-toggle-entry]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-toggle-entry");
+          entryOpenState[id] = !entryOpenState[id];
+          renderEntries(latestData.submissions || []);
+        });
       });
     }
 
@@ -159,9 +450,15 @@
     async function loadData() {
       try {
         var data = await fetchSubmissions();
+        latestData = {
+          count: data && data.count ? data.count : 0,
+          submissions: Array.isArray(data && data.submissions) ? data.submissions : []
+        };
+        var normalized = latestData.submissions.map(function(row, idx) { return normalizeSubmission(row, idx); });
         countText.textContent = (data.count || 0) + " responses";
         rawEl.value = JSON.stringify(data, null, 2);
-        renderEntries(Array.isArray(data.submissions) ? data.submissions : []);
+        renderDashboard(normalized);
+        renderEntries(latestData.submissions || []);
         lastSync.textContent = "Synced " + new Date().toLocaleString();
         setStatus("");
       } catch (err) {
@@ -204,6 +501,30 @@
         lastSync.textContent = "JSON copied " + new Date().toLocaleTimeString();
       } catch (e) {
         setStatus("Clipboard blocked by browser", true);
+      }
+    });
+
+    downloadBtn.addEventListener("click", function() {
+      var blob = new Blob([rawEl.value || "{}"], { type: "application/json;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "gale-submissions-admin.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      lastSync.textContent = "JSON downloaded " + new Date().toLocaleTimeString();
+    });
+
+    toggleRawBtn.addEventListener("click", function() {
+      var showing = !rawWrap.classList.contains("hidden");
+      if (showing) {
+        rawWrap.classList.add("hidden");
+        toggleRawBtn.textContent = "Show Raw";
+      } else {
+        rawWrap.classList.remove("hidden");
+        toggleRawBtn.textContent = "Hide Raw";
       }
     });
 
