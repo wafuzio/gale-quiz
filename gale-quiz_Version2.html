@@ -123,6 +123,13 @@
       color: rgba(255,255,255,0.95);
       max-width: 760px;
     }
+    .style-hint {
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.62);
+      max-width: 760px;
+    }
     .option-list {
       margin-top: 24px;
       display: grid;
@@ -575,7 +582,7 @@
       "Research synthesis",
       "Data analysis",
       "Strategic planning",
-      "Calculation / computation (e.g., summarize metrics, compute growth rates, estimate budget scenarios)",
+      "Calculation / computation",
       "Workflow automation",
       "Content drafting & generation",
       "Communication / messaging",
@@ -1417,10 +1424,15 @@
       slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
       var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
       var opts = getUsageOptions(q);
+      var hint = "";
+      if (q.id === "q2") {
+        hint = 'Example for computation: "Summarize these metrics, compute growth rates, estimate budget scenarios."';
+      }
       var html =
         '<span class="watermark-num">' + zeroPad(num) + '</span>' +
         '<div class="accent-bar"></div>' +
         '<div class="style-body">' + q.prompt + '</div>' +
+        (hint ? '<div class="style-hint">' + hint + '</div>' : '') +
         '<div class="option-list usage-grid">';
 
       opts.forEach(function(opt) {
