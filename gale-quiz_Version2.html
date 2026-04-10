@@ -159,6 +159,7 @@
       cursor: pointer;
     }
     .btn.primary { border-color: #FD6453; background: #FD6453; color: #080808; }
+    .btn[aria-pressed="true"] { border-color: #FD6453; background: rgba(253,100,83,0.2); }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .status-line { font-size: 12px; color: rgba(255,255,255,0.7); min-height: 18px; }
     .result-panel {
@@ -181,6 +182,23 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+    .processing-wrap {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.86);
+    }
+    .processing-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FD6453;
+      opacity: 0.35;
+      animation: pulseGlow 1.2s ease-in-out infinite;
+    }
+    .processing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .processing-dot:nth-child(3) { animation-delay: 0.3s; }
     .progress-track {
       position: fixed;
       bottom: 0;
@@ -229,8 +247,12 @@
       box-shadow: 0 0 0 1px rgba(253,100,83,0.25);
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.25; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
     }
     .score-breakdown {
       display: grid;
@@ -550,7 +572,7 @@
         options: [
           "Prompting and instruction design",
           "Working with documents and data",
-          "Quality verification and trust",
+          "Transferring my current skills into an Alchemy AI environment",
           "Workflow automation",
           "Technical/API implementation"
         ]
@@ -574,7 +596,7 @@
       ]
     };
 
-    var slideOrder = ["intro", "q1", "q2", "q2b", "q2c", "q2a", "q3", "q4", "q5", "q6", "c1", "c2", "s0", "s1", "s2", "d1", "summary"];
+    var slideOrder = ["intro", "q1", "q2", "q2b", "q2c", "q2a", "q3", "q4", "q5", "q6", "c1", "c2", "s0", "s1", "s2", "d1", "astro", "summary"];
     var introSlides = [
       'This 5-minute quiz helps us understand how you use AI today — so we can offer training that actually fits where you are.',
       'WE ARE ASKING ABOUT WHAT YOU HAVE ACTUALLY DONE, NOT WHAT YOU\'VE HEARD ABOUT OR WANT TO LEARN.',
@@ -582,7 +604,7 @@
     ];
 
     /* Question IDs in presentation order (excludes intro and summary) */
-    var questionSlideIds = slideOrder.filter(function(s) { return s !== "intro" && s !== "summary"; });
+    var questionSlideIds = slideOrder.filter(function(s) { return s !== "intro" && s !== "summary" && s !== "astro"; });
     var TOTAL_QUESTIONS = questionSlideIds.length; /* 15 */
 
     function getQuestionNumber(slideId) {
@@ -645,9 +667,9 @@
       history: [],
       responses: {},
       lastResult: null,
-      introStep: 0
+      introStep: 0,
+      astroReadyAt: 0
     };
-    var summaryFeedbackSyncTimer = null;
 
     var slideCard = document.getElementById("slideCard");
     var slideIndex = document.getElementById("slideIndex");
@@ -666,6 +688,7 @@
         state.history = parsed.history || [];
         state.currentSlide = parsed.currentSlide || "intro";
         state.introStep = typeof parsed.introStep === "number" ? parsed.introStep : 0;
+        state.astroReadyAt = typeof parsed.astroReadyAt === "number" ? parsed.astroReadyAt : 0;
         saveStatus.textContent = parsed.updatedAt ? "Draft saved " + new Date(parsed.updatedAt).toLocaleTimeString() : "Draft loaded";
       } catch (e) {
         saveStatus.textContent = "Draft unreadable";
@@ -676,6 +699,7 @@
       var payload = {
         currentSlide: state.currentSlide,
         introStep: state.introStep,
+        astroReadyAt: state.astroReadyAt,
         history: state.history,
         responses: state.responses,
         updatedAt: new Date().toISOString()
@@ -692,7 +716,7 @@
     }
 
     function isSlideAnswered(slideId) {
-      if (slideId === "intro" || slideId === "summary") return true;
+      if (slideId === "intro" || slideId === "summary" || slideId === "astro") return true;
       var usage = usageMap[slideId];
       if (usage) {
         var usageVal = state.responses[usage.id];
@@ -915,7 +939,7 @@
       if (s1.indexOf("Write code that calls AI APIs") >= 0 || s1.indexOf("Build custom tools/apps powered by AI") >= 0) tags.push("Code & API depth");
 
       if (s2.indexOf("Prompting and instruction design") >= 0) tags.push("Wants prompting support");
-      if (s2.indexOf("Quality verification and trust") >= 0) tags.push("Wants verification support");
+      if (s2.indexOf("Transferring my current skills into an Alchemy AI environment") >= 0) tags.push("Wants Alchemy AI transition support");
       if (s2.indexOf("Workflow automation") >= 0 || s2.indexOf("Technical/API implementation") >= 0) tags.push("Wants advanced implementation support");
 
       return tags;
@@ -966,7 +990,7 @@
       }
 
       var rising = s2[0] || "Prompting and instruction design";
-      var watchout = flags[0] || "Keep strengthening verification habits as your use scales.";
+      var watchout = flags[0] || "You’re likely balancing curiosity with caution — trust your momentum and keep refining your quality checks.";
 
       return {
         sign: sign,
@@ -977,32 +1001,16 @@
       };
     }
 
-    function syncSummaryFeedbackToSubmission() {
-      if (!state.lastResult) return;
-      state.lastResult.responses = state.responses;
-      state.lastResult.aiProfile = buildAiAstrologyRead(state.lastResult);
-
-      var all = getStoredSubmissions();
-      var idx = all.findIndex(function(entry) {
-        return entry && entry.respondentKey === state.lastResult.respondentKey;
-      });
-      if (idx >= 0) {
-        all[idx] = state.lastResult;
-      } else {
-        all.push(state.lastResult);
-      }
-      localStorage.setItem(SUBMISSION_KEY, JSON.stringify(all));
-
-      sendSubmissionToApi(state.lastResult).catch(function(err) {
-        console.error("Summary feedback sync failed:", err);
-      });
-    }
-
-    function queueSummaryFeedbackSync() {
-      if (summaryFeedbackSyncTimer) clearTimeout(summaryFeedbackSyncTimer);
-      summaryFeedbackSyncTimer = setTimeout(function() {
-        syncSummaryFeedbackToSubmission();
-      }, 450);
+    function buildAstrologyPreviewResult() {
+      var scoreData = computeScore();
+      var tier = computeTier(scoreData.total);
+      var flags = computeFlags(tier.name);
+      return {
+        score: scoreData.total,
+        tier: tier.name,
+        flags: flags,
+        responses: state.responses
+      };
     }
 
     function submitResults() {
@@ -1328,26 +1336,48 @@
       statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
     }
 
-    function renderSummary() {
-      slideIndex.textContent = "Submitted";
-
-      if (!state.lastResult) state.lastResult = submitResults();
-      var profile = state.lastResult.aiProfile || buildAiAstrologyRead(state.lastResult);
+    function renderAstrology() {
+      slideIndex.textContent = "AI Read";
+      if (!state.astroReadyAt || Date.now() > state.astroReadyAt + 120000) {
+        state.astroReadyAt = Date.now() + 1500;
+        saveDraft();
+      }
+      var waiting = Date.now() < state.astroReadyAt;
       var astroChoice = state.responses.astro_feedback_choice || "";
       var astroNote = state.responses.astro_feedback_note || "";
       var nailedActive = astroChoice === "nailed_it";
       var notQuiteActive = astroChoice === "not_quite";
 
+      if (waiting) {
+        slideCard.innerHTML =
+          '<span class="watermark-num">AI</span>' +
+          '<div class="accent-bar"></div>' +
+          '<div class="style-section">Reading Your AI Pattern</div>' +
+          '<div class="style-body">Taking one quick pass through your responses to generate your AI Astrology read...</div>' +
+          '<div class="processing-wrap">' +
+            '<div class="processing-dot"></div>' +
+            '<div class="processing-dot"></div>' +
+            '<div class="processing-dot"></div>' +
+          '</div>';
+        statusLine.textContent = "Processing your profile...";
+        setTimeout(function() {
+          if (state.currentSlide === "astro") render();
+        }, 220);
+        return;
+      }
+
+      var preview = buildAstrologyPreviewResult();
+      var profile = buildAiAstrologyRead(preview);
+
       slideCard.innerHTML =
-        '<span class="watermark-num">DONE</span>' +
+        '<span class="watermark-num">AI</span>' +
         '<div class="accent-bar"></div>' +
-        '<div class="style-display">Thank You</div>' +
-        '<div class="style-section">Submission Received</div>' +
-        '<div class="style-body">Your responses were submitted successfully. We will use them to plan practical AI training tracks across GALE.</div>' +
+        '<div class="style-section">AI Astrology Read ✦</div>' +
+        '<div class="style-body">Before we submit, here’s a fun read on how you may be feeling about AI right now.</div>' +
         '<div class="result-panel">' +
-          '<div class="style-label-tag">AI Astrology Read ✦</div>' +
           '<div class="style-body"><strong>' + escapeHtml(profile.sign) + '</strong> — ' + escapeHtml(profile.signature) + '</div>' +
           '<div class="style-body" style="margin-top:8px;">Current vibe: <strong>' + escapeHtml(profile.rising) + '</strong> · ' + escapeHtml(profile.domain) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;">Likely right now: ' + escapeHtml(profile.watchout) + '</div>' +
           '<div class="style-body" style="margin-top:10px;">Did this read feel accurate?</div>' +
           '<div class="result-actions" style="margin-top:8px;">' +
             '<button class="btn" type="button" data-astro-feedback="nailed_it" aria-pressed="' + nailedActive + '">Nailed it</button>' +
@@ -1359,17 +1389,32 @@
               '<textarea class="clarify-input" data-astro-feedback-note="true" placeholder="Optional: what felt off or what should be emphasized?">' + escapeHtml(astroNote) + '</textarea>' +
             '</div>' :
             '') +
-        '</div>' +
+        '</div>';
+
+      statusLine.textContent = "If needed, select Not quite and add a note. Then click Next to submit.";
+    }
+
+    function renderSummary() {
+      slideIndex.textContent = "Submitted";
+      if (!state.lastResult) state.lastResult = submitResults();
+
+      slideCard.innerHTML =
+        '<span class="watermark-num">DONE</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-display">Thank You</div>' +
+        '<div class="style-section">Submission Received</div>' +
+        '<div class="style-body">Your responses were submitted successfully. We will use them to plan practical AI training tracks across GALE.</div>' +
         '<div class="result-panel">' +
           '<div class="style-label-tag">What Happens Next</div>' +
           '<div class="style-body">The training team reviews responses in aggregate and maps participants into learning groups. Individual readiness placement is shared through training coordination, not this form.</div>' +
           '<div class="result-actions"><button class="btn" type="button" data-edit-resubmit="true">Edit Answers & Resubmit</button></div>' +
         '</div>';
 
-      statusLine.textContent = "You can close this tab or select Restart to collect another response.";
+      statusLine.textContent = "Submission complete. Use Edit Answers & Resubmit if you need to make changes.";
     }
 
     function render() {
+      nextBtn.disabled = false;
       backBtn.disabled = state.currentSlide === "intro" ? state.introStep === 0 : state.history.length === 0;
       var s = state.currentSlide;
 
@@ -1380,8 +1425,12 @@
       if (s === "intro") {
         nextBtn.textContent = "Begin";
         renderIntro();
+      } else if (s === "astro") {
+        nextBtn.textContent = "Submit";
+        renderAstrology();
       } else if (s === "summary") {
-        nextBtn.textContent = "Restart";
+        nextBtn.textContent = "Submitted";
+        nextBtn.disabled = true;
         renderSummary();
       } else if (usageMap[s]) {
         nextBtn.textContent = "Next";
@@ -1531,6 +1580,7 @@
       slideCard.querySelectorAll("[data-edit-resubmit]").forEach(function(btn) {
         btn.addEventListener("click", function() {
           state.lastResult = null;
+          state.astroReadyAt = 0;
           state.currentSlide = questionSlideIds[0];
           state.history = [];
           saveDraft();
@@ -1548,8 +1598,6 @@
           }
           state.lastResult = null;
           saveDraft();
-          if (!state.lastResult) state.lastResult = submitResults();
-          queueSummaryFeedbackSync();
           render();
         });
       });
@@ -1558,7 +1606,6 @@
         input.addEventListener("input", function() {
           state.responses.astro_feedback_note = input.value;
           saveDraft();
-          queueSummaryFeedbackSync();
         });
       });
 
@@ -1612,13 +1659,7 @@
         render();
         return;
       }
-      if (state.currentSlide === "summary") {
-        state = { currentSlide: "intro", history: [], responses: {}, lastResult: null, introStep: 0 };
-        localStorage.removeItem(DRAFT_KEY);
-        saveStatus.textContent = "Draft cleared";
-        render();
-        return;
-      }
+      if (state.currentSlide === "summary") return;
       if (!skipCheck && !isSlideAnswered(state.currentSlide)) {
         statusLine.textContent = "Please answer before continuing.";
         return;
