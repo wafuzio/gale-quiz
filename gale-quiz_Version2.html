@@ -403,9 +403,9 @@
           id: "q3a",
           prompt: "What do you usually do with a bad result?",
           options: [
-            { text: "I mostly accept what I get or give up", points: 0 },
-            { text: "I try again with roughly the same request", points: 1 },
-            { text: "I make small changes but I\u2019m not sure what actually helps", points: 1.5 }
+            { text: "I usually accept the first result or stop there", signal: 0 },
+            { text: "I retry sometimes, but mostly with minor wording tweaks", signal: 0.25 },
+            { text: "I intentionally revise instructions/context, but not consistently", signal: 0.5 }
           ]
         }
       },
@@ -416,9 +416,9 @@
           id: "q4a",
           prompt: "Which is closest?",
           options: [
-            { text: "I just haven’t prioritized it against what I already know works", points: 0 },
-            { text: "I’ve thought about it but haven’t had the right use case", points: 1 },
-            { text: "I tried but the output wasn’t good enough to use", points: 1.5 }
+            { text: "I didn’t realize AI could work well with files/data for this", signal: 0 },
+            { text: "I’ve tried once or twice, but it’s not repeatable yet", signal: 0.25 },
+            { text: "I can do this in limited cases, but not consistently", signal: 0.5 }
           ]
         }
       },
@@ -429,9 +429,9 @@
           id: "q5a",
           prompt: "Which sounds most like you?",
           options: [
-            { text: "I handle everything in a single prompt", points: 0 },
-            { text: "I\u2019ve gone back and forth with AI but not in a deliberate, structured way", points: 1.5 },
-            { text: "I didn\u2019t know that was a technique", points: 0 }
+            { text: "I usually keep it to one prompt and one output", signal: 0 },
+            { text: "I split tasks into steps occasionally, but ad hoc", signal: 0.25 },
+            { text: "I break work into steps deliberately, but inconsistently", signal: 0.5 }
           ]
         }
       },
@@ -442,9 +442,9 @@
           id: "q6a",
           prompt: "Which is closest?",
           options: [
-            { text: "I\u2019m not sure what that means technically", points: 0 },
-            { text: "I know it\u2019s possible but it\u2019s beyond my current skills", points: 1 },
-            { text: "I\u2019ve explored it but haven\u2019t built anything yet", points: 1.5 }
+            { text: "I haven’t connected AI to other tools yet", signal: 0 },
+            { text: "I’ve experimented, but nothing reliable is running", signal: 0.25 },
+            { text: "I’ve built simple integrations, but not robust recurring workflows", signal: 0.5 }
           ]
         }
       }
@@ -739,8 +739,13 @@
           if (fuAns) {
             q.followup.options.forEach(function(opt) {
               if (opt.text === fuAns) {
-                var normalized = Math.max(0, Math.min(1, opt.points / 1.5));
-                pts = Math.round((normalized * weight * 0.65) * 10) / 10;
+                if (typeof opt.signal === "number") {
+                  var normalizedSignal = Math.max(0, Math.min(0.5, opt.signal));
+                  pts = Math.round((normalizedSignal * weight) * 10) / 10;
+                } else {
+                  var normalized = Math.max(0, Math.min(1, opt.points / 1.5));
+                  pts = Math.round((normalized * weight * 0.65) * 10) / 10;
+                }
               }
             });
           }
