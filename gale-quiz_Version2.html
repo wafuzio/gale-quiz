@@ -150,6 +150,15 @@
       flex: 1;
       min-width: 0;
     }
+    .usage-label-main { display: block; }
+    .usage-label-sub {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.35;
+    }
     .help-wrap {
       position: relative;
       flex: 0 0 auto;
@@ -286,13 +295,10 @@
     .processing-dot:nth-child(2) { animation-delay: 0.15s; }
     .processing-dot:nth-child(3) { animation-delay: 0.3s; }
     .progress-track {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
+      margin: 6px 0 14px;
+      width: min(320px, 100%);
       height: 3px;
       background: rgba(255,255,255,0.08);
-      z-index: 200;
     }
     .progress-fill {
       height: 100%;
@@ -495,6 +501,7 @@
     </div>
     <section id="slideSection">
       <div id="slideIndex" class="slide-index">Loading</div>
+      <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
       <div class="preview-wrap" id="slideCard"></div>
       <div class="nav-row">
         <div class="status-line"><span id="statusLine"><span class="gale-a">A</span>I flow active</span><span class="micro-admin" id="adminLink">Admin</span></div>
@@ -517,8 +524,6 @@
       <div class="admin-modal-status" id="adminModalStatus"></div>
     </div>
   </div>
-  <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
-
   <script>
     var DRAFT_KEY = "galeQuizDraftV5";
     var SUBMISSION_KEY = "galeQuizSubmissionsV5";
@@ -624,16 +629,16 @@
     ];
 
     var usageOptionHelp = {
-      "Question answering / general chat": "Use cases: quick clarifications, first-draft answers, and rapid context checks.",
+      "Quick one-shot answers": "Use cases: direct questions, quick clarifications, and rapid context checks.",
       "Quality assurance / output review": "Use cases: checking quality, spotting errors, and improving tone/clarity before sharing.",
       "Research synthesis": "Use cases: summarizing sources, extracting themes, and condensing long research into key takeaways.",
       "Data analysis": "Use cases: interpreting trends, comparing segments, and generating insights from structured data.",
-      "Strategic planning": "Use cases: outlining plans, evaluating options, and pressure-testing assumptions.",
-      "Project management / planning": "Use cases: creating timelines, drafting task plans, and writing status updates.",
+      "Strategic planning (what to execute)": "Use cases: evaluating options, setting priorities, and deciding what direction to execute.",
+      "Project planning (how to execute)": "Use cases: creating timelines, sequencing tasks, and assigning execution checkpoints.",
       "Calculation / computation": "Use cases: summarize metrics, compute growth rates, estimate budget scenarios.",
       "Coding / software development": "Use cases: writing/debugging code, generating tests, and explaining technical approaches.",
       "Workflow automation": "Use cases: repeatable multi-step workflows, triggered actions, and cross-tool handoffs.",
-      "Content drafting & generation": "Use cases: drafting copy, outlining content, and generating campaign assets.",
+      "Creative content generation": "Use cases: drafting copy, concepting assets, and generating campaign creative.",
       "Communication / messaging": "Use cases: emails, stakeholder updates, and adapting messaging for different audiences.",
       "Idea generation / brainstorming": "Use cases: generating concepts, naming ideas, and exploring creative directions."
     };
@@ -642,17 +647,28 @@
       return usageOptionHelp[optionLabel] || "Use case examples vary by role and team workflow.";
     }
 
+    function renderUsageOptionLabel(optionLabel) {
+      var text = String(optionLabel || "");
+      var match = text.match(/^(.*)\s\((.*)\)$/);
+      if (!match) {
+        return '<span class="usage-label-main">' + escapeHtml(text) + '</span>';
+      }
+      return '' +
+        '<span class="usage-label-main">' + escapeHtml(match[1]) + '</span>' +
+        '<span class="usage-label-sub">(' + escapeHtml(match[2]) + ')</span>';
+    }
+
     var usageAreas = [
-      "Question answering / general chat",
+      "Quick one-shot answers",
       "Quality assurance / output review",
       "Research synthesis",
       "Data analysis",
-      "Strategic planning",
-      "Project management / planning",
+      "Strategic planning (what to execute)",
+      "Project planning (how to execute)",
       "Calculation / computation",
       "Coding / software development",
       "Workflow automation",
-      "Content drafting & generation",
+      "Creative content generation",
       "Communication / messaging",
       "Idea generation / brainstorming"
     ];
@@ -665,12 +681,12 @@
       },
       {
         id: "q2b", stage: "Core Skills", type: "multi",
-        prompt: "From the areas you selected above, which do you generally already feel comfortable using in your daily work life? (Select all that apply)",
+        prompt: "From your Q2 selections, which do you generally already feel comfortable using in your daily work life? (Select all that apply)",
         options: usageAreas
       },
       {
         id: "q2c", stage: "Core Skills", type: "multi",
-        prompt: "Which of these areas feel like blind spots that you want to learn first? (Select all that apply)",
+        prompt: "From your Q2 selections, which areas feel like blind spots that you want to learn first? (Select all that apply)",
         options: usageAreas
       }
     ];
@@ -891,7 +907,7 @@
     }
 
     function getUsageOptions(q) {
-      if (q && q.id === "q2b") {
+      if (q && (q.id === "q2b" || q.id === "q2c")) {
         var selected = Array.isArray(state.responses.q2) ? state.responses.q2 : [];
         return selected.length ? selected : q.options;
       }
@@ -1543,7 +1559,7 @@
         html += '' +
           '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' +
             '<div class="usage-option-row">' +
-              '<span class="usage-label">' + opt + '</span>' +
+              '<span class="usage-label">' + renderUsageOptionLabel(opt) + '</span>' +
               '<span class="help-wrap">' +
                 '<button class="help-trigger" type="button" aria-label="Show use case examples for ' + escapeHtml(opt) + '">?</button>' +
                 '<span class="help-popover">' + escapeHtml(usageHelpFor(opt)) + '</span>' +
@@ -1555,7 +1571,7 @@
       html += '</div>';
       html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
-      if (q.id === "q2b" && (!opts || !opts.length)) {
+      if ((q.id === "q2b" || q.id === "q2c") && (!opts || !opts.length)) {
         statusLine.textContent = "Select at least one area in the previous question first.";
       } else {
         statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
@@ -1830,6 +1846,10 @@
           if (qid === "q2") {
             var q2bCurrent = Array.isArray(state.responses.q2b) ? state.responses.q2b : [];
             state.responses.q2b = q2bCurrent.filter(function(choice) {
+              return updated.indexOf(choice) >= 0;
+            });
+            var q2cCurrent = Array.isArray(state.responses.q2c) ? state.responses.q2c : [];
+            state.responses.q2c = q2cCurrent.filter(function(choice) {
               return updated.indexOf(choice) >= 0;
             });
           }
