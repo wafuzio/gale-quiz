@@ -123,13 +123,6 @@
       color: rgba(255,255,255,0.95);
       max-width: 760px;
     }
-    .style-hint {
-      margin-top: 8px;
-      font-size: 13px;
-      line-height: 1.45;
-      color: rgba(255,255,255,0.62);
-      max-width: 760px;
-    }
     .option-list {
       margin-top: 24px;
       display: grid;
@@ -673,6 +666,34 @@
       "Idea generation / brainstorming"
     ];
 
+    var usageLabelAliases = {
+      "Q and A": "Quick one-shot answers",
+      "Question answering / general chat": "Quick one-shot answers",
+      "Research": "Research synthesis",
+      "Analytics": "Data analysis",
+      "Strategy": "Strategic planning (what to execute)",
+      "Strategic planning": "Strategic planning (what to execute)",
+      "Project management / planning": "Project planning (how to execute)",
+      "Computation": "Calculation / computation",
+      "Automation": "Workflow automation",
+      "Content Creation": "Creative content generation",
+      "Content drafting & generation": "Creative content generation",
+      "Communication": "Communication / messaging",
+      "Ideation": "Idea generation / brainstorming"
+    };
+
+    function normalizeUsageList(list) {
+      if (!Array.isArray(list)) return [];
+      var out = [];
+      list.forEach(function(raw) {
+        var mapped = usageLabelAliases[raw] || raw;
+        if (usageAreas.indexOf(mapped) >= 0 && out.indexOf(mapped) < 0) {
+          out.push(mapped);
+        }
+      });
+      return out;
+    }
+
     var usageQuestions = [
       {
         id: "q2", stage: "Core Skills", type: "multi",
@@ -876,6 +897,13 @@
       try {
         var parsed = JSON.parse(raw);
         state.responses = parsed.responses || {};
+        state.responses.q2 = normalizeUsageList(state.responses.q2);
+        state.responses.q2b = normalizeUsageList(state.responses.q2b).filter(function(choice) {
+          return state.responses.q2.indexOf(choice) >= 0;
+        });
+        state.responses.q2c = normalizeUsageList(state.responses.q2c).filter(function(choice) {
+          return state.responses.q2.indexOf(choice) >= 0;
+        });
         state.history = parsed.history || [];
         state.currentSlide = parsed.currentSlide || "intro";
         state.introStep = typeof parsed.introStep === "number" ? parsed.introStep : 0;
@@ -908,10 +936,14 @@
 
     function getUsageOptions(q) {
       if (q && (q.id === "q2b" || q.id === "q2c")) {
-        var selected = Array.isArray(state.responses.q2) ? state.responses.q2 : [];
-        return selected.length ? selected : q.options;
+        var selected = normalizeUsageList(state.responses.q2);
+        return selected;
       }
       return q && Array.isArray(q.options) ? q.options : [];
+    }
+
+    function isUsageQuestionId(qid) {
+      return Boolean(usageMap[qid]);
     }
 
     function openAdminModal() {
@@ -982,12 +1014,12 @@
       var total = 0;
       var breakdown = {};
       var coreWeights = {
-        q1: 1,
+        q1: 2,
         q2a: 2,
         q3: 3,
-        q4: 1,
+        q4: 2.5,
         q5: 3,
-        q6: 3
+        q6: 2
       };
 
       coreQuestions.forEach(function(q) {
@@ -1104,14 +1136,14 @@
           desc: "Minimal current usage signal; best fit is foundational onboarding before role-specific acceleration"
         };
       }
-      if (score >= 18) {
+      if (score >= 19) {
         return {
           name: "Tier 3",
           label: "Ready to fully integrate rich experience into GALE systems",
           desc: "Strong evidence of advanced application, automation depth, and reliable quality controls"
         };
       }
-      if (score >= 12) {
+      if (score >= 13) {
         return {
           name: "Tier 2",
           label: "Ready to expand current use cases",
@@ -1541,17 +1573,16 @@
     function renderUsageQuestion(q) {
       var num = getQuestionNumber(q.id);
       slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
-      var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+      var val = normalizeUsageList(state.responses[q.id]);
       var opts = getUsageOptions(q);
-      var hint = "";
-      if (q.id === "q2") {
-        hint = 'Example for computation: "Summarize these metrics, compute growth rates, estimate budget scenarios."';
+      if (q.id === "q2b" || q.id === "q2c") {
+        val = val.filter(function(choice) { return opts.indexOf(choice) >= 0; });
       }
+      state.responses[q.id] = val;
       var html =
         '<span class="watermark-num">' + zeroPad(num) + '</span>' +
         '<div class="accent-bar"></div>' +
         '<div class="style-body">' + q.prompt + '</div>' +
-        (hint ? '<div class="style-hint">' + hint + '</div>' : '') +
         '<div class="option-list usage-grid">';
 
       opts.forEach(function(opt) {
@@ -1826,7 +1857,10 @@
           if (evt.target && evt.target.closest('.help-trigger')) return;
           var qid = item.getAttribute("data-qid");
           var val = decodeURIComponent(item.getAttribute("data-val"));
-          var current = Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : [];
+          var usageQuestion = isUsageQuestionId(qid);
+          var current = usageQuestion
+            ? normalizeUsageList(state.responses[qid])
+            : (Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : []);
           var exists = current.indexOf(val) >= 0;
           var updated;
           var isNoneOption = /^None of these/i.test(val);
@@ -1842,16 +1876,27 @@
             updated = updated.filter(function(e) { return !/^None of these/i.test(e); });
           }
 
-          state.responses[qid] = updated;
+          if (usageQuestion) {
+            updated = normalizeUsageList(updated);
+          }
+
           if (qid === "q2") {
+            state.responses.q2 = updated;
             var q2bCurrent = Array.isArray(state.responses.q2b) ? state.responses.q2b : [];
-            state.responses.q2b = q2bCurrent.filter(function(choice) {
+            state.responses.q2b = normalizeUsageList(q2bCurrent).filter(function(choice) {
               return updated.indexOf(choice) >= 0;
             });
             var q2cCurrent = Array.isArray(state.responses.q2c) ? state.responses.q2c : [];
-            state.responses.q2c = q2cCurrent.filter(function(choice) {
+            state.responses.q2c = normalizeUsageList(q2cCurrent).filter(function(choice) {
               return updated.indexOf(choice) >= 0;
             });
+          } else if (qid === "q2b" || qid === "q2c") {
+            var q2Selected = normalizeUsageList(state.responses.q2);
+            state.responses[qid] = updated.filter(function(choice) {
+              return q2Selected.indexOf(choice) >= 0;
+            });
+          } else {
+            state.responses[qid] = updated;
           }
           state.lastResult = null;
           saveDraft();

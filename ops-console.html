@@ -141,6 +141,7 @@
           <div class="stat"><div class="stat-label">Average Score</div><div id="statAvgScore" class="stat-value">0.0</div></div>
           <div class="stat"><div class="stat-label">Most Common Tier</div><div id="statTopTier" class="stat-value">—</div></div>
           <div class="stat"><div class="stat-label">Most Common Domain</div><div id="statTopDomain" class="stat-value">—</div></div>
+          <div class="stat"><div class="stat-label">Use AI More At Home</div><div id="statMoreAtHome" class="stat-value">0%</div></div>
         </div>
 
         <div class="split">
@@ -187,6 +188,7 @@
     var statAvgScore = document.getElementById("statAvgScore");
     var statTopTier = document.getElementById("statTopTier");
     var statTopDomain = document.getElementById("statTopDomain");
+    var statMoreAtHome = document.getElementById("statMoreAtHome");
     var tierBreakdown = document.getElementById("tierBreakdown");
     var domainBreakdown = document.getElementById("domainBreakdown");
     var insightsEl = document.getElementById("insights");
@@ -277,7 +279,7 @@
 
         var contentCreators = domainRows.filter(function(r) {
           var q2 = Array.isArray(r.responses.q2) ? r.responses.q2 : [];
-          return q2.indexOf("Content drafting & generation") >= 0;
+          return q2.indexOf("Creative content generation") >= 0;
         }).length;
         if (contentCreators / domainRows.length >= 0.5 && /programmatic|engineering|marketing|communications/i.test(domain)) {
           insights.push(domain + " shows stronger-than-expected content generation use in day-to-day workflows.");
@@ -317,11 +319,19 @@
       var domainCounts = tallyBy(rows, function(r) { return r.domain || "Unknown"; });
       var scoreSum = rows.reduce(function(sum, r) { return sum + (isFinite(r.score) ? r.score : 0); }, 0);
       var avg = rows.length ? (scoreSum / rows.length) : 0;
+      var moreAtHomeCount = rows.filter(function(r) {
+        return r.responses && (
+          r.responses.q1b === "Much more at home than at work" ||
+          r.responses.q1b === "Somewhat more at home than at work"
+        );
+      }).length;
+      var moreAtHomePct = rows.length ? Math.round((moreAtHomeCount / rows.length) * 100) : 0;
 
       statSubmissions.textContent = String(rows.length);
       statAvgScore.textContent = avg.toFixed(1);
       statTopTier.textContent = topKey(tierCounts);
       statTopDomain.textContent = topKey(domainCounts);
+      statMoreAtHome.textContent = moreAtHomePct + "%";
 
       renderBreakdownList(tierBreakdown, tierCounts);
       renderBreakdownList(domainBreakdown, domainCounts);
