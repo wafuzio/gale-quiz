@@ -1,5 +1,5 @@
 {
-  "count": 9,
+  "count": 10,
   "submissions": [
     {
       "id": "mnp3z5vb-i3zb68",
@@ -748,6 +748,98 @@
             "Written code that calls an AI API",
             "Built a custom tool or app powered by AI"
           ]
+        }
+      }
+    },
+    {
+      "id": "mntama92-ucst8a",
+      "respondentKey": "mntam9x7-wu8fhq8dog",
+      "fingerprint": "dcf006d24aecdf7c6893db53e507645dd71f083eb609ab34b959fd25658ad12b",
+      "createdAt": "2026-04-10T19:22:38.822Z",
+      "updatedAt": "2026-04-10T19:23:30.342Z",
+      "receivedAt": "2026-04-10T19:23:30.342Z",
+      "payload": {
+        "submittedAt": "2026-04-10T19:23:30.218Z",
+        "respondentKey": "mntam9x7-wu8fhq8dog",
+        "score": 18.9,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q2a": 1,
+          "q3": 1,
+          "q4": 1,
+          "q5": 3,
+          "q6": 3,
+          "q2_profile": 3,
+          "q2_blind_gap_count": 2
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "Potentially underselling current readiness",
+          "Prioritize output verification skills",
+          "Training opportunity: 2 self-identified blind spots"
+        ],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Wants prompting support",
+          "Wants advanced implementation support"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "All the time (daily or near-daily)",
+          "q2": [
+            "Q and A",
+            "Strategy",
+            "Communication",
+            "Automation"
+          ],
+          "q2b": [
+            "Q and A",
+            "Strategy",
+            "Content Creation",
+            "Automation"
+          ],
+          "q2c": [
+            "Computation",
+            "Ideation"
+          ],
+          "q2a": "Sometimes",
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "Yes",
+          "c1": "I mostly use AI for basic drafts and quick answers",
+          "c2": [
+            "Verify key facts before using or sharing output",
+            "Compare against original sources/documents when it matters",
+            "Refine prompts and rerun when quality is weak",
+            "I often use output mostly as-is"
+          ],
+          "s0": [
+            "Media brief or creative brief",
+            "Competitive or market research synthesis",
+            "Campaign reporting or performance summary",
+            "Audience segmentation or persona draft"
+          ],
+          "s1": [
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Turn AI output into deliverables shared with others"
+          ],
+          "s2": [
+            "Prompting and instruction design",
+            "Technical/API implementation"
+          ],
+          "d1": "Marketing & Communications",
+          "astro_feedback_choice": "nailed_it"
+        },
+        "aiProfile": {
+          "sign": "The Workflow Architect",
+          "signature": "Your answers show a systems mindset: you tend to turn one-off wins into repeatable ways of working. You’re in the high-upside middle where small prompt upgrades can create outsized gains. You already show real agency-use evidence, which is a strong readiness marker.",
+          "rising": "Prompting and instruction design",
+          "domain": "Marketing & Communications",
+          "watchout": "Potentially underselling current readiness"
         }
       }
     }
