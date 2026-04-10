@@ -140,6 +140,53 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       max-width: 920px;
     }
+    .usage-option-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .usage-label {
+      flex: 1;
+      min-width: 0;
+    }
+    .help-wrap {
+      position: relative;
+      flex: 0 0 auto;
+    }
+    .help-trigger {
+      border: 1px solid rgba(255,255,255,0.26);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.9);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+      cursor: help;
+      padding: 0;
+    }
+    .help-popover {
+      position: absolute;
+      right: 0;
+      top: 24px;
+      width: min(280px, 72vw);
+      border: 1px solid rgba(255,255,255,0.22);
+      background: #121212;
+      color: rgba(255,255,255,0.92);
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      padding: 8px 10px;
+      z-index: 30;
+      display: none;
+      text-transform: none;
+    }
+    .help-wrap:hover .help-popover,
+    .help-wrap:focus-within .help-popover {
+      display: block;
+    }
     .option-btn,
     .check-item {
       border: 1px solid rgba(255,255,255,0.14);
@@ -576,13 +623,34 @@
       }
     ];
 
+    var usageOptionHelp = {
+      "Question answering / general chat": "Use cases: quick clarifications, first-draft answers, and rapid context checks.",
+      "Quality assurance / output review": "Use cases: checking quality, spotting errors, and improving tone/clarity before sharing.",
+      "Research synthesis": "Use cases: summarizing sources, extracting themes, and condensing long research into key takeaways.",
+      "Data analysis": "Use cases: interpreting trends, comparing segments, and generating insights from structured data.",
+      "Strategic planning": "Use cases: outlining plans, evaluating options, and pressure-testing assumptions.",
+      "Project management / planning": "Use cases: creating timelines, drafting task plans, and writing status updates.",
+      "Calculation / computation": "Use cases: summarize metrics, compute growth rates, estimate budget scenarios.",
+      "Coding / software development": "Use cases: writing/debugging code, generating tests, and explaining technical approaches.",
+      "Workflow automation": "Use cases: repeatable multi-step workflows, triggered actions, and cross-tool handoffs.",
+      "Content drafting & generation": "Use cases: drafting copy, outlining content, and generating campaign assets.",
+      "Communication / messaging": "Use cases: emails, stakeholder updates, and adapting messaging for different audiences.",
+      "Idea generation / brainstorming": "Use cases: generating concepts, naming ideas, and exploring creative directions."
+    };
+
+    function usageHelpFor(optionLabel) {
+      return usageOptionHelp[optionLabel] || "Use case examples vary by role and team workflow.";
+    }
+
     var usageAreas = [
       "Question answering / general chat",
       "Quality assurance / output review",
       "Research synthesis",
       "Data analysis",
       "Strategic planning",
+      "Project management / planning",
       "Calculation / computation",
+      "Coding / software development",
       "Workflow automation",
       "Content drafting & generation",
       "Communication / messaging",
@@ -1437,7 +1505,16 @@
 
       opts.forEach(function(opt) {
         var checked = val.indexOf(opt) >= 0;
-        html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
+        html += '' +
+          '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' +
+            '<div class="usage-option-row">' +
+              '<span class="usage-label">' + opt + '</span>' +
+              '<span class="help-wrap">' +
+                '<button class="help-trigger" type="button" aria-label="Show use case examples for ' + escapeHtml(opt) + '">?</button>' +
+                '<span class="help-popover">' + escapeHtml(usageHelpFor(opt)) + '</span>' +
+              '</span>' +
+            '</div>' +
+          '</div>';
       });
 
       html += '</div>';
@@ -1694,7 +1771,8 @@
       });
 
       slideCard.querySelectorAll(".check-item[data-qid]").forEach(function(item) {
-        item.addEventListener("click", function() {
+        item.addEventListener("click", function(evt) {
+          if (evt.target && evt.target.closest('.help-trigger')) return;
           var qid = item.getAttribute("data-qid");
           var val = decodeURIComponent(item.getAttribute("data-val"));
           var current = Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : [];
