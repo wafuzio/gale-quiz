@@ -412,9 +412,9 @@
           id: "q1a",
           prompt: "Which best describes where you are?",
           options: [
-            { text: "I haven\u2019t really had the chance to try AI tools yet", points: 0 },
-            { text: "I\u2019ve tried them a couple of times but they didn\u2019t stick", points: 1.5 },
-            { text: "I use them for personal stuff but not for work", points: 1 }
+            { text: "I haven’t really had the chance to try AI tools yet", signal: 0 },
+            { text: "I’ve tried them a couple of times but they didn’t stick", signal: 0.25 },
+            { text: "I use them for personal stuff but not for work", signal: 0.5 }
           ]
         }
       },
@@ -426,9 +426,9 @@
           id: "q2a1",
           prompt: "Which sounds most like your current prompting style?",
           options: [
-            { text: "I usually keep prompts short and unstructured", points: 0 },
-            { text: "I add some detail, but not consistently", points: 1 },
-            { text: "I include some structure, but I’m still refining what works", points: 1.5 }
+            { text: "I usually keep prompts short and unstructured", signal: 0 },
+            { text: "I add some detail, but not consistently", signal: 0.25 },
+            { text: "I include some structure, but I’m still refining what works", signal: 0.5 }
           ]
         }
       },
@@ -760,7 +760,7 @@
       var coreWeights = {
         q1: 1,
         q2a: 2,
-        q3: 2,
+        q3: 3,
         q4: 1,
         q5: 3,
         q6: 3
@@ -802,6 +802,25 @@
         } else {
           breakdown[q.id] = 0;
         }
+
+        if (q.id === "q1" && ans === "Rarely / just starting") {
+          var q1Followup = state.responses[q.followup.id];
+          if (q1Followup) {
+            q.followup.options.forEach(function(opt) {
+              if (opt.text === q1Followup) {
+                var q1Pts = 0;
+                if (typeof opt.signal === "number") {
+                  q1Pts = Math.round((Math.max(0, Math.min(0.5, opt.signal)) * weight) * 10) / 10;
+                } else {
+                  var q1Normalized = Math.max(0, Math.min(1, opt.points / 1.5));
+                  q1Pts = Math.round((q1Normalized * weight * 0.65) * 10) / 10;
+                }
+                total += q1Pts - (breakdown[q.id] || 0);
+                breakdown[q.id] = q1Pts;
+              }
+            });
+          }
+        }
       });
 
       var q2Used = Array.isArray(state.responses.q2) ? state.responses.q2 : [];
@@ -813,7 +832,6 @@
       var q2ProfileScore = Math.round((comfortScore + usageBreadthScore) * 10) / 10;
       breakdown.q2_profile = q2ProfileScore;
       breakdown.q2_blind_gap_count = blindGapCount;
-      total += q2ProfileScore;
 
       var c2 = Array.isArray(state.responses.c2) ? state.responses.c2 : [];
       if (c2.indexOf("Verify key facts before using or sharing output") >= 0) total += 0.8;
@@ -849,7 +867,7 @@
       s1.forEach(function(opt) {
         if (s1Map[opt]) s1Pts += s1Map[opt];
       });
-      total += Math.min(4.2, s1Pts);
+      total += Math.min(3.0, s1Pts);
 
       return { total: Math.round(total * 10) / 10, breakdown: breakdown };
     }
