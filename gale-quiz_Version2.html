@@ -277,16 +277,36 @@
       gap: 10px;
       color: rgba(255,255,255,0.86);
     }
-    .processing-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #FD6453;
-      opacity: 0.35;
-      animation: pulseGlow 1.2s ease-in-out infinite;
+    .processing-moons {
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 24px;
+      line-height: 1;
     }
-    .processing-dot:nth-child(2) { animation-delay: 0.15s; }
-    .processing-dot:nth-child(3) { animation-delay: 0.3s; }
+    .moon-phase {
+      opacity: 0.35;
+      transform: scale(0.92);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .moon-phase.active {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+    .processing-caption {
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.02em;
+    }
+    .astro-sign-name {
+      margin-top: 6px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 6.4vw, 58px);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: #FD6453;
+    }
     .progress-track {
       margin: 6px 0 14px;
       width: min(320px, 100%);
@@ -1241,6 +1261,92 @@
       var q2Blind = Array.isArray(responses.q2c) ? responses.q2c : [];
       var blindGapCount = q2Blind.filter(function(area) { return q2Comfort.indexOf(area) < 0; }).length;
 
+      var seedSource = [responses.q1, responses.q2a, responses.q3, responses.d1, responses.q1b, (q2Used || []).join("|")].join("||");
+      var seed = 0;
+      for (var i = 0; i < seedSource.length; i++) {
+        seed = (seed * 31 + seedSource.charCodeAt(i)) % 100000;
+      }
+
+      var flavorByTier = {
+        "Tier 0": {
+          spotlight: [
+            "You’re in discovery mode, which is where fast capability jumps often start.",
+            "Your pattern says curiosity first, then confidence — exactly how durable habits form.",
+            "You’re building the foundation layer, and that phase tends to compound quickly."
+          ],
+          superpower: [
+            "Beginner’s edge: you’re less attached to old workflows and can adopt better ones quickly.",
+            "High adaptability: once you see a repeatable win, you’re likely to scale it fast.",
+            "Fresh perspective: you can spot practical use cases that veterans sometimes overlook."
+          ],
+          nextMove: [
+            "Pick one weekly workflow and practice it until it feels automatic.",
+            "Choose one prompt pattern and reuse it across real tasks this month.",
+            "Focus on one high-friction task and turn it into your first AI-powered routine."
+          ],
+          mantra: ["Momentum beats perfection.", "Small reps, sharp gains.", "Consistency creates confidence."]
+        },
+        "Tier 1": {
+          spotlight: [
+            "You’re already getting practical value and are close to more repeatable impact.",
+            "Your profile shows real traction with room to sharpen quality and speed.",
+            "You’re in the strongest growth zone: active usage with clear upside levers."
+          ],
+          superpower: [
+            "Pattern recognition: you can quickly tell which prompts and workflows actually help.",
+            "Execution bias: you tend to test ideas in real work, not just theory.",
+            "Pragmatic judgment: you can blend AI support with human review where it matters."
+          ],
+          nextMove: [
+            "Systematize one successful workflow with a reusable prompt template.",
+            "Add a simple verification step to every important AI-assisted output.",
+            "Turn one ad-hoc use case into a recurring weekly process."
+          ],
+          mantra: ["Refine, don’t restart.", "Repeat what works.", "Quality scales trust."]
+        },
+        "Tier 2": {
+          spotlight: [
+            "You’re operating with consistency and are close to team-level influence.",
+            "Your profile shows reliable usage patterns and strong scale potential.",
+            "You’re beyond experimentation — this is operational AI behavior."
+          ],
+          superpower: [
+            "Workflow leverage: you can connect multiple tasks into coherent AI-assisted flows.",
+            "Quality discipline: you know how to iterate until output is decision-ready.",
+            "Translation skill: you can convert business intent into structured AI instructions."
+          ],
+          nextMove: [
+            "Codify your top 2 workflows so others can execute them consistently.",
+            "Create a lightweight QA checklist for high-visibility outputs.",
+            "Expand into one adjacent domain to increase cross-functional value."
+          ],
+          mantra: ["Scale the system, not the scramble.", "Reliable beats flashy.", "Structure unlocks speed."]
+        },
+        "Tier 3": {
+          spotlight: [
+            "You’re operating at architect level with strong repeatability signals.",
+            "Your profile reflects high-leverage AI operating behavior across workflows.",
+            "You’re positioned to shape standards, not just outputs."
+          ],
+          superpower: [
+            "Systems thinking: you translate individual wins into durable team practices.",
+            "Integration depth: you can connect tools, processes, and judgment effectively.",
+            "Operational leadership: you can raise quality and velocity simultaneously."
+          ],
+          nextMove: [
+            "Package your best workflows into shared playbooks for your team.",
+            "Mentor others on verification and prompt-structure habits that scale safely.",
+            "Design one end-to-end workflow with clear ownership, QA, and measurement."
+          ],
+          mantra: ["Build the standard.", "Scale with guardrails.", "Systems create lift."]
+        }
+      };
+
+      var tierFlavor = flavorByTier[tier] || flavorByTier["Tier 1"];
+      function pick(list, offset) {
+        return list[(seed + offset) % list.length];
+      }
+
       var sign = "The Pattern Scout";
       var signature = "You’re building practical AI instincts and already spotting where better prompting can improve outcomes.";
 
@@ -1291,6 +1397,10 @@
       return {
         sign: sign,
         signature: signature,
+        spotlight: pick(tierFlavor.spotlight, 1),
+        superpower: pick(tierFlavor.superpower, 2),
+        nextMove: pick(tierFlavor.nextMove, 3),
+        mantra: pick(tierFlavor.mantra, 4),
         rising: rising,
         domain: domain,
         watchout: watchout
@@ -1655,7 +1765,7 @@
     function renderAstrology() {
       slideIndex.textContent = "AI Read";
       if (!state.astroReadyAt || Date.now() > state.astroReadyAt + 120000) {
-        state.astroReadyAt = Date.now() + 1500;
+        state.astroReadyAt = Date.now() + 5200;
         saveDraft();
       }
       var waiting = Date.now() < state.astroReadyAt;
@@ -1665,20 +1775,25 @@
       var notQuiteActive = astroChoice === "not_quite";
 
       if (waiting) {
+        var moonPhases = ["🌚", "🌑", "🌒", "🌓", "🌔", "🌕", "🌝", "🌕", "🌖", "🌗", "🌘", "🌑"];
+        var phaseIndex = Math.floor(Date.now() / 160) % moonPhases.length;
+        var moonHtml = moonPhases.map(function(phase, idx) {
+          return '<span class="moon-phase ' + (idx === phaseIndex ? 'active' : '') + '">' + phase + '</span>';
+        }).join('');
+
         slideCard.innerHTML =
           '<span class="watermark-num">AI</span>' +
           '<div class="accent-bar"></div>' +
           '<div class="style-section">Reading Your AI Pattern</div>' +
           '<div class="style-body">Taking one quick pass through your responses to generate your AI Astrology read...</div>' +
-          '<div class="processing-wrap">' +
-            '<div class="processing-dot"></div>' +
-            '<div class="processing-dot"></div>' +
-            '<div class="processing-dot"></div>' +
-          '</div>';
+          '<div class="processing-wrap processing-moons">' + moonHtml + '</div>' +
+          '<div class="processing-caption">Aligning lunar signals across your response pattern...</div>' +
+          '<div class="processing-caption">Calibrating your sign, superpower, and next-move forecast...</div>' +
+          '<div class="processing-caption">One more pass through the constellation map...</div>';
         statusLine.textContent = "Processing your profile...";
         setTimeout(function() {
           if (state.currentSlide === "astro") render();
-        }, 220);
+        }, 160);
         return;
       }
 
@@ -1691,7 +1806,12 @@
         '<div class="style-section">AI Astrology Read ✦</div>' +
         '<div class="style-body">Before we submit, here’s a fun read on how you may be feeling about AI right now.</div>' +
         '<div class="result-panel">' +
-          '<div class="style-body"><strong>' + escapeHtml(profile.sign) + '</strong> — ' + escapeHtml(profile.signature) + '</div>' +
+          '<div class="astro-sign-name">' + escapeHtml(profile.sign) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;">' + escapeHtml(profile.signature) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;"><strong>Spotlight:</strong> ' + escapeHtml(profile.spotlight) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;"><strong>Superpower:</strong> ' + escapeHtml(profile.superpower) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;"><strong>Next Move:</strong> ' + escapeHtml(profile.nextMove) + '</div>' +
+          '<div class="style-body" style="margin-top:8px;"><strong>Mantra:</strong> ' + escapeHtml(profile.mantra) + '</div>' +
           '<div class="style-body" style="margin-top:8px;">Current vibe: <strong>' + escapeHtml(profile.rising) + '</strong> · ' + escapeHtml(profile.domain) + '</div>' +
           '<div class="style-body" style="margin-top:8px;">Likely right now: ' + escapeHtml(profile.watchout) + '</div>' +
           '<div class="style-body" style="margin-top:10px;">Did this read feel accurate?</div>' +
