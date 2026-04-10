@@ -370,7 +370,22 @@
     var coreQuestions = [
       {
         id: "q1", stage: "Core Skills", area: "Basic Usage",
-        prompt: "Do you use AI tools like ChatGPT, Claude, or Copilot for work tasks at least a few times a month?",
+        prompt: "On average, how often do you use AI tools like ChatGPT, Claude, or Copilot for work tasks?",
+        mainOptions: [
+          "All the time (daily or near-daily)",
+          "Steadily week in, week out",
+          "Erratically (bursts of high use with longer lapses)",
+          "Sporadically (occasional, infrequent use)",
+          "Rarely / just starting"
+        ],
+        signalMap: {
+          "All the time (daily or near-daily)": 1,
+          "Steadily week in, week out": 0.83,
+          "Erratically (bursts of high use with longer lapses)": 0.5,
+          "Sporadically (occasional, infrequent use)": 0.17,
+          "Rarely / just starting": 0
+        },
+        followupTriggerValues: ["Rarely / just starting"],
         followup: {
           id: "q1a",
           prompt: "Which best describes where you are?",
@@ -687,7 +702,10 @@
       if (core) {
         var mainAns = state.responses[core.id];
         if (!mainAns) return false;
-        if (mainAns === "No") {
+        var needsFollowup = Array.isArray(core.followupTriggerValues)
+          ? core.followupTriggerValues.indexOf(mainAns) >= 0
+          : mainAns === "No";
+        if (needsFollowup) {
           return Boolean(state.responses[core.followup.id]);
         }
         return true;
@@ -727,7 +745,12 @@
       coreQuestions.forEach(function(q) {
         var ans = state.responses[q.id];
         var weight = coreWeights[q.id] || 1;
-        if (ans === "Yes") {
+        if (q.signalMap && typeof q.signalMap[ans] === "number") {
+          var mapped = Math.max(0, Math.min(1, q.signalMap[ans]));
+          var mappedPts = Math.round((mapped * weight) * 10) / 10;
+          breakdown[q.id] = mappedPts;
+          total += mappedPts;
+        } else if (ans === "Yes") {
           breakdown[q.id] = weight;
           total += weight;
         } else if (ans === "Sometimes") {
@@ -1184,7 +1207,10 @@
           }).join("") +
         '</div>';
 
-      if (mainVal === "No") {
+      var needsFollowup = Array.isArray(q.followupTriggerValues)
+        ? q.followupTriggerValues.indexOf(mainVal) >= 0
+        : mainVal === "No";
+      if (needsFollowup) {
         html += '<div class="followup-area">' +
           '<div class="style-label-tag">Tell us more</div>' +
           '<div class="style-body">' + q.followup.prompt + '</div>' +
@@ -1201,10 +1227,15 @@
 
       if (!mainVal) {
         statusLine.textContent = "Select an answer to continue.";
-      } else if (mainVal === "No" && !fuVal) {
-        statusLine.textContent = "Tell us a bit more, then continue.";
       } else {
-        statusLine.textContent = "";
+        var needsFollowup = Array.isArray(q.followupTriggerValues)
+          ? q.followupTriggerValues.indexOf(mainVal) >= 0
+          : mainVal === "No";
+        if (needsFollowup && !fuVal) {
+          statusLine.textContent = "Tell us a bit more, then continue.";
+        } else {
+          statusLine.textContent = "";
+        }
       }
     }
 
@@ -1410,12 +1441,15 @@
             if (old && old !== val) {
               delete state.responses[core.followup.id];
             }
-            if (val !== "No") {
+            var needsFollowup = Array.isArray(core.followupTriggerValues)
+              ? core.followupTriggerValues.indexOf(val) >= 0
+              : val === "No";
+            if (!needsFollowup) {
               delete state.responses[core.followup.id];
             }
             state.lastResult = null;
             saveDraft();
-            if (val !== "No") {
+            if (!needsFollowup) {
               goToNextSlide(true);
             } else {
               render();
