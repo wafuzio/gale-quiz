@@ -497,7 +497,7 @@
       <div id="slideIndex" class="slide-index">Loading</div>
       <div class="preview-wrap" id="slideCard"></div>
       <div class="nav-row">
-        <div class="status-line" id="statusLine"><span><span class="gale-a">A</span>I flow active</span><span class="micro-admin" id="adminLink">Admin</span></div>
+        <div class="status-line"><span id="statusLine"><span class="gale-a">A</span>I flow active</span><span class="micro-admin" id="adminLink">Admin</span></div>
         <div class="nav-group">
           <button class="btn" id="backBtn" type="button">Back</button>
           <button class="btn primary" id="nextBtn" type="button">Next</button>
@@ -677,6 +677,17 @@
 
     var calibrationQuestions = [
       {
+        id: "q1b", stage: "Core Skills", type: "single",
+        prompt: "How does your AI use at home compare to your AI use at work?",
+        options: [
+          "Much more at home than at work",
+          "Somewhat more at home than at work",
+          "About the same",
+          "Somewhat more at work than at home",
+          "Much more at work than at home"
+        ]
+      },
+      {
         id: "c1", stage: "Calibration", type: "single",
         prompt: "Which statement best matches your current AI working level?",
         options: [
@@ -754,7 +765,7 @@
       ]
     };
 
-    var slideOrder = ["intro", "q1", "q2", "q2b", "q2c", "q2a", "q3", "q4", "q5", "q6", "c1", "c2", "s0", "s1", "s2", "d1", "astro", "summary"];
+    var slideOrder = ["intro", "q1", "q1b", "q2", "q2b", "q2c", "q2a", "q3", "q4", "q5", "q6", "c1", "c2", "s0", "s1", "s2", "d1", "astro", "summary"];
     var introSlides = [
       'This 5-minute quiz helps us understand how you use AI today — so we can offer training that actually fits where you are.',
       'WE ARE ASKING ABOUT WHAT YOU HAVE ACTUALLY DONE, NOT WHAT YOU\'VE HEARD ABOUT OR WANT TO LEARN.',
@@ -763,7 +774,7 @@
 
     /* Question IDs in presentation order (excludes intro and summary) */
     var questionSlideIds = slideOrder.filter(function(s) { return s !== "intro" && s !== "summary" && s !== "astro"; });
-    var TOTAL_QUESTIONS = questionSlideIds.length; /* 15 */
+    var TOTAL_QUESTIONS = questionSlideIds.length; /* 16 */
 
     function getQuestionNumber(slideId) {
       var idx = questionSlideIds.indexOf(slideId);
@@ -1176,6 +1187,11 @@
       var s2 = Array.isArray(responses.s2) ? responses.s2 : [];
       var flags = Array.isArray(result && result.flags) ? result.flags : [];
       var domain = responses.d1 || "Generalist Orbit";
+      var homeVsWork = responses.q1b || "";
+      var q2Used = Array.isArray(responses.q2) ? responses.q2 : [];
+      var q2Comfort = Array.isArray(responses.q2b) ? responses.q2b : [];
+      var q2Blind = Array.isArray(responses.q2c) ? responses.q2c : [];
+      var blindGapCount = q2Blind.filter(function(area) { return q2Comfort.indexOf(area) < 0; }).length;
 
       var sign = "The Pattern Scout";
       var signature = "You’re building practical AI instincts and already spotting where better prompting can improve outcomes.";
@@ -1204,8 +1220,25 @@
         signature += " You already show real agency-use evidence, which is a strong readiness marker.";
       }
 
+      if (homeVsWork === "Much more at home than at work" || homeVsWork === "Somewhat more at home than at work") {
+        signature += " You may feel more experimental in personal settings than in work contexts — which is common and a great bridge-building opportunity.";
+      } else if (homeVsWork === "Much more at work than at home" || homeVsWork === "Somewhat more at work than at home") {
+        signature += " Your momentum appears work-led, suggesting practical utility is already driving adoption.";
+      }
+
+      if (q2Used.length >= 5) {
+        signature += " Your cross-area usage suggests broad exploration, not just one-off use.";
+      }
+
+      if (blindGapCount > 0) {
+        signature += " You also show strong self-awareness by clearly naming growth areas.";
+      }
+
       var rising = s2[0] || "Prompting and instruction design";
       var watchout = flags[0] || "You’re likely balancing curiosity with caution — trust your momentum and keep refining your quality checks.";
+      if (!flags.length && blindGapCount > 0) {
+        watchout = "You’ve identified " + blindGapCount + " growth area" + (blindGapCount > 1 ? "s" : "") + " — protect momentum by focusing on one at a time.";
+      }
 
       return {
         sign: sign,
@@ -1340,10 +1373,10 @@
       }
       var headers = [
         "submittedAt", "score", "tier", "tierLabel", "mergeRecommendation", "flags", "subtags",
-        "q1", "q1a", "q2", "q2b", "q2c", "q2a", "q2a1", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
+        "q1", "q1a", "q1b", "q2", "q2b", "q2c", "q2a", "q2a1", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
         "c1", "c2", "s0", "s1", "s2", "d1", "d1_specialty",
         "astro_feedback_choice", "astro_feedback_note",
-        "q1_note", "q2_note", "q2b_note", "q2c_note", "q2a_note", "q3_note", "q4_note", "q5_note", "q6_note",
+        "q1_note", "q1b_note", "q2_note", "q2b_note", "q2c_note", "q2a_note", "q3_note", "q4_note", "q5_note", "q6_note",
         "c1_note", "c2_note", "s0_note", "s1_note", "s2_note", "d1_note"
       ];
       var lines = [headers.join(",")];
@@ -1358,6 +1391,7 @@
           flags: Array.isArray(entry.flags) ? entry.flags.join(" | ") : "",
           subtags: Array.isArray(entry.subtags) ? entry.subtags.join(" | ") : "",
           q1: r.q1 || "", q1a: r.q1a || "",
+          q1b: r.q1b || "",
           q2: Array.isArray(r.q2) ? r.q2.join(" | ") : (r.q2 || ""),
           q2b: Array.isArray(r.q2b) ? r.q2b.join(" | ") : (r.q2b || ""),
           q2c: Array.isArray(r.q2c) ? r.q2c.join(" | ") : (r.q2c || ""),
@@ -1376,6 +1410,7 @@
           astro_feedback_choice: r.astro_feedback_choice || "",
           astro_feedback_note: r.astro_feedback_note || "",
           q1_note: r.q1_note || "",
+          q1b_note: r.q1b_note || "",
           q2_note: r.q2_note || "",
           q2b_note: r.q2b_note || "",
           q2c_note: r.q2c_note || "",
