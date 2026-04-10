@@ -722,12 +722,12 @@
       },
       {
         id: "q2b", stage: "Core Skills", type: "multi",
-        prompt: "From your Q2 selections, which do you generally already feel comfortable using in your daily work life? (Select all that apply)",
+        prompt: "From your previous choices, which do you generally already feel comfortable using in your daily work life? (Select all that apply)",
         options: usageAreas
       },
       {
         id: "q2c", stage: "Core Skills", type: "multi",
-        prompt: "From your Q2 selections, which areas feel like blind spots that you want to learn first? (Select all that apply)",
+        prompt: "From the areas you did not select above, which feel like blind spots you want to learn first? (Select all that apply)",
         options: usageAreas
       }
     ];
@@ -922,7 +922,7 @@
           return state.responses.q2.indexOf(choice) >= 0;
         });
         state.responses.q2c = normalizeUsageList(state.responses.q2c).filter(function(choice) {
-          return state.responses.q2.indexOf(choice) >= 0;
+          return state.responses.q2.indexOf(choice) < 0;
         });
         state.history = parsed.history || [];
         state.currentSlide = parsed.currentSlide || "intro";
@@ -955,9 +955,13 @@
     }
 
     function getUsageOptions(q) {
-      if (q && (q.id === "q2b" || q.id === "q2c")) {
+      if (q && q.id === "q2b") {
         var selected = normalizeUsageList(state.responses.q2);
         return selected;
+      }
+      if (q && q.id === "q2c") {
+        var chosen = normalizeUsageList(state.responses.q2);
+        return usageAreas.filter(function(area) { return chosen.indexOf(area) < 0; });
       }
       return q && Array.isArray(q.options) ? q.options : [];
     }
@@ -1712,8 +1716,10 @@
       html += '</div>';
       html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
-      if ((q.id === "q2b" || q.id === "q2c") && (!opts || !opts.length)) {
+      if (q.id === "q2b" && (!opts || !opts.length)) {
         statusLine.textContent = "Select at least one area in the previous question first.";
+      } else if (q.id === "q2c" && (!opts || !opts.length)) {
+        statusLine.textContent = "You selected all areas above, so there are no remaining blind-spot options.";
       } else {
         statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
       }
@@ -2008,13 +2014,19 @@
             });
             var q2cCurrent = Array.isArray(state.responses.q2c) ? state.responses.q2c : [];
             state.responses.q2c = normalizeUsageList(q2cCurrent).filter(function(choice) {
-              return updated.indexOf(choice) >= 0;
+              return updated.indexOf(choice) < 0;
             });
           } else if (qid === "q2b" || qid === "q2c") {
             var q2Selected = normalizeUsageList(state.responses.q2);
-            state.responses[qid] = updated.filter(function(choice) {
-              return q2Selected.indexOf(choice) >= 0;
-            });
+            if (qid === "q2b") {
+              state.responses[qid] = updated.filter(function(choice) {
+                return q2Selected.indexOf(choice) >= 0;
+              });
+            } else {
+              state.responses[qid] = updated.filter(function(choice) {
+                return q2Selected.indexOf(choice) < 0;
+              });
+            }
           } else {
             state.responses[qid] = updated;
           }
