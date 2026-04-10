@@ -33,6 +33,25 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
+    .ai-copper { color: #FD6453; }
+    .gale-a {
+      display: inline-block;
+      color: #FD6453;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      position: relative;
+      padding-right: 1px;
+    }
+    .gale-a::after {
+      content: '';
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      top: 52%;
+      height: 1px;
+      background: #080808;
+      opacity: 0.9;
+    }
     .slide-index {
       font-size: 11px;
       letter-spacing: 0.14em;
@@ -148,6 +167,19 @@
       gap: 12px;
     }
     .nav-group { display: flex; gap: 10px; }
+    .micro-admin {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      border-bottom: 1px dotted rgba(255,255,255,0.28);
+      line-height: 1;
+      padding-bottom: 2px;
+      margin-left: 8px;
+      user-select: none;
+    }
+    .micro-admin:hover { color: #FD6453; border-bottom-color: rgba(253,100,83,0.7); }
     .btn {
       border: 1px solid rgba(255,255,255,0.2);
       background: transparent;
@@ -350,6 +382,44 @@
       font-size: 14px;
       line-height: 1.5;
     }
+    .admin-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      padding: 18px;
+    }
+    .admin-modal-backdrop.open { display: flex; }
+    .admin-modal {
+      width: min(420px, 100%);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: #101010;
+      padding: 16px;
+    }
+    .admin-modal input {
+      width: 100%;
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: #0d0d0d;
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    .admin-modal-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .admin-modal-status {
+      margin-top: 8px;
+      min-height: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+    }
     @media (max-width: 760px) {
       body { padding: 24px 14px 88px; }
       .nav-row { flex-direction: column; align-items: stretch; }
@@ -366,14 +436,14 @@
   <main class="app-shell">
     <img class="gale-wordmark" src="608c6a3b589f3737b86b883c_GALE%20Logo.svg" alt="GALE">
     <div class="meta-row">
-      <span>AI SKILLS - FOCUS CONTENT CALIBRATION</span>
+      <span><span class="ai-copper">AI</span> SKILLS - FOCUS CONTENT CALIBRATION</span>
       <span id="saveStatus">Not saved yet</span>
     </div>
     <section id="slideSection">
       <div id="slideIndex" class="slide-index">Loading</div>
       <div class="preview-wrap" id="slideCard"></div>
       <div class="nav-row">
-        <div class="status-line" id="statusLine"></div>
+        <div class="status-line" id="statusLine"><span><span class="gale-a">A</span>I flow active</span><span class="micro-admin" id="adminLink">Admin</span></div>
         <div class="nav-group">
           <button class="btn" id="backBtn" type="button">Back</button>
           <button class="btn primary" id="nextBtn" type="button">Next</button>
@@ -381,6 +451,18 @@
       </div>
     </section>
   </main>
+  <div class="admin-modal-backdrop" id="adminModalBackdrop" role="dialog" aria-modal="true" aria-label="Admin Access">
+    <div class="admin-modal">
+      <div class="style-label-tag">Admin Access</div>
+      <div class="style-body">Enter password to open dashboard.</div>
+      <input id="adminModalPassword" type="password" autocomplete="off" placeholder="Password" />
+      <div class="admin-modal-actions">
+        <button class="btn" type="button" id="adminModalCancel">Cancel</button>
+        <button class="btn primary" type="button" id="adminModalOpen">Open</button>
+      </div>
+      <div class="admin-modal-status" id="adminModalStatus"></div>
+    </div>
+  </div>
   <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
 
   <script>
@@ -678,6 +760,12 @@
     var progressFill = document.getElementById("progressFill");
     var backBtn = document.getElementById("backBtn");
     var nextBtn = document.getElementById("nextBtn");
+    var adminLink = document.getElementById("adminLink");
+    var adminModalBackdrop = document.getElementById("adminModalBackdrop");
+    var adminModalPassword = document.getElementById("adminModalPassword");
+    var adminModalCancel = document.getElementById("adminModalCancel");
+    var adminModalOpen = document.getElementById("adminModalOpen");
+    var adminModalStatus = document.getElementById("adminModalStatus");
 
     function loadDraft() {
       var raw = localStorage.getItem(DRAFT_KEY);
@@ -713,6 +801,31 @@
       var idx = slideOrder.indexOf(slideId);
       if (idx < 0 || idx >= slideOrder.length - 1) return "summary";
       return slideOrder[idx + 1];
+    }
+
+    function openAdminModal() {
+      adminModalPassword.value = "";
+      adminModalStatus.textContent = "";
+      adminModalBackdrop.classList.add("open");
+      setTimeout(function() { adminModalPassword.focus(); }, 30);
+    }
+
+    function closeAdminModal() {
+      adminModalBackdrop.classList.remove("open");
+    }
+
+    function tryAdminAccess() {
+      var candidate = (adminModalPassword.value || "").trim();
+      if (!candidate) {
+        adminModalStatus.textContent = "Enter password.";
+        return;
+      }
+      if (candidate.toLowerCase() !== "gimmethosetokens") {
+        adminModalStatus.textContent = "Incorrect password.";
+        return;
+      }
+      sessionStorage.setItem("galeOpsPanelAuth", candidate);
+      window.location.href = "/ops-console";
     }
 
     function isSlideAnswered(slideId) {
@@ -1717,6 +1830,33 @@
       if (evt.key === "Shift" || evt.key === "Control" || evt.key === "Alt" || evt.key === "Meta") return;
       goToNextSlide(true);
     });
+
+    if (adminLink) {
+      adminLink.addEventListener("click", function() {
+        openAdminModal();
+      });
+    }
+    if (adminModalCancel) {
+      adminModalCancel.addEventListener("click", function() {
+        closeAdminModal();
+      });
+    }
+    if (adminModalOpen) {
+      adminModalOpen.addEventListener("click", function() {
+        tryAdminAccess();
+      });
+    }
+    if (adminModalPassword) {
+      adminModalPassword.addEventListener("keydown", function(evt) {
+        if (evt.key === "Enter") tryAdminAccess();
+        if (evt.key === "Escape") closeAdminModal();
+      });
+    }
+    if (adminModalBackdrop) {
+      adminModalBackdrop.addEventListener("click", function(evt) {
+        if (evt.target === adminModalBackdrop) closeAdminModal();
+      });
+    }
 
     loadDraft();
     render();
