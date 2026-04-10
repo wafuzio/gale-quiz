@@ -1631,6 +1631,7 @@
           var core = coreMap[qid];
           if (core) {
             var old = state.responses[qid];
+            var isRepeatCoreClick = old === val;
             state.responses[qid] = val;
             if (old && old !== val) {
               delete state.responses[core.followup.id];
@@ -1643,7 +1644,7 @@
             }
             state.lastResult = null;
             saveDraft();
-            if (!needsFollowup) {
+            if (isRepeatCoreClick && isSlideAnswered(state.currentSlide)) {
               goToNextSlide(true);
             } else {
               render();
@@ -1653,26 +1654,44 @@
 
           var parentCore = coreQuestions.find(function(q) { return q.followup.id === qid; });
           if (parentCore) {
+            var oldFollowup = state.responses[qid];
+            var isRepeatFollowupClick = oldFollowup === val;
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            goToNextSlide(true);
+            if (isRepeatFollowupClick && isSlideAnswered(state.currentSlide)) {
+              goToNextSlide(true);
+            } else {
+              render();
+            }
             return;
           }
 
           if (calMap[qid] && calMap[qid].type !== "multi") {
+            var oldCalVal = state.responses[qid];
+            var isRepeatCalClick = oldCalVal === val;
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            goToNextSlide(true);
+            if (isRepeatCalClick && isSlideAnswered(state.currentSlide)) {
+              goToNextSlide(true);
+            } else {
+              render();
+            }
             return;
           }
 
           if (domainMap[qid]) {
+            var oldDomainVal = state.responses[qid];
+            var isRepeatDomainClick = oldDomainVal === val;
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            goToNextSlide(true);
+            if (isRepeatDomainClick && isSlideAnswered(state.currentSlide)) {
+              goToNextSlide(true);
+            } else {
+              render();
+            }
             return;
           }
         });
