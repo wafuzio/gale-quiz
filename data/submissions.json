@@ -1,5 +1,5 @@
 {
-  "count": 2,
+  "count": 4,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -227,6 +227,226 @@
           "domain": "Story / Copy",
           "watchout": "Self-assessment may be ahead of observed behavior",
           "shareText": "```\n  _________ __\n /   _____//  |_  ___________ ___.__.\n \\_____  \\\\   __\\/  _ \\_  __ <   |  |\n /        \\|  | (  <_> )  | \\/\\___  |\n/_______  /|__|  \\____/|__|   / ____|\n        \\/                    \\/\n_________                _____  __\n\\_   ___ \\____________ _/ ____\\/  |_  ___________\n/    \\  \\/\\_  __ \\__  \\\\   __\\\\   __\\/ __ \\_  __ \\\n\\     \\____|  | \\// __ \\|  |   |  | \\  ___/|  | \\/\n \\______  /|__|  (____  /__|   |__|  \\___  >__|\n        \\/            \\/                 \\/\n```\n\n✍️ GALE AI Persona: Story Crafter\n\nSignature: You present as Story Crafter — combining high experimental energy, solid versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong.\n\nSuperpower: You can rapidly shape drafts into audience-ready narratives.\n\nNext Move: Build a prompt kit for your top communication formats.\n\nMantra: Message with purpose.\n\nCurrent vibe: Workflow automation\n\nDomain: Story / Copy"
+        }
+      }
+    },
+    {
+      "id": "mnxjvajx-gru0g4",
+      "respondentKey": "mnxjva7d-hv9ym9tacp",
+      "fingerprint": "c7214d741f902ffe5b745ec8a85b5375e9f7634028e4b48e0c92e61ebbb5e32a",
+      "createdAt": "2026-04-13T18:52:40.365Z",
+      "updatedAt": "2026-04-13T18:52:40.365Z",
+      "receivedAt": "2026-04-13T18:52:40.365Z",
+      "payload": {
+        "submittedAt": "2026-04-13T18:52:39.913Z",
+        "respondentKey": "mnxjva7d-hv9ym9tacp",
+        "score": 23.6,
+        "scoreBreakdown": {
+          "q1": 1,
+          "q2a": 2,
+          "q3": 3,
+          "q4": 2.5,
+          "q5": 3,
+          "q6": 2,
+          "q2_profile": 1.4,
+          "q2_blind_gap_count": 2
+        },
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "Potentially underselling current readiness",
+          "Training opportunity: 2 self-identified blind spots"
+        ],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Data & documents depth",
+          "Code & API depth",
+          "Wants prompting support"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "Erratically (bursts of high use with longer lapses)",
+          "q1b": "About the same",
+          "t1": [
+            "Claude",
+            "Gemini / Google AI"
+          ],
+          "t1b": [
+            "Claude"
+          ],
+          "t1c": [
+            "Claude",
+            "Gemini / Google AI"
+          ],
+          "q2": [
+            "Coding / software development",
+            "Workflow automation",
+            "Creative content generation",
+            "Idea generation / brainstorming"
+          ],
+          "q2b": [
+            "Idea generation / brainstorming"
+          ],
+          "q2c": [
+            "Calculation / computation",
+            "Data analysis"
+          ],
+          "q2a": "Yes",
+          "q3": "Yes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "Yes",
+          "c1": "I use AI to do real work faster — with my own documents, data, or context.",
+          "c2": [
+            "Compare against original sources/documents when it matters",
+            "Verify key facts before using or sharing output",
+            "Refine prompts and rerun when quality is weak"
+          ],
+          "s0": [
+            "Media brief or creative brief",
+            "Competitive or market research synthesis",
+            "Campaign reporting or performance summary"
+          ],
+          "s1": [
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Turn AI output into deliverables shared with others",
+            "Build custom tools/apps powered by AI"
+          ],
+          "s2": [
+            "Working with documents and data",
+            "Prompting and instruction design"
+          ],
+          "d1_note": "This answer missing account domain",
+          "d1": "Strategy",
+          "d1_subdomain": "Marketing Strategy"
+        },
+        "aiProfile": {
+          "sign": "Orchestration Architect",
+          "emoji": "🤖",
+          "asciiArt": "________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/",
+          "signature": "You present as Orchestration Architect — combining steady growth energy, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
+          "spotlight": "You’re operating at systems level with strong automation instincts.",
+          "superpower": "You design workflows that scale beyond one-off personal productivity.",
+          "nextMove": "Package your strongest system into a team-ready playbook.",
+          "mantra": "Architect the leverage.",
+          "rising": "Working with documents and data",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Strategy / Marketing Strategy",
+          "watchout": "Potentially underselling current readiness",
+          "shareText": "```\n________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/\n```\n\n🤖 GALE AI Persona: Orchestration Architect\n\nSignature: You present as Orchestration Architect — combining steady growth energy, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You design workflows that scale beyond one-off personal productivity.\n\nNext Move: Package your strongest system into a team-ready playbook.\n\nMantra: Architect the leverage.\n\nCurrent vibe: Working with documents and data\n\nDomain: Strategy / Marketing Strategy"
+        }
+      }
+    },
+    {
+      "id": "mnxjvckp-wu1wa3",
+      "respondentKey": "mnxjvcc8-g9fdzxwfia",
+      "fingerprint": "76ee3b39b2035f1ddd4223876761b5da32069a8aa6f330fd180413dabe192dfa",
+      "createdAt": "2026-04-13T18:52:42.984Z",
+      "updatedAt": "2026-04-13T18:52:42.984Z",
+      "receivedAt": "2026-04-13T18:52:42.984Z",
+      "payload": {
+        "submittedAt": "2026-04-13T18:52:42.680Z",
+        "respondentKey": "mnxjvcc8-g9fdzxwfia",
+        "score": 17.5,
+        "scoreBreakdown": {
+          "q1": 1.7,
+          "q2a": 1,
+          "q3": 3,
+          "q4": 0.6,
+          "q5": 1.5,
+          "q6": 0,
+          "q2_profile": 3.8,
+          "q2_blind_gap_count": 1
+        },
+        "tier": "Tier 2",
+        "tierLabel": "Ready to expand current use cases",
+        "tierDesc": "Consistent practical usage with room to scale into stronger cross-team and system-level workflows",
+        "flags": [
+          "Potentially underselling current readiness",
+          "Training opportunity: 1 self-identified blind spot"
+        ],
+        "subtags": [
+          "Agency workflow evidence",
+          "Data & documents depth",
+          "Wants prompting support"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "q1": "Steadily week in, week out",
+          "q1b": "About the same",
+          "t1": [
+            "ChatGPT",
+            "Claude",
+            "Gemini / Google AI"
+          ],
+          "t1b": [
+            "ChatGPT"
+          ],
+          "t1c": [],
+          "t1c_note": "Unsure as it used to be ChatGPT but I'm starting to dislike it more and more.",
+          "q2": [
+            "Quick one-shot answers",
+            "Quality assurance / output review",
+            "Research synthesis",
+            "Strategic planning (what to execute)",
+            "Project planning (how to execute)",
+            "Creative content generation",
+            "Idea generation / brainstorming",
+            "Communication / messaging"
+          ],
+          "q2b": [
+            "Idea generation / brainstorming",
+            "Communication / messaging",
+            "Strategic planning (what to execute)",
+            "Quick one-shot answers"
+          ],
+          "q2c": [
+            "Workflow automation"
+          ],
+          "q2a": "Sometimes",
+          "q3": "Yes",
+          "q4": "No",
+          "q4a": "I’ve tried once or twice, but it’s not repeatable yet",
+          "q5": "Sometimes",
+          "q6": "No",
+          "q6a": "I haven’t connected AI to other tools yet",
+          "q6_note": "Would like to learn more how to do this.",
+          "c1": "I use AI for one-off tasks (drafts, summaries, quick answers).",
+          "c2": [
+            "Compare against original sources/documents when it matters",
+            "Refine prompts and rerun when quality is weak"
+          ],
+          "s0": [
+            "Competitive or market research synthesis",
+            "Campaign reporting or performance summary"
+          ],
+          "s1": [
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Turn AI output into deliverables shared with others"
+          ],
+          "s2": [
+            "Prompting and instruction design",
+            "Working with documents and data"
+          ],
+          "d1_note": "Client Partner"
+        },
+        "aiProfile": {
+          "sign": "Narrative Producer",
+          "emoji": "🎬",
+          "asciiArt": "888b    888                                  888    d8b\n8888b   888                                  888    Y8P\n88888b  888                                  888\n888Y88b 888  8888b.  888d888 888d888 8888b.  888888 888 888  888  .d88b.\n888 Y88b888     \"88b 888P\"   888P\"      \"88b 888    888 888  888 d8P  Y8b\n888  Y88888 .d888888 888     888    .d888888 888    888 Y88  88P 88888888\n888   Y8888 888  888 888     888    888  888 Y88b.  888  Y8bd8P  Y8b.\n888    Y888 \"Y888888 888     888    \"Y888888  \"Y888 888   Y88P    \"Y8888\n\n\n\n8888888b.                       888\n888   Y88b                      888\n888    888                      888\n888   d88P 888d888 .d88b.   .d88888 888  888  .d8888b .d88b.  888d888\n8888888P\"  888P\"  d88\"\"88b d88\" 888 888  888 d88P\"   d8P  Y8b 888P\"\n888        888    888  888 888  888 888  888 888     88888888 888\n888        888    Y88..88P Y88b 888 Y88b 888 Y88b.   Y8b.     888\n888        888     \"Y88P\"   \"Y88888  \"Y88888  \"Y8888P \"Y8888  888",
+          "signature": "You present as Narrative Producer — combining steady growth energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
+          "spotlight": "You blend creative quality with operational consistency.",
+          "superpower": "You generate high-volume content while protecting clarity and quality.",
+          "nextMove": "Create a quality rubric for fast content review before publishing.",
+          "mantra": "Creative, but controlled.",
+          "rising": "Prompting and instruction design",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Generalist Orbit",
+          "watchout": "Potentially underselling current readiness",
+          "shareText": "```\n888b    888                                  888    d8b\n8888b   888                                  888    Y8P\n88888b  888                                  888\n888Y88b 888  8888b.  888d888 888d888 8888b.  888888 888 888  888  .d88b.\n888 Y88b888     \"88b 888P\"   888P\"      \"88b 888    888 888  888 d8P  Y8b\n888  Y88888 .d888888 888     888    .d888888 888    888 Y88  88P 88888888\n888   Y8888 888  888 888     888    888  888 Y88b.  888  Y8bd8P  Y8b.\n888    Y888 \"Y888888 888     888    \"Y888888  \"Y888 888   Y88P    \"Y8888\n\n\n\n8888888b.                       888\n888   Y88b                      888\n888    888                      888\n888   d88P 888d888 .d88b.   .d88888 888  888  .d8888b .d88b.  888d888\n8888888P\"  888P\"  d88\"\"88b d88\" 888 888  888 d88P\"   d8P  Y8b 888P\"\n888        888    888  888 888  888 888  888 888     88888888 888\n888        888    Y88..88P Y88b 888 Y88b 888 Y88b.   Y8b.     888\n888        888     \"Y88P\"   \"Y88888  \"Y88888  \"Y8888P \"Y8888  888\n```\n\n🎬 GALE AI Persona: Narrative Producer\n\nSignature: You present as Narrative Producer — combining steady growth energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You generate high-volume content while protecting clarity and quality.\n\nNext Move: Create a quality rubric for fast content review before publishing.\n\nMantra: Creative, but controlled.\n\nCurrent vibe: Prompting and instruction design\n\nDomain: Generalist Orbit"
         }
       }
     }
