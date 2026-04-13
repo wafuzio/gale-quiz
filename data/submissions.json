@@ -1,5 +1,5 @@
 {
-  "count": 1,
+  "count": 2,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -121,6 +121,112 @@
           "domain": "Paid Media / Retail Media",
           "watchout": "Training opportunity: 2 self-identified blind spots",
           "shareText": "🔮 GALE AI Persona\n🤖 Orchestration Architect\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\nSuperpower: You design workflows that scale beyond one-off personal productivity.\nNext Move: Package your strongest system into a team-ready playbook.\nMantra: Architect the leverage.\nCurrent vibe: Transferring my current skills into an Alchemy AI environment\nDomain: Paid Media / Retail Media"
+        }
+      }
+    },
+    {
+      "id": "mnxj37w8-cjj1au",
+      "respondentKey": "mnxj3722-zk0hp0c8dv",
+      "fingerprint": "06a82be81ac115cfc541420eeabc00499485eaf1b6399d3b748df653b36f2f4c",
+      "createdAt": "2026-04-13T18:30:50.552Z",
+      "updatedAt": "2026-04-13T18:30:50.552Z",
+      "receivedAt": "2026-04-13T18:30:50.552Z",
+      "payload": {
+        "submittedAt": "2026-04-13T18:30:49.466Z",
+        "respondentKey": "mnxj3722-zk0hp0c8dv",
+        "score": 8,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 1,
+          "q3": 3,
+          "q4": 0,
+          "q5": 0,
+          "q6": 0,
+          "q2_profile": 3.2,
+          "q2_blind_gap_count": 1
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Foundational: ready to apply core workflows",
+        "tierDesc": "Best fit for foundational skill-building and repeatable quality habits before advanced system-level expansion",
+        "flags": [
+          "Self-assessment may be ahead of observed behavior",
+          "Training opportunity: 1 self-identified blind spot"
+        ],
+        "subtags": [
+          "Wants prompting support",
+          "Wants advanced implementation support"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "q1": "All the time (daily or near-daily)",
+          "q1b": "About the same",
+          "t1": [
+            "ChatGPT",
+            "Grammarly"
+          ],
+          "t1b": [
+            "ChatGPT",
+            "Grammarly"
+          ],
+          "t1c": [
+            "ChatGPT"
+          ],
+          "q2": [
+            "Quick one-shot answers",
+            "Creative content generation",
+            "Quality assurance / output review",
+            "Communication / messaging",
+            "Idea generation / brainstorming"
+          ],
+          "q2b": [
+            "Quick one-shot answers",
+            "Creative content generation",
+            "Idea generation / brainstorming",
+            "Communication / messaging"
+          ],
+          "q2c": [
+            "Strategic planning (what to execute)"
+          ],
+          "q2a": "Sometimes",
+          "q3": "Yes",
+          "q4": "No",
+          "q4a": "I didn’t realize AI could work well with files/data for this",
+          "q5": "No",
+          "q5a": "I usually keep it to one prompt and one output",
+          "q6": "No",
+          "q6a": "I haven’t connected AI to other tools yet",
+          "c1": "I use AI to do real work faster — with my own documents, data, or context.",
+          "c2": [
+            "I often use output mostly as-is"
+          ],
+          "s0": [
+            "None of these yet"
+          ],
+          "s1": [
+            "None of these yet"
+          ],
+          "s2": [
+            "Workflow automation",
+            "Prompting and instruction design"
+          ],
+          "d1": "Story",
+          "d1_subdomain": "Copy",
+          "astro_feedback_choice": "nailed_it"
+        },
+        "aiProfile": {
+          "sign": "Story Crafter",
+          "emoji": "✍️",
+          "asciiArt": "  _________ __\n /   _____//  |_  ___________ ___.__.\n \\_____  \\\\   __\\/  _ \\_  __ <   |  |\n /        \\|  | (  <_> )  | \\/\\___  |\n/_______  /|__|  \\____/|__|   / ____|\n        \\/                    \\/\n_________                _____  __\n\\_   ___ \\____________ _/ ____\\/  |_  ___________\n/    \\  \\/\\_  __ \\__  \\\\   __\\\\   __\\/ __ \\_  __ \\\n\\     \\____|  | \\// __ \\|  |   |  | \\  ___/|  | \\/\n \\______  /|__|  (____  /__|   |__|  \\___  >__|\n        \\/            \\/                 \\/",
+          "signature": "You present as Story Crafter — combining high experimental energy, solid versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong.",
+          "spotlight": "You’re strong at translating raw ideas into clear communication.",
+          "superpower": "You can rapidly shape drafts into audience-ready narratives.",
+          "nextMove": "Build a prompt kit for your top communication formats.",
+          "mantra": "Message with purpose.",
+          "rising": "Workflow automation",
+          "operatingStyleLabel": "Operating style: speed-first",
+          "domain": "Story / Copy",
+          "watchout": "Self-assessment may be ahead of observed behavior",
+          "shareText": "```\n  _________ __\n /   _____//  |_  ___________ ___.__.\n \\_____  \\\\   __\\/  _ \\_  __ <   |  |\n /        \\|  | (  <_> )  | \\/\\___  |\n/_______  /|__|  \\____/|__|   / ____|\n        \\/                    \\/\n_________                _____  __\n\\_   ___ \\____________ _/ ____\\/  |_  ___________\n/    \\  \\/\\_  __ \\__  \\\\   __\\\\   __\\/ __ \\_  __ \\\n\\     \\____|  | \\// __ \\|  |   |  | \\  ___/|  | \\/\n \\______  /|__|  (____  /__|   |__|  \\___  >__|\n        \\/            \\/                 \\/\n```\n\n✍️ GALE AI Persona: Story Crafter\n\nSignature: You present as Story Crafter — combining high experimental energy, solid versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong.\n\nSuperpower: You can rapidly shape drafts into audience-ready narratives.\n\nNext Move: Build a prompt kit for your top communication formats.\n\nMantra: Message with purpose.\n\nCurrent vibe: Workflow automation\n\nDomain: Story / Copy"
         }
       }
     }
