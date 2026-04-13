@@ -4,14 +4,14 @@
     {
       "id": "mnxd9w09-p9vjy9",
       "respondentKey": "mntam9x7-wu8fhq8dog",
-      "fingerprint": "a222526d574759bb7e22e16bc2b2974e2f7465914793c5311d2795833bad8569",
+      "fingerprint": "50e36517c55b266979ab766f836ec2b6fa40d8623b9f94676d92cc0cb902e774",
       "createdAt": "2026-04-13T15:48:04.041Z",
-      "updatedAt": "2026-04-13T15:48:04.041Z",
-      "receivedAt": "2026-04-13T15:48:04.041Z",
+      "updatedAt": "2026-04-13T20:21:40.200Z",
+      "receivedAt": "2026-04-13T20:21:40.200Z",
       "payload": {
-        "submittedAt": "2026-04-13T15:48:03.464Z",
+        "submittedAt": "2026-04-13T20:21:39.982Z",
         "respondentKey": "mntam9x7-wu8fhq8dog",
-        "score": 24.5,
+        "score": 19.7,
         "scoreBreakdown": {
           "q1": 2,
           "q2a": 1,
@@ -22,10 +22,11 @@
           "q2_profile": 3.8,
           "q2_blind_gap_count": 2
         },
-        "tier": "Tier 1",
-        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
+        "tier": "Tier 3",
+        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
         "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
         "flags": [
+          "Potentially underselling current readiness",
           "Training opportunity: 2 self-identified blind spots"
         ],
         "subtags": [
@@ -104,23 +105,18 @@
           "s2": [
             "Transferring my current skills into an Alchemy AI environment",
             "Technical/API implementation"
-          ],
-          "d1": "Paid Media",
-          "d1_subdomain": "Retail Media",
-          "astro_feedback_choice": "nailed_it"
+          ]
         },
         "aiProfile": {
-          "sign": "Orchestration Architect",
-          "emoji": "🤖",
-          "signature": "You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.",
-          "spotlight": "You’re operating at systems level with strong automation instincts.",
-          "superpower": "You design workflows that scale beyond one-off personal productivity.",
-          "nextMove": "Package your strongest system into a team-ready playbook.",
-          "mantra": "Architect the leverage.",
+          "sign": "The Workflow Architect",
+          "signature": "Your answers show a systems mindset: you tend to turn one-off wins into repeatable ways of working. You’re in the high-upside middle where small prompt upgrades can create outsized gains. You already show real agency-use evidence, which is a strong readiness marker. Your cross-area usage suggests broad exploration, not just one-off use. You also show strong self-awareness by clearly naming growth areas.",
+          "spotlight": "Your profile reflects high-leverage AI operating behavior across workflows.",
+          "superpower": "Operational leadership: you can raise quality and velocity simultaneously.",
+          "nextMove": "Package your best workflows into shared playbooks for your team.",
+          "mantra": "Scale with guardrails.",
           "rising": "Transferring my current skills into an Alchemy AI environment",
-          "domain": "Paid Media / Retail Media",
-          "watchout": "Training opportunity: 2 self-identified blind spots",
-          "shareText": "🔮 GALE AI Persona\n🤖 Orchestration Architect\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\nSuperpower: You design workflows that scale beyond one-off personal productivity.\nNext Move: Package your strongest system into a team-ready playbook.\nMantra: Architect the leverage.\nCurrent vibe: Transferring my current skills into an Alchemy AI environment\nDomain: Paid Media / Retail Media"
+          "domain": "Generalist Orbit",
+          "watchout": "Potentially underselling current readiness"
         }
       }
     },
@@ -343,9 +339,9 @@
     {
       "id": "mnxjvckp-wu1wa3",
       "respondentKey": "mnxjvcc8-g9fdzxwfia",
-      "fingerprint": "76ee3b39b2035f1ddd4223876761b5da32069a8aa6f330fd180413dabe192dfa",
+      "fingerprint": "e41c400217b6767fe67ee5629e1e3bc3ec5d9acd3d1399154f62f98b09ce577c",
       "createdAt": "2026-04-13T18:52:42.984Z",
-      "updatedAt": "2026-04-13T18:52:42.984Z",
+      "updatedAt": "2026-04-13T20:50:28.761Z",
       "receivedAt": "2026-04-13T18:52:42.984Z",
       "payload": {
         "submittedAt": "2026-04-13T18:52:42.680Z",
@@ -431,7 +427,8 @@
             "Prompting and instruction design",
             "Working with documents and data"
           ],
-          "d1_note": "Client Partner"
+          "d1_note": "Client Partner",
+          "d1": "Client Partner"
         },
         "aiProfile": {
           "sign": "Narrative Producer",
