@@ -4,14 +4,14 @@
     {
       "id": "mnxd9w09-p9vjy9",
       "respondentKey": "mntam9x7-wu8fhq8dog",
-      "fingerprint": "50e36517c55b266979ab766f836ec2b6fa40d8623b9f94676d92cc0cb902e774",
+      "fingerprint": "a061bf8dd6894930dbeaa6f610cbe1b0fab5404d1fe9e201cbf8db2ad885df40",
       "createdAt": "2026-04-13T15:48:04.041Z",
-      "updatedAt": "2026-04-13T20:21:40.200Z",
-      "receivedAt": "2026-04-13T20:21:40.200Z",
+      "updatedAt": "2026-04-13T21:25:45.099Z",
+      "receivedAt": "2026-04-13T21:25:45.099Z",
       "payload": {
-        "submittedAt": "2026-04-13T20:21:39.982Z",
+        "submittedAt": "2026-04-13T21:25:44.964Z",
         "respondentKey": "mntam9x7-wu8fhq8dog",
-        "score": 19.7,
+        "score": 24.5,
         "scoreBreakdown": {
           "q1": 2,
           "q2a": 1,
@@ -22,11 +22,10 @@
           "q2_profile": 3.8,
           "q2_blind_gap_count": 2
         },
-        "tier": "Tier 3",
-        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
         "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
         "flags": [
-          "Potentially underselling current readiness",
           "Training opportunity: 2 self-identified blind spots"
         ],
         "subtags": [
@@ -105,18 +104,29 @@
           "s2": [
             "Transferring my current skills into an Alchemy AI environment",
             "Technical/API implementation"
-          ]
+          ],
+          "t1d": [
+            "Adobe Firefly",
+            "Midjourney",
+            "Canva AI"
+          ],
+          "d1": "Paid Media",
+          "d1_subdomain": "Retail Media"
         },
         "aiProfile": {
-          "sign": "The Workflow Architect",
-          "signature": "Your answers show a systems mindset: you tend to turn one-off wins into repeatable ways of working. You’re in the high-upside middle where small prompt upgrades can create outsized gains. You already show real agency-use evidence, which is a strong readiness marker. Your cross-area usage suggests broad exploration, not just one-off use. You also show strong self-awareness by clearly naming growth areas.",
-          "spotlight": "Your profile reflects high-leverage AI operating behavior across workflows.",
-          "superpower": "Operational leadership: you can raise quality and velocity simultaneously.",
-          "nextMove": "Package your best workflows into shared playbooks for your team.",
-          "mantra": "Scale with guardrails.",
+          "sign": "Orchestration Architect",
+          "emoji": "🤖",
+          "asciiArt": "________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/",
+          "signature": "You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.",
+          "spotlight": "You’re operating at systems level with strong automation instincts.",
+          "superpower": "You design workflows that scale beyond one-off personal productivity.",
+          "nextMove": "Package your strongest system into a team-ready playbook.",
+          "mantra": "Architect the leverage.",
           "rising": "Transferring my current skills into an Alchemy AI environment",
-          "domain": "Generalist Orbit",
-          "watchout": "Potentially underselling current readiness"
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Paid Media / Retail Media",
+          "watchout": "Training opportunity: 2 self-identified blind spots",
+          "shareText": "```\n________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/\n```\n\n🤖 GALE AI Persona: Orchestration Architect\n\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You design workflows that scale beyond one-off personal productivity.\n\nNext Move: Package your strongest system into a team-ready playbook.\n\nMantra: Architect the leverage.\n\nCurrent vibe: Transferring my current skills into an Alchemy AI environment\n\nDomain: Paid Media / Retail Media"
         }
       }
     },
