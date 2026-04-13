@@ -1,17 +1,17 @@
 {
-  "count": 2,
+  "count": 1,
   "submissions": [
     {
-      "id": "mntifois-f4au4b",
+      "id": "mnxd9w09-p9vjy9",
       "respondentKey": "mntam9x7-wu8fhq8dog",
       "fingerprint": "a222526d574759bb7e22e16bc2b2974e2f7465914793c5311d2795833bad8569",
-      "createdAt": "2026-04-10T23:01:27.652Z",
-      "updatedAt": "2026-04-13T14:21:55.995Z",
-      "receivedAt": "2026-04-13T14:21:55.995Z",
+      "createdAt": "2026-04-13T15:48:04.041Z",
+      "updatedAt": "2026-04-13T15:48:04.041Z",
+      "receivedAt": "2026-04-13T15:48:04.041Z",
       "payload": {
-        "submittedAt": "2026-04-13T14:21:55.793Z",
+        "submittedAt": "2026-04-13T15:48:03.464Z",
         "respondentKey": "mntam9x7-wu8fhq8dog",
-        "score": 19.7,
+        "score": 24.5,
         "scoreBreakdown": {
           "q1": 2,
           "q2a": 1,
@@ -22,11 +22,10 @@
           "q2_profile": 3.8,
           "q2_blind_gap_count": 2
         },
-        "tier": "Tier 3",
-        "tierLabel": "Ready to fully integrate rich experience into GALE systems",
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
         "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
         "flags": [
-          "Potentially underselling current readiness",
           "Training opportunity: 2 self-identified blind spots"
         ],
         "subtags": [
@@ -111,120 +110,17 @@
           "astro_feedback_choice": "nailed_it"
         },
         "aiProfile": {
-          "sign": "The Workflow Architect",
-          "signature": "Your answers show a systems mindset: you tend to turn one-off wins into repeatable ways of working. You’re in the high-upside middle where small prompt upgrades can create outsized gains. You already show real agency-use evidence, which is a strong readiness marker. Your cross-area usage suggests broad exploration, not just one-off use. You also show strong self-awareness by clearly naming growth areas.",
-          "spotlight": "You’re positioned to shape standards, not just outputs.",
-          "superpower": "Systems thinking: you translate individual wins into durable team practices.",
-          "nextMove": "Mentor others on verification and prompt-structure habits that scale safely.",
-          "mantra": "Systems create lift.",
+          "sign": "Orchestration Architect",
+          "emoji": "🤖",
+          "signature": "You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.",
+          "spotlight": "You’re operating at systems level with strong automation instincts.",
+          "superpower": "You design workflows that scale beyond one-off personal productivity.",
+          "nextMove": "Package your strongest system into a team-ready playbook.",
+          "mantra": "Architect the leverage.",
           "rising": "Transferring my current skills into an Alchemy AI environment",
-          "domain": "Paid Media",
-          "watchout": "Potentially underselling current readiness"
-        }
-      }
-    },
-    {
-      "id": "mntj9pu8-9erxp5",
-      "respondentKey": "mntj9ni5-amagcl9s8u",
-      "fingerprint": "0e079b03c35557617629acef980e679a22ab5e8837abc7e0a6ea1f300af554d8",
-      "createdAt": "2026-04-10T23:24:49.040Z",
-      "updatedAt": "2026-04-10T23:35:35.609Z",
-      "receivedAt": "2026-04-10T23:35:35.609Z",
-      "payload": {
-        "submittedAt": "2026-04-10T23:35:34.404Z",
-        "respondentKey": "mntj9ni5-amagcl9s8u",
-        "score": 11.9,
-        "scoreBreakdown": {
-          "q1": 1,
-          "q2a": 0.5,
-          "q3": 3,
-          "q4": 2.5,
-          "q5": 1.5,
-          "q6": 0,
-          "q2_profile": 1.4,
-          "q2_blind_gap_count": 4
-        },
-        "tier": "Tier 1",
-        "tierLabel": "Ready to apply the fundamentals",
-        "tierDesc": "Can execute solid core workflows and should focus on repeatable quality and verification habits",
-        "flags": [
-          "Self-assessment may be ahead of observed behavior",
-          "Training opportunity: 4 self-identified blind spots"
-        ],
-        "subtags": [
-          "Agency workflow evidence",
-          "Prompting depth",
-          "Wants advanced implementation support"
-        ],
-        "mergeRecommendation": false,
-        "responses": {
-          "q2": [
-            "Creative content generation",
-            "Idea generation / brainstorming",
-            "Quick one-shot answers",
-            "Research synthesis"
-          ],
-          "q2b": [
-            "Creative content generation"
-          ],
-          "q2c": [
-            "Strategic planning (what to execute)",
-            "Project planning (how to execute)",
-            "Quality assurance / output review",
-            "Communication / messaging"
-          ],
-          "t1": [
-            "ChatGPT",
-            "Claude",
-            "Microsoft Copilot"
-          ],
-          "t1b": [
-            "None of these — I don't pay out of pocket"
-          ],
-          "t1c": [
-            "Claude"
-          ],
-          "q1": "Erratically (bursts of high use with longer lapses)",
-          "q1b": "Much more at work than at home",
-          "q2a": "No",
-          "q2a1": "I add some detail, but not consistently",
-          "q3": "Yes",
-          "q4": "Yes",
-          "q5": "No",
-          "q5a": "I break work into steps deliberately, but inconsistently",
-          "q6": "No",
-          "q6a": "I haven’t connected AI to other tools yet",
-          "c1": "I use AI to do real work faster — with my own documents, data, or context.",
-          "c2": [
-            "I often use output mostly as-is",
-            "Refine prompts and rerun when quality is weak",
-            "Compare against original sources/documents when it matters"
-          ],
-          "s0": [
-            "Media brief or creative brief",
-            "Competitive or market research synthesis"
-          ],
-          "s1": [
-            "Use role/context-rich prompts (beyond basic ask/answer)"
-          ],
-          "s2": [
-            "Workflow automation"
-          ],
-          "d1": "People",
-          "d1_subdomain": "People and Experience"
-        },
-        "aiProfile": {
-          "sign": "System Tinkerer",
-          "emoji": "⚙️",
-          "signature": "You present as System Tinkerer — combining steady growth energy, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
-          "spotlight": "You’ve moved from trial to repeatable execution in core workflows.",
-          "superpower": "You can improve a process incrementally without overcomplicating it.",
-          "nextMove": "Automate one handoff in your weekly workflow and measure the time saved.",
-          "mantra": "Tune the machine.",
-          "rising": "Workflow automation",
-          "domain": "People / People and Experience",
-          "watchout": "Self-assessment may be ahead of observed behavior",
-          "shareText": "🔮 GALE AI Persona\n⚙️ System Tinkerer\nSignature: You present as System Tinkerer — combining steady growth energy, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\nSuperpower: You can improve a process incrementally without overcomplicating it.\nNext Move: Automate one handoff in your weekly workflow and measure the time saved.\nMantra: Tune the machine.\nCurrent vibe: Workflow automation\nDomain: People / People and Experience"
+          "domain": "Paid Media / Retail Media",
+          "watchout": "Training opportunity: 2 self-identified blind spots",
+          "shareText": "🔮 GALE AI Persona\n🤖 Orchestration Architect\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\nSuperpower: You design workflows that scale beyond one-off personal productivity.\nNext Move: Package your strongest system into a team-ready playbook.\nMantra: Architect the leverage.\nCurrent vibe: Transferring my current skills into an Alchemy AI environment\nDomain: Paid Media / Retail Media"
         }
       }
     }
