@@ -1,15 +1,15 @@
 {
-  "count": 4,
+  "count": 5,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
       "respondentKey": "mntam9x7-wu8fhq8dog",
       "fingerprint": "a061bf8dd6894930dbeaa6f610cbe1b0fab5404d1fe9e201cbf8db2ad885df40",
       "createdAt": "2026-04-13T15:48:04.041Z",
-      "updatedAt": "2026-04-13T21:25:45.099Z",
-      "receivedAt": "2026-04-13T21:25:45.099Z",
+      "updatedAt": "2026-04-14T14:25:36.940Z",
+      "receivedAt": "2026-04-14T14:25:36.940Z",
       "payload": {
-        "submittedAt": "2026-04-13T21:25:44.964Z",
+        "submittedAt": "2026-04-14T14:25:36.678Z",
         "respondentKey": "mntam9x7-wu8fhq8dog",
         "score": 24.5,
         "scoreBreakdown": {
@@ -454,6 +454,118 @@
           "domain": "Generalist Orbit",
           "watchout": "Potentially underselling current readiness",
           "shareText": "```\n888b    888                                  888    d8b\n8888b   888                                  888    Y8P\n88888b  888                                  888\n888Y88b 888  8888b.  888d888 888d888 8888b.  888888 888 888  888  .d88b.\n888 Y88b888     \"88b 888P\"   888P\"      \"88b 888    888 888  888 d8P  Y8b\n888  Y88888 .d888888 888     888    .d888888 888    888 Y88  88P 88888888\n888   Y8888 888  888 888     888    888  888 Y88b.  888  Y8bd8P  Y8b.\n888    Y888 \"Y888888 888     888    \"Y888888  \"Y888 888   Y88P    \"Y8888\n\n\n\n8888888b.                       888\n888   Y88b                      888\n888    888                      888\n888   d88P 888d888 .d88b.   .d88888 888  888  .d8888b .d88b.  888d888\n8888888P\"  888P\"  d88\"\"88b d88\" 888 888  888 d88P\"   d8P  Y8b 888P\"\n888        888    888  888 888  888 888  888 888     88888888 888\n888        888    Y88..88P Y88b 888 Y88b 888 Y88b.   Y8b.     888\n888        888     \"Y88P\"   \"Y88888  \"Y88888  \"Y8888P \"Y8888  888\n```\n\n🎬 GALE AI Persona: Narrative Producer\n\nSignature: You present as Narrative Producer — combining steady growth energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You generate high-volume content while protecting clarity and quality.\n\nNext Move: Create a quality rubric for fast content review before publishing.\n\nMantra: Creative, but controlled.\n\nCurrent vibe: Prompting and instruction design\n\nDomain: Generalist Orbit"
+        }
+      }
+    },
+    {
+      "id": "mnyoqucm-3p9uzs",
+      "respondentKey": "mnyoqtl3-39olt1hdwh",
+      "fingerprint": "01e0156f088b132ec7227b295ca6f20bcd31dafaf380c145b72317ff8b26c383",
+      "createdAt": "2026-04-14T13:56:56.998Z",
+      "updatedAt": "2026-04-14T13:56:56.998Z",
+      "receivedAt": "2026-04-14T13:56:56.998Z",
+      "payload": {
+        "submittedAt": "2026-04-14T13:56:56.007Z",
+        "respondentKey": "mnyoqtl3-39olt1hdwh",
+        "score": 16.7,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 2,
+          "q3": 1.5,
+          "q4": 2.5,
+          "q5": 3,
+          "q6": 0,
+          "q2_profile": 4.8,
+          "q2_blind_gap_count": 3
+        },
+        "tier": "Tier 2",
+        "tierLabel": "Ready to expand current use cases",
+        "tierDesc": "Consistent practical usage with room to scale into stronger cross-team and system-level workflows",
+        "flags": [
+          "Training opportunity: 3 self-identified blind spots"
+        ],
+        "subtags": [
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Wants advanced implementation support"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "q1": "All the time (daily or near-daily)",
+          "q1_note": "I use AI for something every day. Whether it is to create an outline for something or to take an outline I've created and expand on it. I also use it regularly to ensure my communications are clear and concise.",
+          "q1b": "About the same",
+          "q1b_note": "I use AI in my personal life about as much as I do at work. It has become an ideal thought partner, especially after training it over the last few years.",
+          "q2": [
+            "Quick one-shot answers",
+            "Quality assurance / output review",
+            "Research synthesis",
+            "Data analysis",
+            "Project planning (how to execute)",
+            "Idea generation / brainstorming",
+            "Communication / messaging",
+            "Workflow automation"
+          ],
+          "q2b": [
+            "Quick one-shot answers",
+            "Quality assurance / output review",
+            "Research synthesis",
+            "Idea generation / brainstorming",
+            "Project planning (how to execute)",
+            "Data analysis",
+            "Communication / messaging",
+            "Workflow automation"
+          ],
+          "q2c": [
+            "Strategic planning (what to execute)",
+            "Coding / software development",
+            "Creative content generation"
+          ],
+          "q2a": "Yes",
+          "q2a_note": "I try to be as specific as possible in my prompts with any AI tool. I have developed a degree of specificity that has helped ensure I get the output I am looking for; sometimes, there are tweaks required, but more often than not, I get what I am looking for the first or second time around",
+          "q3": "Sometimes",
+          "q3_note": "Sometimes, I rewrite the prompt and start from scratch; more often than not, I just continue the conversation by clarifying what I am looking for.",
+          "q4": "Yes",
+          "q4_note": "I have used AI at work for several projects, where the output was used to present to our ELT. The results have been well received and used as we develop strategies tied to Learning and Development, Goals and Objectives, Performance Reviews, and Engagement Surveys.",
+          "q5": "Yes",
+          "q5_note": "Depending on the size of the ask, the project itself, and the type of results I am looking for, I have approached my interactions with AI in various ways. I have developed some best practices that seem to work well to produce the outcomes I need.",
+          "q6": "No",
+          "q6a": "I haven’t connected AI to other tools yet",
+          "q6_note": "This is what is next for me. I'd like to connect AI to my work tools, but connectivity in our ISO environment has proven to be a bit tricky.",
+          "c1": "I regularly use AI with documents/data in real workflows",
+          "c2": [
+            "Verify key facts before using or sharing output",
+            "Compare against original sources/documents when it matters",
+            "Refine prompts and rerun when quality is weak"
+          ],
+          "s0": [
+            "None of these yet"
+          ],
+          "s0_note": "These are not areas of my current role at GALE, so I don't know that I would personally be using AI for these particular outputs.",
+          "s1": [
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Turn AI output into deliverables shared with others",
+            "Use AI as part of recurring workflows"
+          ],
+          "s2": [
+            "Workflow automation",
+            "Technical/API implementation"
+          ],
+          "d1": "People / HR / Talent",
+          "d1_specialty": "Coaching; Learning and Development",
+          "astro_feedback_choice": "nailed_it"
+        },
+        "aiProfile": {
+          "sign": "The Systems Navigator",
+          "signature": "Your pattern shows steady practical use with clear potential to scale what already works. Your prompt-refinement signal is strong. Your cross-area usage suggests broad exploration, not just one-off use. You also show strong self-awareness by clearly naming growth areas.",
+          "spotlight": "You’re operating with consistency and are close to team-level influence.",
+          "superpower": "Quality discipline: you know how to iterate until output is decision-ready.",
+          "nextMove": "Expand into one adjacent domain to increase cross-functional value.",
+          "mantra": "Scale the system, not the scramble.",
+          "rising": "Workflow automation",
+          "domain": "People / HR / Talent",
+          "watchout": "Training opportunity: 3 self-identified blind spots"
         }
       }
     }
