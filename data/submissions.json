@@ -1,5 +1,5 @@
 {
-  "count": 5,
+  "count": 6,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -566,6 +566,137 @@
           "rising": "Workflow automation",
           "domain": "People / HR / Talent",
           "watchout": "Training opportunity: 3 self-identified blind spots"
+        }
+      }
+    },
+    {
+      "id": "mo05rik3-l9bpa4",
+      "respondentKey": "mo05rhtw-y5kw4jbeea",
+      "fingerprint": "dc826b79418b7347e775e44b00ca15e0fac12f33616e587b2ee740cfa7391bee",
+      "createdAt": "2026-04-15T14:41:08.019Z",
+      "updatedAt": "2026-04-15T14:41:08.019Z",
+      "receivedAt": "2026-04-15T14:41:08.019Z",
+      "payload": {
+        "submittedAt": "2026-04-15T14:41:07.076Z",
+        "respondentKey": "mo05rhtw-y5kw4jbeea",
+        "score": 24.5,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 2,
+          "q3": 1.5,
+          "q4": 2.5,
+          "q5": 3,
+          "q6": 0,
+          "q2_profile": 5,
+          "q2_blind_gap_count": 2
+        },
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "flags": [
+          "Potentially underselling current readiness",
+          "Training opportunity: 2 self-identified blind spots"
+        ],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Wants advanced implementation support"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "All the time (daily or near-daily)",
+          "q1b": "About the same",
+          "t1": [
+            "ChatGPT",
+            "Alchemy AI",
+            "Nanobanana",
+            "Adobe Firefly",
+            "Midjourney",
+            "Gemini / Google AI"
+          ],
+          "t1b": [
+            "ChatGPT"
+          ],
+          "t1d": [
+            "None of these — I feel set for now"
+          ],
+          "t1c": [
+            "ChatGPT",
+            "Alchemy AI"
+          ],
+          "t1_note": "",
+          "q2": [
+            "Research synthesis",
+            "Quality assurance / output review",
+            "Quick one-shot answers",
+            "Data analysis",
+            "Strategic planning (what to execute)",
+            "Project planning (how to execute)",
+            "Workflow automation",
+            "Creative content generation",
+            "Communication / messaging",
+            "Idea generation / brainstorming"
+          ],
+          "q2b": [
+            "Research synthesis",
+            "Strategic planning (what to execute)",
+            "Project planning (how to execute)",
+            "Quick one-shot answers",
+            "Workflow automation",
+            "Creative content generation",
+            "Communication / messaging",
+            "Idea generation / brainstorming"
+          ],
+          "q2c": [
+            "Coding / software development",
+            "Calculation / computation"
+          ],
+          "q2a": "Yes",
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "No",
+          "q6a": "I haven’t connected AI to other tools yet",
+          "c1": "I use AI to do real work faster — with my own documents, data, or context.",
+          "c2": [
+            "Verify key facts before using or sharing output",
+            "Compare against original sources/documents when it matters",
+            "Refine prompts and rerun when quality is weak"
+          ],
+          "s0": [
+            "Media brief or creative brief",
+            "Competitive or market research synthesis",
+            "Audience segmentation or persona draft"
+          ],
+          "s1": [
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Turn AI output into deliverables shared with others",
+            "Use AI as part of recurring workflows"
+          ],
+          "s2": [
+            "Working with documents and data",
+            "Technical/API implementation"
+          ],
+          "d1": "Strategy",
+          "d1_subdomain": "Marketing Strategy"
+        },
+        "aiProfile": {
+          "sign": "Creative Systems Lead",
+          "emoji": "🌟",
+          "asciiArt": " ██████╗██████╗ ███████╗ █████╗ ████████╗██╗██╗   ██╗███████╗\n██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝\n██║     ██████╔╝█████╗  ███████║   ██║   ██║██║   ██║█████╗\n██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝\n╚██████╗██║  ██║███████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗\n ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝\n\n███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗███████╗\n██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔════╝\n███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║███████╗\n╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║\n███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║███████║\n╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝\n\n██╗     ███████╗ █████╗ ██████╗\n██║     ██╔════╝██╔══██╗██╔══██╗\n██║     █████╗  ███████║██║  ██║\n██║     ██╔══╝  ██╔══██║██║  ██║\n███████╗███████╗██║  ██║██████╔╝\n╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝",
+          "signature": "You present as Creative Systems Lead — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
+          "spotlight": "You unify creative experimentation with dependable process.",
+          "superpower": "You can scale content and ideation without losing brand coherence.",
+          "nextMove": "Codify your creative operating system for cross-team reuse.",
+          "mantra": "Create at scale.",
+          "rising": "Working with documents and data",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Strategy / Marketing Strategy",
+          "watchout": "Potentially underselling current readiness",
+          "shareText": "```\n ██████╗██████╗ ███████╗ █████╗ ████████╗██╗██╗   ██╗███████╗\n██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝\n██║     ██████╔╝█████╗  ███████║   ██║   ██║██║   ██║█████╗\n██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝\n╚██████╗██║  ██║███████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗\n ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝\n\n███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗███████╗\n██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔════╝\n███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║███████╗\n╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║\n███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║███████║\n╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝\n\n██╗     ███████╗ █████╗ ██████╗\n██║     ██╔════╝██╔══██╗██╔══██╗\n██║     █████╗  ███████║██║  ██║\n██║     ██╔══╝  ██╔══██║██║  ██║\n███████╗███████╗██║  ██║██████╔╝\n╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝\n```\n\n🌟 GALE AI Persona: Creative Systems Lead\n\nSignature: You present as Creative Systems Lead — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You can scale content and ideation without losing brand coherence.\n\nNext Move: Codify your creative operating system for cross-team reuse.\n\nMantra: Create at scale.\n\nCurrent vibe: Working with documents and data\n\nDomain: Strategy / Marketing Strategy"
         }
       }
     }
