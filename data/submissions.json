@@ -1,5 +1,5 @@
 {
-  "count": 7,
+  "count": 9,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -729,10 +729,10 @@
       "respondentKey": "mo0udk3w-xsl3eeidpd",
       "fingerprint": "4cb8fa7e0c2187669f3ea13fc26ba4f6e8d301e7d7edd8de10ec6d6c86b1cdc6",
       "createdAt": "2026-04-16T02:10:07.640Z",
-      "updatedAt": "2026-04-16T05:04:44.456Z",
-      "receivedAt": "2026-04-16T05:04:44.456Z",
+      "updatedAt": "2026-04-16T15:12:54.495Z",
+      "receivedAt": "2026-04-16T15:12:54.495Z",
       "payload": {
-        "submittedAt": "2026-04-16T05:04:44.326Z",
+        "submittedAt": "2026-04-16T15:12:54.200Z",
         "respondentKey": "mo0udk3w-xsl3eeidpd",
         "quizVersion": "revised",
         "scoreModel": "revised_v1",
@@ -866,6 +866,233 @@
           "domain": "Paid Media",
           "watchout": "High priority: advanced quality and risk controls for scaled usage",
           "shareText": "```\n________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/\n```\n\n🤖 GALE AI Persona: Orchestration Architect\n\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a chaos-leaning operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You design workflows that scale beyond one-off personal productivity.\n\nNext Move: Package your strongest system into a team-ready playbook.\n\nMantra: Architect the leverage.\n\nCurrent vibe: 1:1 office hours with someone more advanced\n\nDomain: Paid Media"
+        }
+      }
+    },
+    {
+      "id": "mo1m2ct6-6jxrbc",
+      "respondentKey": "mo1m2cpu-1wc5192hgw",
+      "fingerprint": "543c0030ee5aecd17fdabe3318347a2d6a4ec5a08e8b58542e47362934601c24",
+      "createdAt": "2026-04-16T15:05:13.818Z",
+      "updatedAt": "2026-04-16T15:05:13.818Z",
+      "receivedAt": "2026-04-16T15:05:13.818Z",
+      "payload": {
+        "submittedAt": "2026-04-16T15:05:13.698Z",
+        "respondentKey": "mo1m2cpu-1wc5192hgw",
+        "score": 10.5,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 0,
+          "q3": 3,
+          "q4": 2.5,
+          "q5": 3,
+          "q6": 0,
+          "q2_profile": 4.8,
+          "q2_blind_gap_count": 0
+        },
+        "tier": "Tier 1",
+        "tierLabel": "Ready to apply the fundamentals",
+        "tierDesc": "Can execute solid core workflows and should focus on repeatable quality and verification habits",
+        "flags": [],
+        "subtags": [],
+        "mergeRecommendation": true,
+        "responses": {
+          "q1": "Yes",
+          "q2": [
+            "Quick one-shot answers",
+            "Research synthesis",
+            "Data analysis",
+            "Strategic planning (what to execute)",
+            "Workflow automation",
+            "Creative content generation",
+            "Communication / messaging",
+            "Idea generation / brainstorming"
+          ],
+          "q2b": [
+            "Research synthesis",
+            "Data analysis",
+            "Quick one-shot answers",
+            "Strategic planning (what to execute)",
+            "Creative content generation",
+            "Communication / messaging",
+            "Idea generation / brainstorming"
+          ],
+          "q2c": [],
+          "q3": "Yes",
+          "q4": "Yes",
+          "q5": "Yes",
+          "q6": "No",
+          "q6a": "I’ve explored it but haven’t built anything yet",
+          "c1": [
+            "I use AI for quick drafting and first-pass outputs",
+            "I provide structured prompts with role, audience, and constraints",
+            "I regularly use AI with documents or data as part of real work"
+          ],
+          "c2": "I usually catch it early and verify before I use it",
+          "c3": [
+            "Give it a quick read-through",
+            "Check specific facts, tone, or accuracy"
+          ],
+          "s1": [
+            "Given AI specific examples before asking it to generate something similar",
+            "Assigned AI a role or persona (e.g., “Act as a senior editor...”)",
+            "Created a reusable prompt template you use more than once"
+          ],
+          "s2": [
+            "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+            "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
+            "Used AI-generated output to create a deliverable you shared with others"
+          ],
+          "s3": [
+            "None of these"
+          ]
+        },
+        "aiProfile": {
+          "sign": "The Pattern Scout",
+          "signature": "You’re building practical AI instincts and already spotting where better prompting can improve outcomes. Your prompt-refinement signal is strong. Your cross-area usage suggests broad exploration, not just one-off use.",
+          "spotlight": "You’re already getting practical value and are close to more repeatable impact.",
+          "superpower": "Execution bias: you tend to test ideas in real work, not just theory.",
+          "nextMove": "Turn one ad-hoc use case into a recurring weekly process.",
+          "mantra": "Refine, don’t restart.",
+          "rising": "Pasted raw data (spreadsheet, CSV) into AI for analysis",
+          "domain": "Generalist Orbit",
+          "watchout": "You’re likely balancing curiosity with caution — trust your momentum and keep refining your quality checks."
+        }
+      }
+    },
+    {
+      "id": "mo1niinh-xvljcc",
+      "respondentKey": "mo1niho4-e8dfir1pvs",
+      "fingerprint": "63bd7f3c43070b8c0e726f16a9dd5b495251994b6226353a4bad4a9f7949cf37",
+      "createdAt": "2026-04-16T15:45:47.501Z",
+      "updatedAt": "2026-04-16T15:45:47.501Z",
+      "receivedAt": "2026-04-16T15:45:47.501Z",
+      "payload": {
+        "submittedAt": "2026-04-16T15:45:46.228Z",
+        "respondentKey": "mo1niho4-e8dfir1pvs",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 16.2,
+        "scoreBreakdown": {
+          "q1": 0.9,
+          "q2a": 1,
+          "q3": 1.5,
+          "q4": 2.5,
+          "qv1": 1.7,
+          "q2_profile": 3.8,
+          "c1_readiness": 0.4,
+          "t1_tool_profile": 1.1,
+          "s0_outputs": 1,
+          "s1_activities": 2.3
+        },
+        "tier": "Tier 2",
+        "tierLabel": "Ready to expand current use cases",
+        "tierDesc": "Consistent practical usage with room to scale into stronger cross-team and system-level workflows",
+        "trackRecommendation": "Applied acceleration track",
+        "flags": [
+          "Prioritize prompt quality coaching",
+          "Prioritize verification and client-safe deployment guidance"
+        ],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Data & documents depth",
+          "Wants prompting support",
+          "Wants role-based tool guidance",
+          "Wants advanced implementation support",
+          "Prompt quality friction",
+          "Risk-confidence friction",
+          "Wants peer examples"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "d1": "Paid Media",
+          "c1": "Dabbling — I use it for some things, mostly the basics",
+          "q1": "A few times a week",
+          "t1": [
+            "ChatGPT",
+            "ALCHEMY AI",
+            "Canva AI",
+            "Gemini"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "q2": [
+            "Data analysis or spreadsheets",
+            "Conversational Q&A",
+            "Image, video, or design generation",
+            "Personal stuff outside work",
+            "Client work and deliverables"
+          ],
+          "q2b": [
+            "Data analysis or spreadsheets",
+            "Personal stuff outside work",
+            "Conversational Q&A",
+            "Client work and deliverables",
+            "Image, video, or design generation"
+          ],
+          "q2c": [],
+          "q2a": "Go with the flow — I start loose and refine as I go",
+          "q2a1": "I include some structure, but I’m still refining what works",
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "qv1": "Ask AI to rerun with tighter constraints, then review carefully",
+          "s0": [
+            "Campaign reporting or performance summary"
+          ],
+          "s1": [
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Use role/context-rich prompts (beyond basic ask/answer)"
+          ],
+          "outside_ai": [
+            "I use it like Google",
+            "I use it for advice",
+            "curious but cautious",
+            "I use it as a creative outlet"
+          ],
+          "outside_ai_note": "comes in handy for wedding planning and design in my personal life, and building, carpentry, floral installation mechanics, and other DIY advice and design ",
+          "blockers": [
+            "Not sure what's safe for client work",
+            "My prompts don't get great results"
+          ],
+          "blockers_note": "sometimes it does not get niche information or best practice quite right, and it makes me skeptical and it feel liek too much work to get it on the same page as me for strategy work. Also it often takes several tries to get it ot actually read a doc or be able to access an excel sheet and i lose patience and do it myself \n",
+          "program_topics": [
+            "AI fundamentals and the basics",
+            "Image, video, and multimodal generation",
+            "Slides, docs, and content creation",
+            "Agentic AI and autonomous workflows",
+            "Best practices and frameworks",
+            "Tool comparisons and what's new",
+            "Industry-specific applications"
+          ],
+          "q15": [
+            "Show-and-tell from GALE colleagues",
+            "Guided tutorials with takeaway materials",
+            "Short tactical tips (5-min segments)",
+            "Live demos of tools and workflows"
+          ],
+          "q15_note": "",
+          "s2": [
+            "Curated tool recommendations for my role",
+            "Templates and starter prompts I can steal",
+            "A library of GALE-built Skills and workflows"
+          ]
+        },
+        "aiProfile": {
+          "sign": "Versatility Navigator",
+          "emoji": "🌐",
+          "asciiArt": "eee....eee.eeeeee.eeeeeee...eeeeee..eeeeee..eeeeeeeee.eee.eee....eee.eeeeeeeee.eee...eee.\n@@@::::@@@:@@@@@@:@@@@@@@@:@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@:@@@::::@@@:@@@@@@@@@:@@@:::@@@.\n%%%----%%%-%%%----%%%--%%%-%%%-----%%%--%%%----%%%----%%%-%%%----%%%----%%%----%%%---%%%-\n&&&++++&&&+&&&&&++&&&&&&&++&&&&&&++&&&&&&&&++++&&&++++&&&+&&&++++&&&++++&&&+++++&&&&&&&++\n*|||**|||**|||||**||||||****||||||*||||||||****|||****|||*|||****|||****|||******|||||***\n==!!!!!!===!!!====!!!=!!!======!!!=!!!==!!!====!!!====!!!=!!!====!!!====!!!=======!!!====\n###::::####::::::#:::##:::#:::::::#:::##:::####:::####:::#::::::#:::####:::#######:::####\n@@@@..@@@@@......@...@@...@......@@...@@...@@@@...@@@@...@......@...@@@@...@@@@@@@...@@@@\n\neeeeeee...eeeeee..eee....eee.eee..eeeeee...eeeeee..eeeeeeeee..eeeeee..eeeeeee..\n@@@@@@@@:@@@@@@@@:@@@::::@@@:@@@:@@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@@@@@@:@@@@@@@@:\n%%%--%%%-%%%--%%%-%%%----%%%-%%%-%%%------%%%--%%%----%%%----%%%--%%%-%%%--%%%-\n&&&++&&&+&&&&&&&&+&&&++++&&&+&&&+&&&++++++&&&&&&&&++++&&&++++&&&++&&&+&&&&&&&++\n|||**|||*||||||||**|||**|||**|||*|||*||||*||||||||****|||****|||**|||*||||||***\n!!!==!!!=!!!==!!!===!!!!!!===!!!=!!!==!!!=!!!==!!!====!!!====!!!==!!!=!!!=!!!==\n:::##:::#:::##:::####::::####:::#::::::::#:::##:::####:::####::::::::#:::##:::#\n...@@...@...@@...@@@@@..@@@@@...@@......@@...@@...@@@@...@@@@@......@@...@@...@",
+          "signature": "You present as Versatility Navigator — combining steady growth energy, wide versatility, and a chaos-leaning operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.",
+          "spotlight": "You show broad capability and can adapt tools to context quickly.",
+          "superpower": "You connect different use cases into coherent operating habits.",
+          "nextMove": "Pick one specialty lane to deepen without losing your broad range.",
+          "mantra": "Range with precision.",
+          "rising": "Curated tool recommendations for my role",
+          "operatingStyleLabel": "Operating style: speed-first",
+          "domain": "Paid Media",
+          "watchout": "Prioritize prompt quality coaching",
+          "shareText": "```\neee....eee.eeeeee.eeeeeee...eeeeee..eeeeee..eeeeeeeee.eee.eee....eee.eeeeeeeee.eee...eee.\n@@@::::@@@:@@@@@@:@@@@@@@@:@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@:@@@::::@@@:@@@@@@@@@:@@@:::@@@.\n%%%----%%%-%%%----%%%--%%%-%%%-----%%%--%%%----%%%----%%%-%%%----%%%----%%%----%%%---%%%-\n&&&++++&&&+&&&&&++&&&&&&&++&&&&&&++&&&&&&&&++++&&&++++&&&+&&&++++&&&++++&&&+++++&&&&&&&++\n*|||**|||**|||||**||||||****||||||*||||||||****|||****|||*|||****|||****|||******|||||***\n==!!!!!!===!!!====!!!=!!!======!!!=!!!==!!!====!!!====!!!=!!!====!!!====!!!=======!!!====\n###::::####::::::#:::##:::#:::::::#:::##:::####:::####:::#::::::#:::####:::#######:::####\n@@@@..@@@@@......@...@@...@......@@...@@...@@@@...@@@@...@......@...@@@@...@@@@@@@...@@@@\n\neeeeeee...eeeeee..eee....eee.eee..eeeeee...eeeeee..eeeeeeeee..eeeeee..eeeeeee..\n@@@@@@@@:@@@@@@@@:@@@::::@@@:@@@:@@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@@@@@@:@@@@@@@@:\n%%%--%%%-%%%--%%%-%%%----%%%-%%%-%%%------%%%--%%%----%%%----%%%--%%%-%%%--%%%-\n&&&++&&&+&&&&&&&&+&&&++++&&&+&&&+&&&++++++&&&&&&&&++++&&&++++&&&++&&&+&&&&&&&++\n|||**|||*||||||||**|||**|||**|||*|||*||||*||||||||****|||****|||**|||*||||||***\n!!!==!!!=!!!==!!!===!!!!!!===!!!=!!!==!!!=!!!==!!!====!!!====!!!==!!!=!!!=!!!==\n:::##:::#:::##:::####::::####:::#::::::::#:::##:::####:::####::::::::#:::##:::#\n...@@...@...@@...@@@@@..@@@@@...@@......@@...@@...@@@@...@@@@@......@@...@@...@\n```\n\n🌐 GALE AI Persona: Versatility Navigator\n\nSignature: You present as Versatility Navigator — combining steady growth energy, wide versatility, and a chaos-leaning operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You connect different use cases into coherent operating habits.\n\nNext Move: Pick one specialty lane to deepen without losing your broad range.\n\nMantra: Range with precision.\n\nCurrent vibe: Curated tool recommendations for my role\n\nDomain: Paid Media"
         }
       }
     }
