@@ -1,5 +1,5 @@
 {
-  "count": 6,
+  "count": 7,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -697,6 +697,151 @@
           "domain": "Strategy / Marketing Strategy",
           "watchout": "Potentially underselling current readiness",
           "shareText": "```\n ██████╗██████╗ ███████╗ █████╗ ████████╗██╗██╗   ██╗███████╗\n██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝\n██║     ██████╔╝█████╗  ███████║   ██║   ██║██║   ██║█████╗\n██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝\n╚██████╗██║  ██║███████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗\n ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝\n\n███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗███████╗\n██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔════╝\n███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║███████╗\n╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║\n███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║███████║\n╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝\n\n██╗     ███████╗ █████╗ ██████╗\n██║     ██╔════╝██╔══██╗██╔══██╗\n██║     █████╗  ███████║██║  ██║\n██║     ██╔══╝  ██╔══██║██║  ██║\n███████╗███████╗██║  ██║██████╔╝\n╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝\n```\n\n🌟 GALE AI Persona: Creative Systems Lead\n\nSignature: You present as Creative Systems Lead — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You can scale content and ideation without losing brand coherence.\n\nNext Move: Codify your creative operating system for cross-team reuse.\n\nMantra: Create at scale.\n\nCurrent vibe: Working with documents and data\n\nDomain: Strategy / Marketing Strategy"
+        }
+      }
+    },
+    {
+      "id": "mo0udkew-cw5ylt",
+      "respondentKey": "mo0udk3w-xsl3eeidpd",
+      "fingerprint": "06306349d257bdbe4b076c3dd16d435595b49dc87ce61eb8975d58976e0549eb",
+      "createdAt": "2026-04-16T02:10:07.640Z",
+      "updatedAt": "2026-04-16T02:21:38.111Z",
+      "receivedAt": "2026-04-16T02:21:38.111Z",
+      "payload": {
+        "submittedAt": "2026-04-16T02:21:37.773Z",
+        "respondentKey": "mo0udk3w-xsl3eeidpd",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 23.8,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 1,
+          "q3": 1.5,
+          "q4": 2.5,
+          "qv1": 1.7,
+          "q2_profile": 4,
+          "c1_readiness": 1.5,
+          "t1_tool_profile": 1.6,
+          "s0_outputs": 2.8,
+          "s1_activities": 4.8,
+          "non_dev_advanced_bonus": 0.4
+        },
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "trackRecommendation": "Advanced builder track",
+        "flags": [
+          "High priority: advanced quality and risk controls for scaled usage"
+        ],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Code & API depth",
+          "Wants prompting support",
+          "Wants role-based tool guidance",
+          "Wants advanced implementation support",
+          "Prefers hands-on learning"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "d1": "Paid Media",
+          "c1": "Deep end — agents, APIs, vibe coding, the works",
+          "q1": "Constantly — it's woven into how I work",
+          "t1": [
+            "ChatGPT",
+            "Claude",
+            "Gemini",
+            "Perplexity",
+            "GitHub Copilot",
+            "ALCHEMY AI"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "q2": [
+            "Conversational Q&A",
+            "Research and synthesis",
+            "Slides, docs, decks",
+            "Brainstorming and ideation",
+            "Data analysis or spreadsheets",
+            "Internal ops (notes, summaries, emails)",
+            "Coding or building tools",
+            "Personal stuff outside work",
+            "Client work and deliverables"
+          ],
+          "q2b": [
+            "Conversational Q&A",
+            "Data analysis or spreadsheets",
+            "Brainstorming and ideation",
+            "Coding or building tools"
+          ],
+          "q2c": [],
+          "q2a": "Go with the flow — I start loose and refine as I go",
+          "q2a1": "I include some structure, but I’m still refining what works",
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "qv1": "Ask AI to rerun with tighter constraints, then review carefully",
+          "s0": [
+            "Media brief or creative brief",
+            "Competitive or market research synthesis",
+            "Campaign reporting or performance summary"
+          ],
+          "s1": [
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Turn AI output into deliverables shared with others",
+            "Use AI as part of recurring workflows",
+            "Connect AI to other tools or automations",
+            "Write code that calls AI APIs",
+            "Build custom tools/apps powered by AI"
+          ],
+          "outside_ai": [
+            "I use it like Google",
+            "I use it for advice",
+            "It's fun to use",
+            "I use it as a creative outlet",
+            "I use it to build things"
+          ],
+          "blockers": [
+            "I am used to AI tools I can't use at work"
+          ],
+          "program_topics": [
+            "GALE tools and ALCHEMY AI",
+            "Image, video, and multimodal generation",
+            "Agentic AI and autonomous workflows",
+            "Claude Code specifically",
+            "Claude Skills, Projects, and memory",
+            "RAG, knowledge graphs, and context systems"
+          ],
+          "q15": [
+            "Hands-on workshops where I build something",
+            "Guided tutorials with takeaway materials"
+          ],
+          "s2": [
+            "1:1 office hours with someone more advanced",
+            "Curated tool recommendations for my role",
+            "Templates and starter prompts I can steal",
+            "A library of GALE-built Skills and workflows",
+            "Cohort-based learning (small group, multiple sessions)"
+          ],
+          "feedback_other": "you guys are the coolest"
+        },
+        "aiProfile": {
+          "sign": "Orchestration Architect",
+          "emoji": "🤖",
+          "asciiArt": "________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/",
+          "signature": "You present as Orchestration Architect — combining high experimental energy, wide versatility, and a chaos-leaning operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.",
+          "spotlight": "You’re operating at systems level with strong automation instincts.",
+          "superpower": "You design workflows that scale beyond one-off personal productivity.",
+          "nextMove": "Package your strongest system into a team-ready playbook.",
+          "mantra": "Architect the leverage.",
+          "rising": "1:1 office hours with someone more advanced",
+          "operatingStyleLabel": "Operating style: speed-first",
+          "domain": "Paid Media",
+          "watchout": "High priority: advanced quality and risk controls for scaled usage",
+          "shareText": "```\n________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/\n```\n\n🤖 GALE AI Persona: Orchestration Architect\n\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a chaos-leaning operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You design workflows that scale beyond one-off personal productivity.\n\nNext Move: Package your strongest system into a team-ready playbook.\n\nMantra: Architect the leverage.\n\nCurrent vibe: 1:1 office hours with someone more advanced\n\nDomain: Paid Media"
         }
       }
     }
