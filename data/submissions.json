@@ -729,10 +729,10 @@
       "respondentKey": "mo0udk3w-xsl3eeidpd",
       "fingerprint": "4cb8fa7e0c2187669f3ea13fc26ba4f6e8d301e7d7edd8de10ec6d6c86b1cdc6",
       "createdAt": "2026-04-16T02:10:07.640Z",
-      "updatedAt": "2026-04-16T15:12:54.495Z",
-      "receivedAt": "2026-04-16T15:12:54.495Z",
+      "updatedAt": "2026-04-16T18:25:13.455Z",
+      "receivedAt": "2026-04-16T18:25:13.455Z",
       "payload": {
-        "submittedAt": "2026-04-16T15:12:54.200Z",
+        "submittedAt": "2026-04-16T18:25:13.084Z",
         "respondentKey": "mo0udk3w-xsl3eeidpd",
         "quizVersion": "revised",
         "scoreModel": "revised_v1",
