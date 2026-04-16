@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>GALE Quiz App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&family=Roboto:wght@100&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -16,10 +16,8 @@
     }
     .app-shell { max-width: 980px; margin: 0 auto; }
     .gale-wordmark {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      color: rgba(255,255,255,0.75);
-      letter-spacing: 0.08em;
+      width: 112px;
+      height: auto;
       margin-bottom: 28px;
       display: block;
     }
@@ -34,6 +32,25 @@
       font-size: 12px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
+    }
+    .ai-copper { color: #FD6453; }
+    .gale-a {
+      display: inline-block;
+      color: #FD6453;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      position: relative;
+      padding-right: 1px;
+    }
+    .gale-a::after {
+      content: '';
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      top: 52%;
+      height: 1px;
+      background: #080808;
+      opacity: 0.9;
     }
     .slide-index {
       font-size: 11px;
@@ -51,6 +68,9 @@
       width: 4px;
       height: 4px;
       background: #FD6453;
+    }
+    #saveStatus {
+      display: none;
     }
     .preview-wrap {
       background: #080808;
@@ -109,6 +129,66 @@
       gap: 10px;
       max-width: 760px;
     }
+    .option-list.usage-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 920px;
+    }
+    .usage-option-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .usage-label {
+      flex: 1;
+      min-width: 0;
+    }
+    .usage-label-main { display: block; }
+    .usage-label-sub {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.35;
+    }
+    .help-wrap {
+      position: relative;
+      flex: 0 0 auto;
+    }
+    .help-trigger {
+      border: 1px solid rgba(255,255,255,0.26);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.9);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+      cursor: help;
+      padding: 0;
+    }
+    .help-popover {
+      position: absolute;
+      right: 0;
+      top: 24px;
+      width: min(280px, 72vw);
+      border: 1px solid rgba(255,255,255,0.22);
+      background: #121212;
+      color: rgba(255,255,255,0.92);
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      padding: 8px 10px;
+      z-index: 30;
+      display: none;
+      text-transform: none;
+    }
+    .help-wrap:hover .help-popover,
+    .help-wrap:focus-within .help-popover {
+      display: block;
+    }
     .option-btn,
     .check-item {
       border: 1px solid rgba(255,255,255,0.14);
@@ -127,10 +207,12 @@
       border-color: #FD6453;
       background: rgba(253,100,83,0.14);
     }
-    .option-btn:hover,
-    .check-item:hover {
-      border-color: rgba(253,100,83,0.75);
-      background: rgba(253,100,83,0.08);
+    @media (hover: hover) and (pointer: fine) {
+      .option-btn:hover,
+      .check-item:hover {
+        border-color: rgba(253,100,83,0.75);
+        background: rgba(253,100,83,0.08);
+      }
     }
     .check-item input { margin-right: 10px; accent-color: #FD6453; }
     .check-item label { cursor: pointer; display: flex; align-items: flex-start; }
@@ -143,6 +225,27 @@
       gap: 12px;
     }
     .nav-group { display: flex; gap: 10px; }
+    .micro-admin {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      border-bottom: 1px dotted rgba(255,255,255,0.28);
+      line-height: 1;
+      padding-bottom: 2px;
+      margin-left: 8px;
+      user-select: none;
+    }
+    .micro-admin:hover,
+    .micro-admin:focus-visible {
+      color: #FD6453;
+      border-bottom-color: rgba(253,100,83,0.7);
+      outline: none;
+    }
     .btn {
       border: 1px solid rgba(255,255,255,0.2);
       background: transparent;
@@ -154,8 +257,31 @@
       cursor: pointer;
     }
     .btn.primary { border-color: #FD6453; background: #FD6453; color: #080808; }
+    .btn[aria-pressed="true"] { border-color: #FD6453; background: rgba(253,100,83,0.2); }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .status-line { font-size: 12px; color: rgba(255,255,255,0.7); min-height: 18px; }
+    .status-line {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+    }
+    .status-attention {
+      color: #FD6453;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .micro-admin-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
     .result-panel {
       margin-top: 22px;
       border: 1px solid rgba(255,255,255,0.12);
@@ -176,20 +302,247 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .progress-track {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: rgba(255,255,255,0.08);
-      z-index: 200;
+    .processing-wrap {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.86);
     }
-    .progress-fill {
+    .processing-moons {
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 24px;
+      line-height: 1;
+    }
+    .moon-phase {
+      opacity: 0.35;
+      transform: scale(0.92);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .moon-phase.active {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+    .processing-caption {
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.02em;
+    }
+    .astro-sign-name {
+      margin-top: 6px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 6.4vw, 58px);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: #FD6453;
+    }
+    .astro-card {
+      margin-top: 14px;
+      border: 1px solid rgba(253,100,83,0.35);
+      background: linear-gradient(180deg, rgba(253,100,83,0.1), rgba(253,100,83,0.02) 28%, rgba(255,255,255,0.02));
+      border-radius: 10px;
+      padding: clamp(16px, 2.4vw, 24px);
+    }
+    .astro-ascii {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.28);
+      border-radius: 6px;
+      max-width: 100%;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.2;
+      white-space: pre;
+      color: rgba(255,255,255,0.93);
+    }
+    .astro-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+      min-width: 0;
+    }
+    .astro-emoji {
+      font-size: clamp(32px, 6vw, 52px);
+      line-height: 1;
+      margin-bottom: 0;
+      filter: drop-shadow(0 6px 20px rgba(253,100,83,0.2));
+    }
+    .astro-sign-name {
+      margin-top: 0;
+      font-size: clamp(44px, 7.4vw, 72px);
+      line-height: 1.05;
+      letter-spacing: 0.035em;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .astro-signature {
+      margin-top: 10px;
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.7;
+      color: rgba(255,255,255,0.96);
+      max-width: 820px;
+    }
+    .astro-meta {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .astro-chip {
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.03);
+      padding: 5px 10px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.88);
+    }
+    .astro-lines {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .astro-line {
+      font-size: clamp(15px, 1.65vw, 18px);
+      line-height: 1.6;
+      color: rgba(255,255,255,0.92);
+      border-left: 2px solid rgba(253,100,83,0.55);
+      padding-left: 10px;
+    }
+    .astro-label {
+      display: inline-block;
+      min-width: 118px;
+      font-weight: 700;
+      color: #FFD1CA;
+      letter-spacing: 0.01em;
+    }
+    .section-progress {
+      margin: 6px 0 14px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-progress-segment {
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid transparent;
+      flex-basis: 0;
+      flex-grow: 1;
+      overflow: hidden;
+    }
+    .section-progress-fill {
       height: 100%;
       width: 0;
       background: #FD6453;
-      transition: width 0.22s ease;
+      transition: width .25s ease;
+    }
+    #progressInterest {
+      background: #FDCB40;
+    }
+    #progressFeedback {
+      background: #A280FF;
+    }
+    .section-progress-segment.intro-pulse-aptitude {
+      animation: sectionPulseAptitude 2.6s ease-in-out infinite;
+    }
+    .section-progress-segment.intro-pulse-interest {
+      animation: sectionPulseInterest 2.6s ease-in-out infinite;
+    }
+    .section-progress-segment.intro-pulse-feedback {
+      animation: sectionPulseFeedback 2.6s ease-in-out infinite;
+    }
+    @keyframes sectionPulseAptitude {
+      0%, 100% { background: #080808; border-color: rgba(253,100,83,0); box-shadow: inset 0 0 0 0 rgba(253,100,83,0); }
+      50% { background: rgba(253,100,83,0.08); border-color: rgba(253,100,83,0.88); box-shadow: inset 0 0 0 1px rgba(253,100,83,0.65); }
+    }
+    @keyframes sectionPulseInterest {
+      0%, 100% { background: #080808; border-color: rgba(253,203,64,0); box-shadow: inset 0 0 0 0 rgba(253,203,64,0); }
+      50% { background: rgba(253,203,64,0.08); border-color: rgba(253,203,64,0.9); box-shadow: inset 0 0 0 1px rgba(253,203,64,0.68); }
+    }
+    @keyframes sectionPulseFeedback {
+      0%, 100% { background: #080808; border-color: rgba(162,128,255,0); box-shadow: inset 0 0 0 0 rgba(162,128,255,0); }
+      50% { background: rgba(162,128,255,0.1); border-color: rgba(162,128,255,0.92); box-shadow: inset 0 0 0 1px rgba(162,128,255,0.7); }
+    }
+    .astro-progress-marker {
+      position: relative;
+      flex: 0 0 auto;
+      width: 24px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      line-height: 1;
+      opacity: 0.55;
+      filter: saturate(0.9);
+      transition: transform 0.22s ease, opacity 0.22s ease, filter 0.22s ease;
+      user-select: none;
+    }
+    .astro-progress-marker.active {
+      opacity: 1;
+      transform: translateY(-1px) scale(1.05);
+      filter: drop-shadow(0 0 8px rgba(162,128,255,0.6));
+    }
+    .astro-progress-sparkles {
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      width: 28px;
+      height: 18px;
+      transform: translateX(-50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .astro-progress-marker.active .astro-progress-sparkles {
+      opacity: 1;
+    }
+    .astro-progress-sparkle {
+      position: absolute;
+      font-size: 10px;
+      line-height: 1;
+      color: #FDF2C6;
+      opacity: 0;
+      transform: translateY(4px) scale(0.8);
+      animation: astroSparkle 1.1s ease-in-out infinite;
+    }
+    .astro-progress-sparkle:nth-child(1) {
+      left: 2px;
+      bottom: 2px;
+      animation-delay: 0s;
+    }
+    .astro-progress-sparkle:nth-child(2) {
+      left: 11px;
+      bottom: 8px;
+      animation-delay: 0.22s;
+    }
+    .astro-progress-sparkle:nth-child(3) {
+      right: 2px;
+      bottom: 3px;
+      animation-delay: 0.44s;
+    }
+    @keyframes astroSparkle {
+      0%, 100% {
+        opacity: 0;
+        transform: translateY(4px) scale(0.75);
+      }
+      35% {
+        opacity: 1;
+        transform: translateY(-1px) scale(1);
+      }
+      70% {
+        opacity: 0.65;
+        transform: translateY(-5px) scale(0.9);
+      }
     }
     .followup-area {
       margin-top: 28px;
@@ -197,9 +550,39 @@
       border-top: 1px solid rgba(255,255,255,0.08);
       animation: fadeIn 0.25s ease;
     }
+    .clarify-area {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .clarify-input {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 92px;
+      resize: vertical;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    .clarify-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .clarify-input:focus {
+      outline: none;
+      border-color: rgba(253,100,83,0.7);
+      box-shadow: 0 0 0 1px rgba(253,100,83,0.25);
+    }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.25; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
     }
     .score-breakdown {
       display: grid;
@@ -248,14 +631,48 @@
       letter-spacing: 0.04em;
     }
     .intro-copy {
+      font-family: 'Roboto', sans-serif;
       font-size: clamp(24px, 3.8vw, 42px);
       line-height: 1.35;
-      font-weight: 300;
+      font-weight: 100;
       max-width: 860px;
       letter-spacing: 0.01em;
+      text-transform: uppercase;
+      min-height: var(--intro-copy-min-height, 0px);
     }
     .intro-copy p + p {
       margin-top: 16px;
+    }
+    .intro-copy .intro-subnote {
+      display: block;
+      font-size: 0.52em;
+      line-height: 1.25;
+      letter-spacing: 0.04em;
+      margin-top: 12px;
+      color: #FD6453;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+    .intro-copy .intro-contribute-link {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-transform: inherit;
+      letter-spacing: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      line-height: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+    }
+    .intro-copy .intro-contribute-link:hover,
+    .intro-copy .intro-contribute-link:focus-visible {
+      color: #ff897d;
+      outline: none;
     }
     .intro-nav {
       margin-top: 30px;
@@ -286,26 +703,234 @@
       color: rgba(255,255,255,0.55);
       margin-left: 6px;
     }
+    .option-list.two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 920px;
+    }
+    .other-input-wrap {
+      margin-top: 14px;
+      max-width: 640px;
+    }
+    .other-input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    .other-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .other-input:focus {
+      outline: none;
+      border-color: rgba(253,100,83,0.7);
+      box-shadow: 0 0 0 1px rgba(253,100,83,0.25);
+    }
+    .merge-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(253,180,50,0.4);
+      background: rgba(253,180,50,0.08);
+      color: rgba(253,220,100,0.95);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .admin-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      padding: 18px;
+    }
+    .admin-modal-backdrop.open { display: flex; }
+    .admin-modal {
+      width: min(420px, 100%);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: #101010;
+      padding: 16px;
+    }
+    .admin-modal input {
+      width: 100%;
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: #0d0d0d;
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    .admin-modal-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .admin-modal-status {
+      margin-top: 8px;
+      min-height: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+    }
+    .contribute-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 520;
+      padding: 18px;
+    }
+    .contribute-modal-backdrop.open { display: flex; }
+    .contribute-modal {
+      width: min(720px, 100%);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: #101010;
+      padding: 16px;
+    }
+    .contribute-modal .contribute-helper {
+      margin-top: 8px;
+      max-width: 620px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.84);
+    }
+    .contribute-modal .field-wrap {
+      margin-top: 12px;
+      max-width: 640px;
+    }
+    .contribute-modal input,
+    .contribute-modal textarea {
+      width: 100%;
+      margin-top: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: #0d0d0d;
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      line-height: 1.45;
+      resize: vertical;
+    }
+    .contribute-modal-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .contribute-modal-status {
+      margin-top: 8px;
+      min-height: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+    }
     @media (max-width: 760px) {
       body { padding: 24px 14px 88px; }
       .nav-row { flex-direction: column; align-items: stretch; }
       .nav-group { width: 100%; }
       .btn { flex: 1; }
+      .option-list.usage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .astro-title-row { gap: 8px; align-items: flex-start; }
+      .astro-sign-name { font-size: clamp(26px, 7.2vw, 38px); letter-spacing: 0.02em; }
+      .astro-emoji { font-size: clamp(28px, 7vw, 40px); }
+      .astro-ascii { font-size: 9px; }
+    }
+    @media (max-width: 520px) {
+      .option-list.usage-grid { grid-template-columns: 1fr; }
+      .option-list.two-col { grid-template-columns: 1fr; }
+    }
+    .logo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .logo-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      min-height: 90px;
+      padding: 14px 8px 10px;
+      background: #141414;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      gap: 8px;
+    }
+    .logo-tile:hover { border-color: rgba(253,100,83,0.5); background: #1a1a1a; }
+    .logo-tile.active { border-color: #FD6453; background: rgba(253,100,83,0.08); }
+    .logo-tile img { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; }
+    .logo-tile .logo-fallback {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: rgba(255,255,255,0.4);
+      border: 1px dashed rgba(255,255,255,0.2);
+      border-radius: 6px;
+    }
+    .logo-tile .logo-fallback.plain-emoji {
+      width: auto;
+      height: auto;
+      border: 0;
+      border-radius: 0;
+      font-size: 28px;
+      line-height: 1;
+      color: #fff;
+      background: transparent;
+    }
+    .logo-tile .logo-name {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      text-align: center; line-height: 1.3; max-width: 88px;
+    }
+    .logo-tile.active .logo-name { color: rgba(255,255,255,0.9); }
+    .copy-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      z-index: 1200;
+      border: 1px solid rgba(253,100,83,0.75);
+      background: rgba(8,8,8,0.95);
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     }
   </style>
 </head>
 <body>
   <main class="app-shell">
-    <span class="gale-wordmark">GALE</span>
+    <img class="gale-wordmark" src="608c6a3b589f3737b86b883c_GALE%20Logo.svg" alt="GALE">
     <div class="meta-row">
-      <span>AI Skills Assessment</span>
+      <span><span class="ai-copper">AI</span> SKILLS - FOCUS CONTENT CALIBRATION</span>
       <span id="saveStatus">Not saved yet</span>
     </div>
     <section id="slideSection">
       <div id="slideIndex" class="slide-index">Loading</div>
+      <div class="section-progress" id="sectionProgress" aria-label="Section progress">
+        <div class="section-progress-segment" id="segmentAptitude"><div id="progressAptitude" class="section-progress-fill"></div></div>
+        <div class="section-progress-segment" id="segmentInterest"><div id="progressInterest" class="section-progress-fill"></div></div>
+        <div class="astro-progress-marker" id="astroProgressMarker" aria-hidden="true">🔮
+          <span class="astro-progress-sparkles" aria-hidden="true">
+            <span class="astro-progress-sparkle">✦</span>
+            <span class="astro-progress-sparkle">✦</span>
+            <span class="astro-progress-sparkle">✦</span>
+          </span>
+        </div>
+        <div class="section-progress-segment" id="segmentFeedback"><div id="progressFeedback" class="section-progress-fill"></div></div>
+      </div>
       <div class="preview-wrap" id="slideCard"></div>
       <div class="nav-row">
-        <div class="status-line" id="statusLine"></div>
+        <div class="status-line"><span id="statusLine"><span class="gale-a">A</span>I flow active</span><span class="micro-admin-group"><button class="micro-admin" id="resetResponsesBtn" type="button">Reset</button><button class="micro-admin" id="adminLink" type="button">Admin</button></span></div>
         <div class="nav-group">
           <button class="btn" id="backBtn" type="button">Back</button>
           <button class="btn primary" id="nextBtn" type="button">Next</button>
@@ -313,197 +938,860 @@
       </div>
     </section>
   </main>
-  <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
-
+  <div class="admin-modal-backdrop" id="adminModalBackdrop" role="dialog" aria-modal="true" aria-label="Admin Access">
+    <div class="admin-modal">
+      <div class="style-label-tag">Admin Access</div>
+      <div class="style-body">Enter password to open dashboard.</div>
+      <input id="adminModalPassword" type="password" autocomplete="off" placeholder="Password" />
+      <div class="admin-modal-actions">
+        <button class="btn" type="button" id="adminModalCancel">Cancel</button>
+        <button class="btn primary" type="button" id="adminModalOpen">Open</button>
+      </div>
+      <div class="admin-modal-status" id="adminModalStatus"></div>
+    </div>
+  </div>
+  <div class="contribute-modal-backdrop" id="contributeModalBackdrop" role="dialog" aria-modal="true" aria-label="Contribute">
+    <div class="contribute-modal">
+      <div class="style-label-tag">Contribute</div>
+      <div class="style-body">Want to run a segment or share something you've built?</div>
+      <div class="contribute-helper">Tried something that flopped? Have an idea you want to workshop with the group? Tell us in a sentence — we'll reach out. No pitch deck required.</div>
+      <div class="field-wrap">
+        <div class="style-label-tag">Name</div>
+        <input id="contributeName" type="text" autocomplete="name" placeholder="Your name (optional)">
+      </div>
+      <div class="field-wrap">
+        <div class="style-label-tag">Idea</div>
+        <textarea id="contributeIdea" rows="4" placeholder="Share your idea in a sentence"></textarea>
+      </div>
+      <div class="contribute-modal-actions">
+        <button class="btn" type="button" id="contributeModalCancel">Cancel</button>
+        <button class="btn primary" type="button" id="contributeModalSave">Save</button>
+      </div>
+      <div class="contribute-modal-status" id="contributeModalStatus"></div>
+    </div>
+  </div>
   <script>
-    var DRAFT_KEY = "galeQuizDraftV4";
-    var SUBMISSION_KEY = "galeQuizSubmissionsV4";
+    var DRAFT_KEY = "galeQuizRevisedDraftV1";
+    var SUBMISSION_KEY = "galeQuizRevisedSubmissionsV1";
+    var SUBMISSION_API_ENDPOINT = "/api/submissions";
+    var RESPONDENT_KEY_STORAGE = "galeQuizRevisedRespondentKeyV1";
+    var SCORE_MODEL = "revised_v1";
+    var QUIZ_VERSION = "revised";
 
     var coreQuestions = [
       {
-        id: "q1", label: "Q1", stage: "Core Skills", area: "Basic Usage",
-        prompt: "Do you use AI tools like ChatGPT, Claude, or Copilot for work tasks at least a few times a month?",
+        id: "q1", stage: "Core Skills", area: "Basic Usage",
+        prompt: "How often are you using AI in a typical work week?",
+        mainOptions: [
+          "Rarely / not yet",
+          "A few times a week",
+          "Daily for specific tasks",
+          "Constantly — it's woven into how I work"
+        ],
+        signalMap: {
+          "Rarely / not yet": 0,
+          "A few times a week": 0.45,
+          "Daily for specific tasks": 0.75,
+          "Constantly — it's woven into how I work": 1
+        },
+        followupTriggerValues: ["Rarely / not yet"],
         followup: {
-          id: "q1a", label: "Q1a",
+          id: "q1a",
           prompt: "Which best describes where you are?",
           options: [
-            { text: "I haven\u2019t really had the chance to try AI tools yet", points: 0 },
-            { text: "I\u2019ve tried them a couple of times but they didn\u2019t stick", points: 1.5 },
-            { text: "I use them for personal stuff but not for work", points: 1 }
+            { text: "I haven’t really had the chance to try AI tools yet", signal: 0 },
+            { text: "I’ve tried them a couple of times but they didn’t stick", signal: 0.25 },
+            { text: "I use them for personal stuff but not for work", signal: 0.5 }
           ]
         }
       },
       {
-        id: "q2", label: "Q2", stage: "Core Skills", area: "Prompt Shaping",
-        prompt: "When you prompt AI, do you include specific instructions \u2014 like who the audience is, what format you want, or how long the response should be?",
+        id: "q2a", stage: "Core Skills", area: "Prompt Structure",
+        prompt: "How would you describe your prompting style?",
+        mainOptions: [
+          "Casual and conversational — I just talk to it like a person",
+          "Go with the flow — I start loose and refine as I go",
+          "Structured — I usually give it context, role, and constraints",
+          "Prescriptive — detailed prompts with examples, format specs, the works",
+          "Honestly, I don't have a style yet"
+        ],
+        signalMap: {
+          "Casual and conversational — I just talk to it like a person": 0.2,
+          "Go with the flow — I start loose and refine as I go": 0.45,
+          "Structured — I usually give it context, role, and constraints": 0.8,
+          "Prescriptive — detailed prompts with examples, format specs, the works": 1,
+          "Honestly, I don't have a style yet": 0
+        },
+        followupTriggerValues: [
+          "Casual and conversational — I just talk to it like a person",
+          "Go with the flow — I start loose and refine as I go",
+          "Honestly, I don't have a style yet"
+        ],
         followup: {
-          id: "q2a", label: "Q2a",
-          prompt: "Which sounds most like you?",
+          id: "q2a1",
+          prompt: "Which sounds most like your current prompting style?",
           options: [
-            { text: "I just type what I need and see what comes back", points: 0 },
-            { text: "I\u2019ve thought about being more specific but I\u2019m not sure what to include", points: 1 },
-            { text: "I tweak the output after the fact instead of giving instructions upfront", points: 1.5 }
+            { text: "I usually keep prompts short and unstructured", signal: 0 },
+            { text: "I add some detail, but not consistently", signal: 0.25 },
+            { text: "I include some structure, but I’m still refining what works", signal: 0.5 }
           ]
         }
       },
       {
-        id: "q3", label: "Q3", stage: "Core Skills", area: "Iterative Refinement",
-        prompt: "When AI gives you a weak result, do you rewrite your prompt \u2014 changing what you asked for or how you asked it \u2014 rather than just trying again?",
+        id: "q3", stage: "Core Skills", area: "Iterative Refinement",
+        prompt: "When AI gives you a weak result, do you rewrite your prompt — changing what you asked for or how you asked it — rather than just trying again?",
+        mainOptions: ["Yes", "Sometimes", "No"],
         followup: {
-          id: "q3a", label: "Q3a",
+          id: "q3a",
           prompt: "What do you usually do with a bad result?",
           options: [
-            { text: "I mostly accept what I get or give up", points: 0 },
-            { text: "I try again with roughly the same request", points: 1 },
-            { text: "I make small changes but I\u2019m not sure what actually helps", points: 1.5 }
+            { text: "I usually accept the first result or stop there", signal: 0 },
+            { text: "I retry sometimes, but mostly with minor wording tweaks", signal: 0.25 },
+            { text: "I intentionally revise instructions/context, but not consistently", signal: 0.5 }
           ]
         }
       },
       {
-        id: "q4", label: "Q4", stage: "Core Skills", area: "Document & Data Work",
-        prompt: "Have you given AI a document, spreadsheet, or dataset and used the output in actual work \u2014 not just tested it?",
+        id: "q4", stage: "Core Skills", area: "Document & Data Work",
+        prompt: "Have you given AI a document, spreadsheet, or dataset and used the output in actual work — not just tested it?",
+        mainOptions: ["Yes", "No"],
         followup: {
-          id: "q4a", label: "Q4a",
+          id: "q4a",
           prompt: "Which is closest?",
           options: [
-            { text: "I didn\u2019t realize AI could work with files and data", points: 0 },
-            { text: "I\u2019ve thought about it but haven\u2019t had the right use case", points: 1 },
-            { text: "I tried but the output wasn\u2019t good enough to use", points: 1.5 }
+            { text: "I didn’t realize AI could work well with files/data for this", signal: 0 },
+            { text: "I’ve tried once or twice, but it’s not repeatable yet", signal: 0.25 },
+            { text: "I can do this in limited cases, but not consistently", signal: 0.5 }
           ]
         }
       },
       {
-        id: "q5", label: "Q5", stage: "Core Skills", area: "Multi-Step Prompting",
-        prompt: "Have you intentionally broken a complex task into multiple prompt steps \u2014 feeding the output from one step into the next \u2014 to get a better result?",
-        followup: {
-          id: "q5a", label: "Q5a",
-          prompt: "Which sounds most like you?",
-          options: [
-            { text: "I handle everything in a single prompt", points: 0 },
-            { text: "I\u2019ve gone back and forth with AI but not in a deliberate, structured way", points: 1.5 },
-            { text: "I didn\u2019t know that was a technique", points: 0 }
-          ]
+        id: "qv1", stage: "Core Skills", area: "Verification Maturity",
+        prompt: "AI gives you a confidently wrong answer on a client deliverable — what do you do first?",
+        mainOptions: [
+          "Verify against original sources/materials before proceeding",
+          "Ask AI to rerun with tighter constraints, then review carefully",
+          "Ask a teammate for a quick sense-check before deciding",
+          "Abandon AI and do it another way",
+          "Edit the wording/tone and use it"
+        ],
+        signalMap: {
+          "Verify against original sources/materials before proceeding": 1,
+          "Ask AI to rerun with tighter constraints, then review carefully": 0.72,
+          "Ask a teammate for a quick sense-check before deciding": 0.62,
+          "Abandon AI and do it another way": 0.45,
+          "Edit the wording/tone and use it": 0.05
         }
+      }
+    ];
+
+    var usageOptionHelp = {
+      "Writing and editing": "Use cases: drafting and refining written content.",
+      "Conversational Q&A": "Use cases: back-and-forth questioning to clarify concepts and decisions.",
+      "Research and synthesis": "Use cases: summarizing and combining source information.",
+      "Brainstorming and ideation": "Use cases: generating ideas and creative directions.",
+      "Image, video, or design generation": "Use cases: visual concepting and multimedia generation.",
+      "Slides, docs, decks": "Use cases: building presentation and document materials.",
+      "Data analysis or spreadsheets": "Use cases: spreadsheet support and analytic interpretation.",
+      "Coding or building tools": "Use cases: software development and tool building.",
+      "Client work and deliverables": "Use cases: external-facing outputs and delivery work.",
+      "Internal ops (notes, summaries, emails)": "Use cases: internal workflow support and communication.",
+      "Personal stuff outside work": "Use cases: non-work experimentation and personal productivity."
+    };
+
+    function usageHelpFor(optionLabel) {
+      return usageOptionHelp[optionLabel] || "Use case examples vary by role and team workflow.";
+    }
+
+    function renderUsageOptionLabel(optionLabel) {
+      var text = String(optionLabel || "");
+      var match = text.match(/^(.*)\s\((.*)\)$/);
+      if (!match) {
+        return '<span class="usage-label-main">' + escapeHtml(text) + '</span>';
+      }
+      return '' +
+        '<span class="usage-label-main">' + escapeHtml(match[1]) + '</span>' +
+        '<span class="usage-label-sub">(' + escapeHtml(match[2]) + ')</span>';
+    }
+
+    var usageAreas = [
+      "Writing and editing",
+      "Conversational Q&A",
+      "Research and synthesis",
+      "Brainstorming and ideation",
+      "Image, video, or design generation",
+      "Slides, docs, decks",
+      "Data analysis or spreadsheets",
+      "Coding or building tools",
+      "Client work and deliverables",
+      "Internal ops (notes, summaries, emails)",
+      "Personal stuff outside work"
+    ];
+
+    var usageLabelAliases = {
+      "Data analysis": "Data analysis or spreadsheets",
+      "Coding / software development": "Coding or building tools",
+      "Creative content generation": "Image, video, or design generation",
+      "Communication / messaging": "Internal ops (notes, summaries, emails)",
+      "Idea generation / brainstorming": "Brainstorming and ideation"
+    };
+
+    var T1B_NONE_OPTION = "None of these — I don't pay out of pocket";
+    var T1C_NONE_OPTION = "None of these yet";
+    var T1D_NONE_OPTION = "None of these — I feel set for now";
+    var Q2B_NONE_OPTION = "None of these";
+    var Q2C_NONE_OPTION = "None of these";
+    var C1_NONE_OPTION = "None of the above";
+
+    function normalizeToolList(list) {
+      if (!Array.isArray(list)) return [];
+      var out = [];
+      list.forEach(function(raw) {
+        var value = String(raw || "").trim();
+        if (value === "Copilot (Microsoft / GitHub)") value = "Microsoft Copilot";
+        if (!value) return;
+        if (out.indexOf(value) < 0) out.push(value);
+      });
+      return out;
+    }
+
+    function normalizeQ2bList(list) {
+      if (!Array.isArray(list)) return [];
+      var out = [];
+      list.forEach(function(raw) {
+        var mapped = usageLabelAliases[raw] || raw;
+        if (mapped === Q2B_NONE_OPTION) {
+          out = [Q2B_NONE_OPTION];
+          return;
+        }
+        if (usageAreas.indexOf(mapped) >= 0 && out.indexOf(mapped) < 0 && out.indexOf(Q2B_NONE_OPTION) < 0) {
+          out.push(mapped);
+        }
+      });
+      return out;
+    }
+
+    function filterQ2bSelections(selections, selectedUsage) {
+      var base = normalizeUsageList(selectedUsage);
+      var filtered = normalizeQ2bList(selections).filter(function(choice) {
+        return choice === Q2B_NONE_OPTION || base.indexOf(choice) >= 0;
+      });
+      return filtered.indexOf(Q2B_NONE_OPTION) >= 0 ? [Q2B_NONE_OPTION] : filtered;
+    }
+
+    function normalizeQ2cList(list) {
+      if (!Array.isArray(list)) return [];
+      var out = [];
+      list.forEach(function(raw) {
+        var mapped = usageLabelAliases[raw] || raw;
+        if (mapped === Q2C_NONE_OPTION) {
+          out = [Q2C_NONE_OPTION];
+          return;
+        }
+        if (usageAreas.indexOf(mapped) >= 0 && out.indexOf(mapped) < 0 && out.indexOf(Q2C_NONE_OPTION) < 0) {
+          out.push(mapped);
+        }
+      });
+      return out;
+    }
+
+    function filterQ2cSelections(selections, selectedUsage) {
+      var chosen = normalizeUsageList(selectedUsage);
+      var base = usageAreas.filter(function(area) { return chosen.indexOf(area) < 0; });
+      var filtered = normalizeQ2cList(selections).filter(function(choice) {
+        return choice === Q2C_NONE_OPTION || base.indexOf(choice) >= 0;
+      });
+      return filtered.indexOf(Q2C_NONE_OPTION) >= 0 ? [Q2C_NONE_OPTION] : filtered;
+    }
+
+    function getSelectedToolsInMasterOrder() {
+      var master = (calMap.t1 && Array.isArray(calMap.t1.options)) ? calMap.t1.options : [];
+      var selected = normalizeToolList(state.responses.t1);
+      return master.filter(function(tool) {
+        return selected.indexOf(tool) >= 0;
+      });
+    }
+
+    function getUnselectedToolsInMasterOrder() {
+      var master = (calMap.t1 && Array.isArray(calMap.t1.options)) ? calMap.t1.options : [];
+      var selected = normalizeToolList(state.responses.t1);
+      return master.filter(function(tool) {
+        return selected.indexOf(tool) < 0 && tool !== "Other";
+      });
+    }
+
+    function filterToolFollowupSelections(selections, selectedTools, noneLabel) {
+      var base = normalizeToolList(selectedTools);
+      var filtered = normalizeToolList(selections).filter(function(choice) {
+        return choice === noneLabel || base.indexOf(choice) >= 0;
+      });
+      return filtered.indexOf(noneLabel) >= 0 ? [noneLabel] : filtered;
+    }
+
+    function filterToolDiscoverySelections(selections, unselectedTools) {
+      var base = normalizeToolList(unselectedTools);
+      var filtered = normalizeToolList(selections).filter(function(choice) {
+        return choice === T1D_NONE_OPTION || base.indexOf(choice) >= 0;
+      });
+      return filtered.indexOf(T1D_NONE_OPTION) >= 0 ? [T1D_NONE_OPTION] : filtered;
+    }
+
+    function normalizeUsageList(list) {
+      if (!Array.isArray(list)) return [];
+      var out = [];
+      list.forEach(function(raw) {
+        var mapped = usageLabelAliases[raw] || raw;
+        if (usageAreas.indexOf(mapped) >= 0 && out.indexOf(mapped) < 0) {
+          out.push(mapped);
+        }
+      });
+      return out;
+    }
+
+    var usageQuestions = [
+      {
+        id: "q2", stage: "Core Skills", type: "multi",
+        prompt: "What are you using AI for right now?",
+        options: usageAreas
       },
       {
-        id: "q6", label: "Q6", stage: "Core Skills", area: "Automation & Integration",
-        prompt: "Have you connected AI to other tools or workflows \u2014 through APIs, automation platforms like Zapier or Make, or custom code?",
-        followup: {
-          id: "q6a", label: "Q6a",
-          prompt: "Which is closest?",
-          options: [
-            { text: "I\u2019m not sure what that means technically", points: 0 },
-            { text: "I know it\u2019s possible but it\u2019s beyond my current skills", points: 1 },
-            { text: "I\u2019ve explored it but haven\u2019t built anything yet", points: 1.5 }
-          ]
-        }
+        id: "q2b", stage: "Aptitude", type: "multi_dynamic",
+        prompt: "From your selected use cases, which ones do you feel confident doing today? (Select all that apply)",
+        options: []
       }
     ];
 
     var calibrationQuestions = [
       {
-        id: "c1", label: "C1", stage: "Calibration", type: "single",
-        prompt: "Which best describes how you use AI today?",
+        id: "t1", stage: "Tool Profile", type: "logo-multi",
+        prompt: "Which AI tools do you actually use?",
         options: [
-          "I ask it questions or get basic drafts",
-          "I give it detailed instructions and shape the results",
-          "I use it regularly with documents, data, and recurring tasks",
-          "I build workflows or integrations that use AI automatically"
+          "ChatGPT",
+          "Claude",
+          "Gemini",
+          "Perplexity",
+          "Microsoft Copilot",
+          "GitHub Copilot",
+          "ALCHEMY AI",
+          "Midjourney",
+          "Adobe Firefly",
+          "Nano Banana",
+          "Weavy",
+          "NotebookLM",
+          "Notion AI",
+          "Grammarly",
+          "Canva AI",
+          "Figma AI (Weave)",
+          "Cursor / Claude Code / other coding tools",
+          "Other"
         ]
       },
       {
-        id: "c2", label: "C2", stage: "Calibration", type: "single",
-        prompt: "Have you ever caught AI giving you an incorrect or made-up answer?",
+        id: "c1", stage: "Calibration", type: "single",
+        prompt: "Where are you on the AI curve right now?",
         options: [
-          "I haven\u2019t noticed that happening",
-          "Yes, and I can usually tell when something\u2019s off",
-          "Yes, but I\u2019m not always confident I\u2019d catch it"
+          "Just getting started — still figuring out what to use it for",
+          "Dabbling — I use it for some things, mostly the basics",
+          "Comfortable — it's part of my regular workflow",
+          "Building — I'm making things with it (prompts, workflows, tools, code)",
+          "Deep end — agents, APIs, vibe coding, the works"
         ]
       },
       {
-        id: "c3", label: "C3", stage: "Calibration", type: "single",
-        prompt: "Before using AI output in real work, what do you typically do?",
+        id: "q15", stage: "Feedback", type: "multi",
+        prompt: "what would be the most helpful format to learn this?",
         options: [
-          "Use it mostly as-is",
-          "Give it a quick read-through",
-          "Check specific facts, tone, or accuracy",
-          "Verify against original sources before using anything"
+          "State of the Union briefings on what's new",
+          "Live demos of tools and workflows",
+          "Hands-on workshops where I build something",
+          "Show-and-tell from GALE colleagues",
+          "Guided tutorials with takeaway materials",
+          "Discussion and Q&A",
+          "Guest speakers from outside GALE",
+          "Short tactical tips (5-min segments)",
+          "Other"
         ]
       }
     ];
 
     var signalQuestions = [
       {
-        id: "s1", label: "S1", stage: "Qualifying Signals", type: "multi",
-        prompt: "Which of these have you done?",
+        id: "s0", stage: "Applied Signals", type: "multi",
+        prompt: "Which GALE-relevant work outputs have you used AI to help produce in real work?",
         options: [
-          "Given AI specific examples before asking it to generate something similar",
-          "Assigned AI a role or persona (e.g., \u201cAct as a senior editor...\u201d)",
-          "Created a reusable prompt template you use more than once",
-          "None of these"
+          "Media brief or creative brief",
+          "Competitive or market research synthesis",
+          "Campaign reporting or performance summary",
+          "Audience segmentation or persona draft",
+          "None of these yet"
         ]
       },
       {
-        id: "s2", label: "S2", stage: "Qualifying Signals", type: "multi",
-        prompt: "Which of these have you done with data or documents?",
+        id: "s1", stage: "Applied Signals", type: "multi",
+        prompt: "Which of these applied AI activities have you done in real work?",
         options: [
-          "Pasted raw data (spreadsheet, CSV) into AI for analysis",
-          "Asked AI to synthesize multiple messy sources into a usable brief with recommendations",
-          "Used AI-generated output to create a deliverable you shared with others",
-          "None of these"
+          "Use role/context-rich prompts (beyond basic ask/answer)",
+          "Use AI with documents or data to produce analysis or recommendations",
+          "Turn AI output into deliverables shared with others",
+          "Use AI as part of recurring workflows",
+          "Connect AI to other tools or automations",
+          "Write code that calls AI APIs",
+          "Build custom tools/apps powered by AI",
+          "None of these yet"
         ]
       },
       {
-        id: "s3", label: "S3", stage: "Qualifying Signals", type: "multi",
-        prompt: "Which of these have you done?",
+        id: "outside_ai", stage: "Content Sorting", type: "multi",
+        prompt: "How would you describe your relationship with AI outside of work?",
         options: [
-          "Used AI as a regular part of a recurring workflow",
-          "Connected AI to other tools through an automation platform",
-          "Written code that calls an AI API",
-          "Built a custom tool or app powered by AI",
-          "None of these"
+          "I use it like Google",
+          "I use it for advice",
+          "It's fun to use",
+          "I don't trust it",
+          "curious but cautious",
+          "I use it as a creative outlet",
+          "I only need/want it for work",
+          "I use it to build things",
+          "I am overwhelmed by it"
         ]
+      },
+      {
+        id: "s2", stage: "Content Sorting", type: "multi",
+        prompt: "What support would be most useful next?",
+        options: [
+          "1:1 office hours with someone more advanced",
+          "Curated tool recommendations for my role",
+          "Templates and starter prompts I can steal",
+          "A Teams channel for ongoing questions",
+          "Recordings of past sessions",
+          "A library of GALE-built Skills and workflows",
+          "Cohort-based learning (small group, multiple sessions)",
+          "Just keep doing what you're doing",
+          "Other"
+        ]
+      },
+      {
+        id: "program_topics", stage: "Content Sorting", type: "multi",
+        prompt: "What topics do you want GWP to cover?",
+        options: [
+          "AI fundamentals and the basics",
+          "Prompt engineering and craft",
+          "GALE tools and ALCHEMY AI",
+          "Image, video, and multimodal generation",
+          "Slides, docs, and content creation",
+          "Agentic AI and autonomous workflows",
+          "Vibe coding and building tools",
+          "Claude Code specifically",
+          "Claude Skills, Projects, and memory",
+          "RAG, knowledge graphs, and context systems",
+          "Best practices and frameworks",
+          "Legal, ethics, IP, and disclosure",
+          "AI in society and where it's headed",
+          "Tool comparisons and what's new",
+          "Industry-specific applications",
+          "Other"
+        ]
+      },
+      {
+        id: "blockers", stage: "Content Sorting", type: "multi",
+        prompt: "whats actually blocking you from doing more at work?",
+        options: [
+          "Don't know where to start",
+          "Don't know which tool to use when",
+          "My prompts don't get great results",
+          "Not sure what's safe for client work",
+          "Can't tell if the output is good",
+          "Tools change too fast to keep up",
+          "Nothing's blocking me — I just want to go deeper",
+          "I am used to AI tools I can't use at work",
+          "Other"
+        ]
+      },
+      {
+        id: "feedback_change", stage: "Feedback", type: "text",
+        prompt: "What's working — and what should we change?",
+        placeholder: "Share what is working and what should change"
+      },
+      {
+        id: "share_segment", stage: "Feedback", type: "text_pair",
+        prompt: "Want to run a segment or share something you've built?",
+        helperText: "Tried something that flopped? Have an idea you want to workshop with the group? Tell us in a sentence — we'll reach out. No pitch deck required.",
+        fields: [
+          { key: "name", label: "Name", placeholder: "Your name (optional)" },
+          { key: "idea", label: "Idea", placeholder: "Share your idea in a sentence" }
+        ]
+      },
+      {
+        id: "feedback_other", stage: "Feedback", type: "text",
+        prompt: "Anything else you want us to know?",
+        placeholder: "Anything else you'd like us to know"
       }
     ];
 
-    var slideOrder = ["intro", "q1", "q2", "q3", "q4", "q5", "q6", "c1", "c2", "c3", "s1", "s2", "s3", "summary"];  
+    var domainQuestion = {
+      id: "d1", stage: "Content Sorting", type: "single",
+      prompt: "What's your primary role at GALE?",
+      options: [
+        "Account / Client Partner",
+        "Corporate Communications",
+        "Data Science and Analytics",
+        "Finance",
+        "Project Management",
+        "Operations",
+        "Paid Media",
+        "People",
+        "Public Relations",
+        "Quality Assurance",
+        "SEO",
+        "Story",
+        "Strategy",
+        "Technology",
+        "Other"
+      ],
+      subdomains: {
+        "Paid Media": [
+          "Ad Ops and Ad Tech",
+          "Biddable",
+          "Integrated Direct Investment",
+          "Investment Operations",
+          "Media Management",
+          "Media Planning",
+          "Paid Search",
+          "Paid Social",
+          "Programmatic",
+          "Retail Media"
+        ]
+      }
+    };
+
+    var slideOrder = ["intro", "section_aptitude", "d1", "c1", "q1", "t1", "q2", "q2b", "q2a", "q3", "q4", "qv1", "s0", "s1", "section_interest", "outside_ai", "blockers", "astro", "section_feedback", "program_topics", "q15", "s2", "feedback_change", "share_segment", "feedback_other", "summary"];
     var introSlides = [
-      'This 5-minute quiz helps us understand how you use AI today — so we can offer training that actually fits where you are.',
-      'There are no wrong answers and no technical jargon.<br>We are asking about what you have actually done, not what you have heard of.',
-      'Your honest responses tell us where to focus, not where you are lacking.<br>Results stay with the training team.<br>You will see a submission confirmation at the end.'
+      'This 5 -7 MIN quiz helps us understand how you use AI today — so we can offer training that actually fits where you are.',
+      'First, we are asking about what you have actually done. Then, a few questions about what youre interested in and how we can help.',
+      'Your honest responses tell us where to focus, not where you are lacking.<br>Results stay with the training team and are anonymous.<span class="intro-subnote"><button class="intro-contribute-link" type="button" data-contribute-open="true">(Unless you want to contribute!)</button></span>'
     ];
+
+    var sectionIntroSlides = {
+      section_aptitude: {
+        watermark: "01",
+        title: "First, we are asking about what you have actually done.",
+        body: "",
+        status: ""
+      },
+      section_interest: {
+        watermark: "02",
+        title: "Next: Interests",
+        body: "Next, we are going to ask what you like to do with AI and what you want to learn next.",
+        status: ""
+      },
+      section_feedback: {
+        watermark: "03",
+        title: "Final: Feedback",
+        body: "Lastly, just a few questions about how we can help and how we are doing so far",
+        status: ""
+      }
+    };
+
+    var sectionConfigs = [
+      {
+        id: "aptitude",
+        questionIds: ["d1", "c1", "q1", "t1", "q2", "q2b", "q2a", "q3", "q4", "qv1", "s0", "s1"]
+      },
+      {
+        id: "interest",
+        questionIds: ["outside_ai", "blockers"]
+      },
+      {
+        id: "feedback",
+        questionIds: ["program_topics", "q15", "s2", "feedback_change", "share_segment", "feedback_other"]
+      }
+    ];
+
+    /* Question IDs in presentation order (excludes intro and summary) */
+    var questionSlideIds = slideOrder.filter(function(s) {
+      return s !== "intro" && s !== "summary" && s !== "astro" && s.indexOf("section_") !== 0;
+    });
+    var TOTAL_QUESTIONS = questionSlideIds.length;
+
+    function otherTextKey(questionId) {
+      return questionId + "_other_text";
+    }
+
+    function hasOtherOption(question) {
+      return !!(question && Array.isArray(question.options) && question.options.indexOf("Other") >= 0);
+    }
+
+    function isOtherChosen(questionId) {
+      var current = state.responses[questionId];
+      if (Array.isArray(current)) return current.indexOf("Other") >= 0;
+      return current === "Other";
+    }
+
+    function getOtherText(questionId) {
+      return String(state.responses[otherTextKey(questionId)] || "").trim();
+    }
+
+    function getQuestionNumber(slideId) {
+      var idx = questionSlideIds.indexOf(slideId);
+      return idx >= 0 ? idx + 1 : 0;
+    }
+
+    function zeroPad(n) {
+      return n < 10 ? "0" + n : "" + n;
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function noteKeyFor(questionId) {
+      return questionId + "_note";
+    }
+
+    function createRandomKey() {
+      return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
+    }
+
+    function getRespondentKey() {
+      var existing = localStorage.getItem(RESPONDENT_KEY_STORAGE);
+      if (existing) return existing;
+      var created = createRandomKey();
+      localStorage.setItem(RESPONDENT_KEY_STORAGE, created);
+      return created;
+    }
+
+    function renderClarifyField(questionId) {
+      var noteKey = noteKeyFor(questionId);
+      var noteVal = state.responses[noteKey] || "";
+      return '' +
+        '<div class="clarify-area">' +
+          '<div class="style-label-tag">Optional Clarification</div>' +
+          '<textarea class="clarify-input" data-clarify-qid="' + questionId + '" placeholder="Anything else you want us to know about this answer?">' + escapeHtml(noteVal) + '</textarea>' +
+        '</div>';
+    }
 
     var coreMap = {};
     coreQuestions.forEach(function(q) { coreMap[q.id] = q; });
+    var usageMap = {};
+    usageQuestions.forEach(function(q) { usageMap[q.id] = q; });
     var calMap = {};
     calibrationQuestions.forEach(function(q) { calMap[q.id] = q; });
+
+    var TOOL_LOGO_DOMAINS = {
+      "ChatGPT":           "openai.com",
+      "Claude":            "anthropic.com",
+      "Gemini":            "google.com",
+      "Gemini / Google AI":"google.com",
+      "ALCHEMY AI":        "alchemy.ai",
+      "Alchemy AI":        "alchemy.ai",
+      "Copilot (Microsoft / GitHub)": "microsoft.com",
+      "Microsoft Copilot": "microsoft.com",
+      "GitHub Copilot":    "github.com",
+      "Cursor / Claude Code / other coding tools": "cursor.com",
+      "Cursor":            "cursor.com",
+      "Perplexity":        "perplexity.ai",
+      "Nano Banana":       "nanobanana.ai",
+      "Weavy":             "weavy.ai",
+      "NotebookLM":        "notebooklm.google",
+      "Notion AI":         "notion.so",
+      "Grammarly":         "grammarly.com",
+      "Jasper":            "jasper.ai",
+      "Grok":              "x.ai",
+      "Midjourney":        "midjourney.com",
+      "Adobe Firefly":     "adobe.com",
+      "Runway":            "runwayml.com",
+      "Synthesia":         "synthesia.io",
+      "Otter AI":          "otter.ai",
+      "Canva AI":          "canva.com",
+      "Figma AI (Weave)":  "figma.com"
+    };
+
+    var TOOL_BRAND_LOGOS = {
+      "ChatGPT": "https://www.google.com/s2/favicons?sz=64&domain=openai.com",
+      "Claude": "https://www.google.com/s2/favicons?sz=64&domain=claude.ai",
+      "Gemini": "https://cdn.simpleicons.org/googlegemini/8AB4F8",
+      "Gemini / Google AI": "https://cdn.simpleicons.org/googlegemini/8AB4F8",
+      "ALCHEMY AI": "assets/alchemy-ai.png",
+      "Alchemy AI": "assets/alchemy-ai.png",
+      "Copilot (Microsoft / GitHub)": "https://www.google.com/s2/favicons?sz=64&domain=copilot.microsoft.com",
+      "Cursor / Claude Code / other coding tools": "https://www.google.com/s2/favicons?sz=64&domain=cursor.com",
+      "Microsoft Copilot": "https://www.google.com/s2/favicons?sz=64&domain=copilot.microsoft.com",
+      "GitHub Copilot": "https://cdn.simpleicons.org/githubcopilot/FFFFFF",
+      "Nano Banana": "https://www.google.com/s2/favicons?sz=64&domain=nanobanana.ai",
+      "Notion AI": "https://www.google.com/s2/favicons?sz=64&domain=notion.so",
+      "Adobe Firefly": "https://www.google.com/s2/favicons?sz=64&domain=adobe.com",
+      "Canva AI": "https://www.google.com/s2/favicons?sz=64&domain=canva.com",
+      "Figma AI (Weave)": "https://www.google.com/s2/favicons?sz=64&domain=figma.com",
+      "Weavy": "https://www.google.com/s2/favicons?sz=64&domain=weavy.ai",
+      "NotebookLM": "https://www.google.com/s2/favicons?sz=64&domain=notebooklm.google"
+    };
+
+    function isNanoBananaTool(toolName) {
+      var normalized = String(toolName || "").trim().toLowerCase().replace(/\s+/g, "");
+      return normalized === "nanobanana";
+    }
+
+    function getToolLogoUrl(toolName) {
+      if (isNanoBananaTool(toolName)) return "";
+      var brandLogo = TOOL_BRAND_LOGOS[toolName];
+      if (brandLogo) return brandLogo;
+      var domain = TOOL_LOGO_DOMAINS[toolName];
+      if (!domain) return "";
+      return "https://www.google.com/s2/favicons?sz=64&domain=" + encodeURIComponent(domain);
+    }
+
+    function getToolInitial(toolName) {
+      if (isNanoBananaTool(toolName)) return "🍌";
+      var cleaned = String(toolName || "").replace(/[^A-Za-z0-9]/g, "");
+      return cleaned ? cleaned.charAt(0).toUpperCase() : "+";
+    }
+
+    function renderLogoQuestion(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+
+      var options = q.filterFromT1
+        ? getSelectedToolsInMasterOrder()
+        : (q.filterFromT1Inverse ? getUnselectedToolsInMasterOrder() : q.options.slice());
+
+      if (q.id === "t1b") {
+        options.push(T1B_NONE_OPTION);
+      }
+      if (q.id === "t1c") {
+        options.push(T1C_NONE_OPTION);
+      }
+      if (q.id === "t1d") {
+        options.push(T1D_NONE_OPTION);
+      }
+
+      var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="logo-grid">';
+
+      options.forEach(function(opt) {
+        var checked = val.indexOf(opt) >= 0;
+        var logoUrl = getToolLogoUrl(opt);
+        var fallbackMark = getToolInitial(opt);
+        var fallbackClass = isNanoBananaTool(opt) ? "logo-fallback plain-emoji" : "logo-fallback";
+        var isNoneLogoOption = opt === T1B_NONE_OPTION || opt === T1C_NONE_OPTION || opt === T1D_NONE_OPTION;
+        var imgHtml = '';
+        if (!isNoneLogoOption) {
+          imgHtml = logoUrl
+            ? '<img src="' + logoUrl + '" alt="' + escapeHtml(opt) + '" ' +
+              'onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">' +
+              '<div class="' + fallbackClass + '" style="display:none">' + fallbackMark + '</div>'
+            : '<div class="' + fallbackClass + '">' + fallbackMark + '</div>';
+        }
+        html +=
+          '<div class="check-item logo-tile ' + (checked ? 'active' : '') + '" ' +
+          'data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' +
+            imgHtml +
+            '<div class="logo-name">' + escapeHtml(opt) + '</div>' +
+          '</div>';
+      });
+
+      html += '</div>';
+      html += renderClarifyField(q.id);
+      slideCard.innerHTML = html;
+
+      var hint = "Select one or more to continue.";
+      if (q.id === "t1b") {
+        hint = options.length <= 1
+          ? "Select tools in the previous question first, or choose None."
+          : "Tap the tools you personally pay for, or select None.";
+      } else if (q.id === "t1c") {
+        hint = options.length <= 1
+          ? "Select tools in the previous question first, or choose None."
+          : "Pick your current favorites, or choose None.";
+      } else if (q.id === "t1d") {
+        hint = options.length <= 1
+          ? "You already selected most listed apps. Choose None to continue."
+          : "Pick tools you want to learn next, or choose None.";
+      }
+      statusLine.textContent = val.length > 0 ? "" : hint;
+    }
     var sigMap = {};
     signalQuestions.forEach(function(q) { sigMap[q.id] = q; });
+    var domainMap = {};
+    domainMap[domainQuestion.id] = domainQuestion;
 
     var state = {
       currentSlide: "intro",
       history: [],
       responses: {},
       lastResult: null,
-      introStep: 0
+      introStep: 0,
+      astroReadyAt: 0,
+      suppressAutoAdvanceUntil: 0
     };
 
     var slideCard = document.getElementById("slideCard");
     var slideIndex = document.getElementById("slideIndex");
     var statusLine = document.getElementById("statusLine");
     var saveStatus = document.getElementById("saveStatus");
-    var progressFill = document.getElementById("progressFill");
+    var progressAptitude = document.getElementById("progressAptitude");
+    var progressInterest = document.getElementById("progressInterest");
+    var progressFeedback = document.getElementById("progressFeedback");
+    var segmentAptitude = document.getElementById("segmentAptitude");
+    var segmentInterest = document.getElementById("segmentInterest");
+    var segmentFeedback = document.getElementById("segmentFeedback");
+    var astroProgressMarker = document.getElementById("astroProgressMarker");
     var backBtn = document.getElementById("backBtn");
     var nextBtn = document.getElementById("nextBtn");
+    var resetResponsesBtn = document.getElementById("resetResponsesBtn");
+    var adminLink = document.getElementById("adminLink");
+    var adminModalBackdrop = document.getElementById("adminModalBackdrop");
+    var adminModalPassword = document.getElementById("adminModalPassword");
+    var adminModalCancel = document.getElementById("adminModalCancel");
+    var adminModalOpen = document.getElementById("adminModalOpen");
+    var adminModalStatus = document.getElementById("adminModalStatus");
+    var contributeModalBackdrop = document.getElementById("contributeModalBackdrop");
+    var contributeName = document.getElementById("contributeName");
+    var contributeIdea = document.getElementById("contributeIdea");
+    var contributeModalCancel = document.getElementById("contributeModalCancel");
+    var contributeModalSave = document.getElementById("contributeModalSave");
+    var contributeModalStatus = document.getElementById("contributeModalStatus");
+
     function loadDraft() {
       var raw = localStorage.getItem(DRAFT_KEY);
       if (!raw) return;
       try {
         var parsed = JSON.parse(raw);
         state.responses = parsed.responses || {};
-        state.history = parsed.history || [];
-        state.currentSlide = parsed.currentSlide || "intro";
-        state.introStep = typeof parsed.introStep === "number" ? parsed.introStep : 0;
+        var t1Options = (calMap.t1 && Array.isArray(calMap.t1.options)) ? calMap.t1.options : [];
+        var savedTools = normalizeToolList(state.responses.t1).filter(function(choice) {
+          return t1Options.indexOf(choice) >= 0;
+        });
+        state.responses.t1 = t1Options.filter(function(tool) {
+          return savedTools.indexOf(tool) >= 0;
+        });
+        state.responses.q2 = normalizeUsageList(state.responses.q2);
+        state.responses.q2b = filterQ2bSelections(state.responses.q2b, state.responses.q2);
+        state.responses.q2c = filterQ2cSelections(state.responses.q2c, state.responses.q2);
+        state.responses.t1b = filterToolFollowupSelections(state.responses.t1b, state.responses.t1, T1B_NONE_OPTION);
+        state.responses.t1d = filterToolDiscoverySelections(state.responses.t1d, getUnselectedToolsInMasterOrder());
+        state.responses.t1c = filterToolFollowupSelections(state.responses.t1c, state.responses.t1, T1C_NONE_OPTION);
+        var savedSlide = typeof parsed.currentSlide === "string" ? parsed.currentSlide : "intro";
+        state.currentSlide = slideOrder.indexOf(savedSlide) >= 0 ? savedSlide : "intro";
+        state.history = Array.isArray(parsed.history)
+          ? parsed.history.filter(function(slideId) { return slideOrder.indexOf(slideId) >= 0; })
+          : [];
+        state.introStep = typeof parsed.introStep === "number"
+          ? Math.max(0, Math.min(introSlides.length - 1, parsed.introStep))
+          : 0;
+        if (state.currentSlide === "intro") {
+          state.history = [];
+        }
+        state.astroReadyAt = typeof parsed.astroReadyAt === "number" ? parsed.astroReadyAt : 0;
         saveStatus.textContent = parsed.updatedAt ? "Draft saved " + new Date(parsed.updatedAt).toLocaleTimeString() : "Draft loaded";
       } catch (e) {
         saveStatus.textContent = "Draft unreadable";
@@ -514,6 +1802,7 @@
       var payload = {
         currentSlide: state.currentSlide,
         introStep: state.introStep,
+        astroReadyAt: state.astroReadyAt,
         history: state.history,
         responses: state.responses,
         updatedAt: new Date().toISOString()
@@ -529,23 +1818,157 @@
       return slideOrder[idx + 1];
     }
 
+    function getUsageOptions(q) {
+      if (q && q.id === "q2b") {
+        var selected = normalizeUsageList(state.responses.q2);
+        return selected.concat([Q2B_NONE_OPTION]);
+      }
+      if (q && q.id === "q2c") {
+        var chosen = normalizeUsageList(state.responses.q2);
+        return usageAreas.filter(function(area) { return chosen.indexOf(area) < 0; }).concat([Q2C_NONE_OPTION]);
+      }
+      return q && Array.isArray(q.options) ? q.options : [];
+    }
+
+    function isUsageQuestionId(qid) {
+      return Boolean(usageMap[qid]);
+    }
+
+    function openAdminModal() {
+      if (!adminModalBackdrop || !adminModalPassword || !adminModalStatus) {
+        window.location.href = "ops-console.html";
+        return;
+      }
+      adminModalPassword.value = "";
+      adminModalStatus.textContent = "";
+      adminModalBackdrop.classList.add("open");
+      setTimeout(function() { adminModalPassword.focus(); }, 30);
+    }
+
+    function closeAdminModal() {
+      adminModalBackdrop.classList.remove("open");
+    }
+
+    function openContributeModal() {
+      contributeName.value = state.responses.share_segment_name || "";
+      contributeIdea.value = state.responses.share_segment_idea || "";
+      contributeModalStatus.textContent = "";
+      contributeModalBackdrop.classList.add("open");
+      setTimeout(function() { contributeName.focus(); }, 30);
+    }
+
+    function closeContributeModal() {
+      contributeModalBackdrop.classList.remove("open");
+    }
+
+    function saveContributeModal() {
+      var nameVal = String(contributeName.value || "").trim();
+      var ideaVal = String(contributeIdea.value || "").trim();
+      if (ideaVal && !nameVal) {
+        contributeModalStatus.innerHTML = '<span class="status-attention">Please add your name if you entered an idea.</span>';
+        contributeName.focus();
+        return;
+      }
+      state.responses.share_segment_name = contributeName.value;
+      state.responses.share_segment_idea = contributeIdea.value;
+      state.lastResult = null;
+      saveDraft();
+      closeContributeModal();
+      statusLine.textContent = "Contribution details saved.";
+      if (state.currentSlide === "share_segment") {
+        render();
+      }
+    }
+
+    function resetResponsesWithConfirm() {
+      var ok = window.confirm("Are you sure you want to reset your responses? This clears your current quiz draft on this device.");
+      if (!ok) return;
+      localStorage.removeItem(DRAFT_KEY);
+      state.currentSlide = "intro";
+      state.history = [];
+      state.responses = {};
+      state.lastResult = null;
+      state.introStep = 0;
+      state.astroReadyAt = 0;
+      saveStatus.textContent = "Draft cleared";
+      updateProgress();
+      render();
+      statusLine.textContent = "Responses reset.";
+    }
+
+    function tryAdminAccess() {
+      var candidate = (adminModalPassword.value || "").trim();
+      if (!candidate) {
+        adminModalStatus.textContent = "Enter password.";
+        return;
+      }
+      var allowedAdminPasswords = ["gimmethosetokens", "maxtokens"];
+      if (allowedAdminPasswords.indexOf(candidate.toLowerCase()) < 0) {
+        adminModalStatus.textContent = "Incorrect password.";
+        return;
+      }
+      sessionStorage.setItem("galeOpsPanelAuth", candidate);
+      var target = "ops-console.html";
+      window.location.href = target;
+    }
+
     function isSlideAnswered(slideId) {
-      if (slideId === "intro" || slideId === "summary") return true;
+      if (slideId === "intro" || slideId === "summary" || slideId === "astro" || slideId.indexOf("section_") === 0) return true;
+      var usage = usageMap[slideId];
+      if (usage) {
+        var usageVal = state.responses[usage.id];
+        return Array.isArray(usageVal) && usageVal.length > 0;
+      }
       var core = coreMap[slideId];
       if (core) {
         var mainAns = state.responses[core.id];
         if (!mainAns) return false;
-        if (mainAns === "No") {
+        var needsFollowup = Array.isArray(core.followupTriggerValues)
+          ? core.followupTriggerValues.indexOf(mainAns) >= 0
+          : mainAns === "No";
+        if (needsFollowup) {
           return Boolean(state.responses[core.followup.id]);
         }
         return true;
       }
       var cal = calMap[slideId];
-      if (cal) return Boolean(state.responses[cal.id]);
+      if (cal) {
+        if (cal.type === "multi" || cal.type === "logo-multi") {
+          var calVal = state.responses[cal.id];
+          return Array.isArray(calVal) && calVal.length > 0;
+        }
+        return Boolean(state.responses[cal.id]);
+      }
       var sig = sigMap[slideId];
       if (sig) {
+        if (sig.type === "text") return true;
+        if (sig.type === "text_pair") {
+          if (sig.id === "share_segment") {
+            var nameVal = String(state.responses.share_segment_name || "").trim();
+            var ideaVal = String(state.responses.share_segment_idea || "").trim();
+            return !(ideaVal && !nameVal);
+          }
+          return true;
+        }
         var val = state.responses[sig.id];
-        return Array.isArray(val) && val.length > 0;
+        if (!Array.isArray(val) || val.length === 0) return false;
+        if (hasOtherOption(sig) && val.indexOf("Other") >= 0) {
+          return Boolean(getOtherText(sig.id));
+        }
+        return true;
+      }
+      var domain = domainMap[slideId];
+      if (domain) {
+        var main = state.responses[domain.id];
+        if (!main) return false;
+        if (main === "Other") {
+          return Boolean(getOtherText(domain.id));
+        }
+        var subdomains = domain.subdomains && domain.subdomains[main];
+        if (Array.isArray(subdomains) && subdomains.length) {
+          return Boolean(state.responses.d1_subdomain);
+        }
+        return true;
       }
       return true;
     }
@@ -554,28 +1977,41 @@
       var total = 0;
       var breakdown = {};
       var coreWeights = {
-        q1: 1,
-        q2: 2,
-        q3: 2,
-        q4: 1,
-        q5: 3,
-        q6: 3
+        q1: 2,
+        q2a: 2,
+        q3: 3,
+        q4: 2.5,
+        qv1: 2.4
       };
 
       coreQuestions.forEach(function(q) {
         var ans = state.responses[q.id];
         var weight = coreWeights[q.id] || 1;
-        if (ans === "Yes") {
+        if (q.signalMap && typeof q.signalMap[ans] === "number") {
+          var mapped = Math.max(0, Math.min(1, q.signalMap[ans]));
+          var mappedPts = Math.round((mapped * weight) * 10) / 10;
+          breakdown[q.id] = mappedPts;
+          total += mappedPts;
+        } else if (ans === "Yes") {
           breakdown[q.id] = weight;
           total += weight;
+        } else if (ans === "Sometimes") {
+          var half = Math.round((weight * 0.5) * 10) / 10;
+          breakdown[q.id] = half;
+          total += half;
         } else if (ans === "No") {
           var fuAns = state.responses[q.followup.id];
           var pts = 0;
           if (fuAns) {
             q.followup.options.forEach(function(opt) {
               if (opt.text === fuAns) {
-                var normalized = Math.max(0, Math.min(1, opt.points / 1.5));
-                pts = Math.round((normalized * weight * 0.65) * 10) / 10;
+                if (typeof opt.signal === "number") {
+                  var normalizedSignal = Math.max(0, Math.min(0.5, opt.signal));
+                  pts = Math.round((normalizedSignal * weight) * 10) / 10;
+                } else {
+                  var normalized = Math.max(0, Math.min(1, opt.points / 1.5));
+                  pts = Math.round((normalized * weight * 0.65) * 10) / 10;
+                }
               }
             });
           }
@@ -584,64 +2020,172 @@
         } else {
           breakdown[q.id] = 0;
         }
+
+        if (q.id === "q1" && ans === "Rarely / not yet") {
+          var q1Followup = state.responses[q.followup.id];
+          if (q1Followup) {
+            q.followup.options.forEach(function(opt) {
+              if (opt.text === q1Followup) {
+                var q1Pts = 0;
+                if (typeof opt.signal === "number") {
+                  var q1Signal = Math.max(0, Math.min(0.45, opt.signal));
+                  q1Pts = Math.round((q1Signal * weight) * 10) / 10;
+                } else {
+                  var q1Normalized = Math.max(0, Math.min(1, opt.points / 1.5));
+                  q1Pts = Math.round((q1Normalized * weight * 0.65) * 10) / 10;
+                }
+                total += q1Pts - (breakdown[q.id] || 0);
+                breakdown[q.id] = q1Pts;
+              }
+            });
+          }
+        }
+
+        if (q.id === "q2a") {
+          var needsQ2aFollowup = Array.isArray(q.followupTriggerValues) && q.followupTriggerValues.indexOf(ans) >= 0;
+          var q2aFollowup = state.responses[q.followup.id];
+          if (needsQ2aFollowup && q2aFollowup) {
+            q.followup.options.forEach(function(opt) {
+              if (opt.text === q2aFollowup) {
+                var q2aPts = 0;
+                if (typeof opt.signal === "number") {
+                  var q2aBaseSignal = (q.signalMap && typeof q.signalMap[ans] === "number") ? Math.max(0, Math.min(1, q.signalMap[ans])) : 0;
+                  var q2aFollowSignal = Math.max(0, Math.min(0.5, opt.signal));
+                  q2aPts = Math.round((Math.max(q2aBaseSignal, q2aFollowSignal) * weight) * 10) / 10;
+                } else {
+                  var q2aNormalized = Math.max(0, Math.min(1, opt.points / 1.5));
+                  q2aPts = Math.round((q2aNormalized * weight * 0.65) * 10) / 10;
+                }
+                total += q2aPts - (breakdown[q.id] || 0);
+                breakdown[q.id] = q2aPts;
+              }
+            });
+          }
+        }
       });
 
-      var c2ScoreMap = {
-        "I haven’t noticed that happening": 0,
-        "Yes, and I can usually tell when something’s off": 1.5,
-        "Yes, but I’m not always confident I’d catch it": 0.8
-      };
-      total += c2ScoreMap[state.responses.c2] || 0;
+      var q2Used = Array.isArray(state.responses.q2) ? state.responses.q2 : [];
+      var q2Comfort = normalizeUsageList(state.responses.q2b);
+      var comfortScore = Math.min(3.2, q2Comfort.length * 0.55);
+      var usageBreadthScore = Math.min(1.8, q2Used.length * 0.2);
+      var q2ProfileScore = Math.round((comfortScore + usageBreadthScore) * 10) / 10;
+      breakdown.q2_profile = q2ProfileScore;
+      total += q2ProfileScore;
 
-      var c3ScoreMap = {
-        "Use it mostly as-is": 0,
-        "Give it a quick read-through": 0.6,
-        "Check specific facts, tone, or accuracy": 1.2,
-        "Verify against original sources before using anything": 1.8
+      var c1Map = {
+        "Just getting started — still figuring out what to use it for": 0,
+        "Dabbling — I use it for some things, mostly the basics": 0.4,
+        "Comfortable — it's part of my regular workflow": 0.8,
+        "Building — I'm making things with it (prompts, workflows, tools, code)": 1.2,
+        "Deep end — agents, APIs, vibe coding, the works": 1.5
       };
-      total += c3ScoreMap[state.responses.c3] || 0;
+      var c1Score = c1Map[state.responses.c1] || 0;
+      breakdown.c1_readiness = c1Score;
+      total += c1Score;
 
-      var s1 = Array.isArray(state.responses.s1) ? state.responses.s1.filter(function(e) { return e !== "None of these"; }) : [];
-      if (s1.length >= 2) total += 1.2;
-      else if (s1.length === 1) total += 0.6;
+      var tools = normalizeToolList(state.responses.t1).filter(function(tool) { return tool !== "Other"; });
+      var toolBreadthScore = Math.min(2.2, tools.length * 0.2);
+      var advancedToolScore = 0;
+      if (tools.indexOf("ALCHEMY AI") >= 0) advancedToolScore += 0.25;
+      if (tools.indexOf("Cursor / Claude Code / other coding tools") >= 0) advancedToolScore += 0.25;
+      if (tools.indexOf("NotebookLM") >= 0) advancedToolScore += 0.2;
+      if (tools.indexOf("Perplexity") >= 0) advancedToolScore += 0.15;
+      if (tools.indexOf("Midjourney") >= 0 || tools.indexOf("Weavy") >= 0) advancedToolScore += 0.15;
+      advancedToolScore = Math.min(0.9, advancedToolScore);
+      var t1Score = Math.round((toolBreadthScore + advancedToolScore) * 10) / 10;
+      breakdown.t1_tool_profile = t1Score;
+      total += t1Score;
 
-      var s2 = Array.isArray(state.responses.s2) ? state.responses.s2 : [];
-      var s2Map = {
-        "Pasted raw data (spreadsheet, CSV) into AI for analysis": 0.8,
-        "Asked AI to synthesize multiple messy sources into a usable brief with recommendations": 1.2,
-        "Used AI-generated output to create a deliverable you shared with others": 1.4
+      var s1 = Array.isArray(state.responses.s1) ? state.responses.s1 : [];
+      var s0 = Array.isArray(state.responses.s0) ? state.responses.s0 : [];
+      var s0Map = {
+        "Media brief or creative brief": 0.9,
+        "Competitive or market research synthesis": 1.0,
+        "Campaign reporting or performance summary": 1.0,
+        "Audience segmentation or persona draft": 0.9,
+        "None of these yet": 0
       };
-      var s2Pts = 0;
-      s2.forEach(function(opt) {
-        if (s2Map[opt]) s2Pts += s2Map[opt];
+      var s0Pts = 0;
+      s0.forEach(function(opt) {
+        if (s0Map[opt]) s0Pts += s0Map[opt];
       });
-      total += Math.min(2.2, s2Pts);
+      var s0Score = Math.min(2.8, s0Pts);
+      breakdown.s0_outputs = Math.round(s0Score * 10) / 10;
+      total += s0Score;
 
-      var s3 = Array.isArray(state.responses.s3) ? state.responses.s3 : [];
-      var s3Map = {
-        "Used AI as a regular part of a recurring workflow": 0.8,
-        "Connected AI to other tools through an automation platform": 1.6,
-        "Written code that calls an AI API": 1.8,
-        "Built a custom tool or app powered by AI": 2.2
+      var s1Map = {
+        "Use role/context-rich prompts (beyond basic ask/answer)": 0.9,
+        "Use AI with documents or data to produce analysis or recommendations": 1.4,
+        "Turn AI output into deliverables shared with others": 1.4,
+        "Use AI as part of recurring workflows": 1.2,
+        "Connect AI to other tools or automations": 1.7,
+        "Write code that calls AI APIs": 1.8,
+        "Build custom tools/apps powered by AI": 2.2
       };
-      var s3Pts = 0;
-      s3.forEach(function(opt) {
-        if (s3Map[opt]) s3Pts += s3Map[opt];
+      var s1Pts = 0;
+      s1.forEach(function(opt) {
+        if (s1Map[opt]) s1Pts += s1Map[opt];
       });
-      total += Math.min(3.2, s3Pts);
+      var s1Score = Math.min(4.8, s1Pts);
+      breakdown.s1_activities = Math.round(s1Score * 10) / 10;
+      total += s1Score;
+
+      if (state.responses.c1 === "Deep end — agents, APIs, vibe coding, the works") {
+        var c1EvidenceSignals = [
+          "Use AI with documents or data to produce analysis or recommendations",
+          "Turn AI output into deliverables shared with others",
+          "Use AI as part of recurring workflows",
+          "Connect AI to other tools or automations",
+          "Write code that calls AI APIs",
+          "Build custom tools/apps powered by AI"
+        ];
+        var c1EvidenceCount = c1EvidenceSignals.filter(function(opt) {
+          return s1.indexOf(opt) >= 0;
+        }).length;
+        if (c1EvidenceCount === 0) {
+          var cappedC1 = Math.min(c1Score, 0.8);
+          if (cappedC1 < c1Score) {
+            total += cappedC1 - c1Score;
+            breakdown.c1_readiness = cappedC1;
+            breakdown.c1_overclaim_adjustment = Math.round((cappedC1 - c1Score) * 10) / 10;
+            c1Score = cappedC1;
+          }
+        }
+      }
+
+      var nonDevAdvancedOptions = [
+        "Use AI with documents or data to produce analysis or recommendations",
+        "Turn AI output into deliverables shared with others",
+        "Use AI as part of recurring workflows",
+        "Connect AI to other tools or automations"
+      ];
+      var nonDevAdvancedCount = nonDevAdvancedOptions.filter(function(opt) {
+        return s1.indexOf(opt) >= 0;
+      }).length;
+      var hasCodingBuildSignal = s1.indexOf("Write code that calls AI APIs") >= 0 || s1.indexOf("Build custom tools/apps powered by AI") >= 0;
+      var nonDevExpertBonus = 0;
+      if (nonDevAdvancedCount >= 3 && !hasCodingBuildSignal) {
+        nonDevExpertBonus = 0.8;
+      } else if (nonDevAdvancedCount >= 4) {
+        nonDevExpertBonus = 0.4;
+      }
+      if (nonDevExpertBonus > 0) {
+        breakdown.non_dev_advanced_bonus = nonDevExpertBonus;
+        total += nonDevExpertBonus;
+      }
 
       return { total: Math.round(total * 10) / 10, breakdown: breakdown };
     }
 
     function computeTier(score) {
-      if (score >= 15.5) {
+      if (score >= 21) {
         return {
-          name: "Tier 3",
-          label: "Ready to fully integrate rich experience into GALE's systems",
-          desc: "Strong evidence of advanced application, workflow depth, and reliable quality controls"
+          name: "Tier 1",
+          label: "Advanced: ready to fully integrate rich experience into GALE systems",
+          desc: "Strong evidence of advanced application, automation depth, and reliable quality controls"
         };
       }
-      if (score >= 10) {
+      if (score >= 14) {
         return {
           name: "Tier 2",
           label: "Ready to expand current use cases",
@@ -649,15 +2193,32 @@
         };
       }
       return {
-        name: "Tier 1",
-        label: "Ready to apply the fundamentals",
-        desc: "Solid baseline usage with focus needed on consistency, rigor, and repeatable review habits"
+        name: "Tier 3",
+        label: "Foundational: ready to apply core workflows",
+        desc: "Best fit for foundational skill-building and repeatable quality habits before advanced system-level expansion"
       };
     }
 
+    function scoreMeaningText(score) {
+      var n = Number(score || 0);
+      if (n >= 21) {
+        return "21.0+ maps to Tier 1 (Advanced): systems-level application and strong quality controls.";
+      }
+      if (n >= 14) {
+        return "14.0–20.9 maps to Tier 2 (Intermediate): consistent practical use with room to scale.";
+      }
+      return "Below 14.0 maps to Tier 3 (Foundational): build repeatable core workflows and quality habits.";
+    }
+
+    function tierTrackRecommendation(tierName) {
+      if (tierName === "Tier 1") return "Advanced builder track";
+      if (tierName === "Tier 2") return "Applied acceleration track";
+      return "Foundational enablement track";
+    }
+
     function toTierNumber(tierName) {
-      var map = { "Tier 1": 1, "Tier 2": 2, "Tier 3": 3 };
-      return map[tierName] || 1;
+      var map = { "Tier 1": 3, "Tier 2": 2, "Tier 3": 1 };
+      return map[tierName] || 0;
     }
 
     function computeFlags(tierName) {
@@ -665,20 +2226,20 @@
       var a = state.responses;
       var tierNum = toTierNumber(tierName);
 
-      var selfPlacementMap = {
-        "I ask it questions or get basic drafts": 1,
-        "I give it detailed instructions and shape the results": 1,
-        "I use it regularly with documents, data, and recurring tasks": 2,
-        "I build workflows or integrations that use AI automatically": 3
-      };
-      var selfTier = selfPlacementMap[a.c1];
-      if (selfTier && selfTier >= tierNum + 1) flags.push("Self-assessment may be ahead of observed behavior");
-      if (selfTier && selfTier <= tierNum - 1) flags.push("Potentially underselling current readiness");
+      var blockers = Array.isArray(a.blockers) ? a.blockers : [];
+      var verifyChoice = a.qv1 || "";
 
-      if (tierNum >= 2 && a.c2 === "I haven\u2019t noticed that happening") flags.push("Prioritize output verification skills");
-      if (tierNum >= 2 && a.c3 === "Use it mostly as-is") flags.push("Prioritize quality review habits");
-      if (tierNum >= 3 && a.c3 !== "Verify against original sources before using anything") {
-        flags.push("High priority: verification practices for advanced deployment");
+      if (blockers.indexOf("My prompts don't get great results") >= 0) {
+        flags.push("Prioritize prompt quality coaching");
+      }
+      if (blockers.indexOf("Can't tell if the output is good") >= 0 || blockers.indexOf("Not sure what's safe for client work") >= 0) {
+        flags.push("Prioritize verification and client-safe deployment guidance");
+      }
+      if (verifyChoice === "Edit the wording/tone and use it") {
+        flags.push("Prioritize source-verification habits on high-stakes deliverables");
+      }
+      if (tierNum >= 3 && verifyChoice !== "Verify against original sources/materials before proceeding") {
+        flags.push("High priority: advanced quality and risk controls for scaled usage");
       }
 
       return flags;
@@ -686,21 +2247,354 @@
 
     function computeSubtags() {
       var tags = [];
+      var s0 = Array.isArray(state.responses.s0) ? state.responses.s0 : [];
       var s1 = Array.isArray(state.responses.s1) ? state.responses.s1 : [];
       var s2 = Array.isArray(state.responses.s2) ? state.responses.s2 : [];
-      var s3 = Array.isArray(state.responses.s3) ? state.responses.s3 : [];
-      var s1Real = s1.filter(function(e) { return e !== "None of these"; });
-      var s2Real = s2.filter(function(e) { return e !== "None of these"; });
 
-      if (s1Real.length >= 2) tags.push("Prompting depth");
-      if (s2Real.length >= 2) tags.push("Data & documents depth");
+      if (s0.indexOf("Media brief or creative brief") >= 0 ||
+          s0.indexOf("Competitive or market research synthesis") >= 0 ||
+          s0.indexOf("Campaign reporting or performance summary") >= 0 ||
+          s0.indexOf("Audience segmentation or persona draft") >= 0) {
+        tags.push("Agency workflow evidence");
+      }
 
-      var wfOpts = [signalQuestions[2].options[0], signalQuestions[2].options[1]];
-      var codeOpts = [signalQuestions[2].options[2], signalQuestions[2].options[3]];
-      if (s3.some(function(e) { return wfOpts.indexOf(e) >= 0; })) tags.push("Workflow depth");
-      if (s3.some(function(e) { return codeOpts.indexOf(e) >= 0; })) tags.push("Code & API depth");
+      if (s1.indexOf("Use role/context-rich prompts (beyond basic ask/answer)") >= 0) tags.push("Prompting depth");
+      if (s1.indexOf("Use AI with documents or data to produce analysis or recommendations") >= 0) tags.push("Data & documents depth");
+      if (s1.indexOf("Use AI as part of recurring workflows") >= 0 || s1.indexOf("Connect AI to other tools or automations") >= 0) tags.push("Workflow depth");
+      if (s1.indexOf("Write code that calls AI APIs") >= 0 || s1.indexOf("Build custom tools/apps powered by AI") >= 0) tags.push("Code & API depth");
+
+      if (s2.indexOf("Templates and starter prompts I can steal") >= 0) tags.push("Wants prompting support");
+      if (s2.indexOf("Curated tool recommendations for my role") >= 0) tags.push("Wants role-based tool guidance");
+      if (s2.indexOf("A library of GALE-built Skills and workflows") >= 0 || s2.indexOf("Cohort-based learning (small group, multiple sessions)") >= 0) tags.push("Wants advanced implementation support");
+
+      var blockers = Array.isArray(state.responses.blockers) ? state.responses.blockers : [];
+      if (blockers.indexOf("My prompts don't get great results") >= 0) tags.push("Prompt quality friction");
+      if (blockers.indexOf("Not sure what's safe for client work") >= 0) tags.push("Risk-confidence friction");
+
+      if (state.responses.qv1 === "Verify against original sources/materials before proceeding") {
+        tags.push("Verification-first");
+      } else if (state.responses.qv1 === "Edit the wording/tone and use it") {
+        tags.push("Verification-risk");
+      }
+
+      var formats = Array.isArray(state.responses.q15) ? state.responses.q15 : [];
+      if (formats.indexOf("Hands-on workshops where I build something") >= 0) tags.push("Prefers hands-on learning");
+      if (formats.indexOf("Show-and-tell from GALE colleagues") >= 0) tags.push("Wants peer examples");
 
       return tags;
+    }
+
+    function computeMergeRecommendation() {
+      var all = getStoredSubmissions();
+      var advancedCount = 0;
+      all.forEach(function(entry) {
+        if (entry.tier === "Tier 1") advancedCount++;
+      });
+      return advancedCount > 0 && advancedCount < 5;
+    }
+
+    var personaGridOverride = null;
+
+    function defaultPersonaGrid() {
+      return [
+        [
+          { name: "Quick Study", emoji: "📚", spotlight: "You’re in the build-up phase where practical habits start compounding.", superpower: "You turn curiosity into action quickly once a workflow feels useful.", nextMove: "Pick one recurring task and turn it into your first reliable AI routine.", mantra: "Start simple. Repeat often." },
+          { name: "Insight Scout", emoji: "🔎", spotlight: "You naturally look for patterns before trying to force output.", superpower: "You spot where better inputs can create smarter decisions.", nextMove: "Run one weekly analysis workflow and track quality gains over time.", mantra: "Clarity before velocity." },
+          { name: "Creative Spark", emoji: "⚡️", spotlight: "You unlock momentum through ideas, messaging, and fast exploration.", superpower: "You can generate multiple angles quickly when direction is still forming.", nextMove: "Template your top two creative prompts so they become repeatable assets.", mantra: "Explore wide, refine fast." },
+          { name: "Plan Starter", emoji: "🧭", spotlight: "You’re already framing work in steps, which is ideal for AI growth.", superpower: "You break ambiguity into actionable sequences.", nextMove: "Convert one planning process into a reusable AI-assisted checklist.", mantra: "Structure creates confidence." },
+          { name: "Curious Drifter", emoji: "🍃", spotlight: "You’re at the starting line with a clear runway ahead.", superpower: "You’re approaching AI without baggage — ready to build the right habits from the start.", nextMove: "Choose a single use case to deepen so results become more consistent.", mantra: "Experiment with intent." }
+        ],
+        [
+          { name: "Tinkerer", emoji: "👷", spotlight: "You’ve moved from trial to repeatable execution in core workflows.", superpower: "You can improve a process incrementally without overcomplicating it.", nextMove: "Automate one handoff in your weekly workflow and measure the time saved.", mantra: "Tune the machine." },
+          { name: "Evidence Driver", emoji: "🕵️", spotlight: "You balance output speed with decision quality in practical ways.", superpower: "You build trust by grounding AI outputs in evidence and checks.", nextMove: "Add a standard verification pass to every high-visibility deliverable.", mantra: "Proof scales trust." },
+          { name: "Story Crafter", emoji: "✍️", spotlight: "You’re strong at translating raw ideas into clear communication.", superpower: "You can rapidly shape drafts into audience-ready narratives.", nextMove: "Build a prompt kit for your top communication formats.", mantra: "Message with purpose." },
+          { name: "Execution Mapper", emoji: "📌", spotlight: "You use AI to organize execution and reduce coordination friction.", superpower: "You convert strategy into concrete steps teams can actually run.", nextMove: "Create one planning workflow that starts with goals and ends with owners.", mantra: "Plan, then ship." },
+          { name: "Momentum Explorer", emoji: "🚀", spotlight: "You’re sampling the landscape and starting to find your lanes.", superpower: "You’ve tested enough to know what’s possible — now it’s about picking where to go deep.", nextMove: "Prioritize the 2 highest-impact use cases and deepen consistency there.", mantra: "Momentum with direction." }
+        ],
+        [
+          { name: "Automation Engineer", emoji: "🦾", spotlight: "You’re turning scattered wins into repeatable systems.", superpower: "You can orchestrate tools and prompts into dependable flows.", nextMove: "Document one end-to-end workflow so others can run it reliably.", mantra: "Build for repeatability." },
+          { name: "Decision Analyst", emoji: "🧠", spotlight: "You're developing a reliable instinct for when data needs to drive the decision.", superpower: "You combine synthesis and evidence to strengthen how you frame recommendations.", nextMove: "Scale your analysis patterns into templates the wider team can reuse.", mantra: "Insight into action." },
+          { name: "Narrative Producer", emoji: "🎬", spotlight: "You bring creative range and are building the systems to make it consistent.", superpower: "You can move from concept to polished output and are learning to protect quality at speed.", nextMove: "Create a quality rubric for fast content review before publishing.", mantra: "Creative, but controlled." },
+          { name: "Operations Strategist", emoji: "🗺️", spotlight: "You use AI to coordinate execution across moving parts.", superpower: "You design practical systems that reduce chaos and improve throughput.", nextMove: "Introduce one lightweight orchestration board for AI-assisted workflows.", mantra: "Orchestrate the flow." },
+          { name: "Versatility Navigator", emoji: "🌐", spotlight: "You're actively engaged across multiple AI use cases and adapting tools to fit each context.", superpower: "You pull from multiple approaches and adapt quickly — your range is becoming a real asset.", nextMove: "Pick one specialty lane to deepen without losing your broad range.", mantra: "Range with precision." }
+        ],
+        [
+          { name: "Orchestration Architect", emoji: "🤖", spotlight: "You’re operating at systems level with strong automation instincts.", superpower: "You design workflows that scale beyond one-off personal productivity.", nextMove: "Package your strongest system into a team-ready playbook.", mantra: "Architect the leverage." },
+          { name: "Intelligence Director", emoji: "🎯", spotlight: "You lead with evidence and quality control under real delivery pressure.", superpower: "You raise decision quality while maintaining execution speed.", nextMove: "Standardize QA checkpoints that others can adopt consistently.", mantra: "Rigor is a multiplier." },
+          { name: "Creative Systems Lead", emoji: "🌟", spotlight: "You unify creative experimentation with dependable process.", superpower: "You can scale content and ideation without losing brand coherence.", nextMove: "Codify your creative operating system for cross-team reuse.", mantra: "Create at scale." },
+          { name: "Workflow Commander", emoji: "🏛️", spotlight: "You transform complexity into clear, runnable execution systems.", superpower: "You align people, process, and AI into coherent delivery engines.", nextMove: "Design one flagship workflow with ownership, metrics, and guardrails.", mantra: "Command with clarity." },
+          { name: "Adaptive Polymath", emoji: "🥷", spotlight: "You're operating at a high level across multiple AI domains — building, analyzing, creating, and orchestrating.", superpower: "You read the situation and deploy the right AI approach for the context, without defaulting to one lane.", nextMove: "Mentor peers by sharing your top decision patterns and templates.", mantra: "Adapt, then elevate." }
+        ]
+      ];
+    }
+
+    function isValidPersonaGrid(grid) {
+      if (!Array.isArray(grid) || grid.length !== 4) return false;
+      var valid = true;
+      grid.forEach(function(row) {
+        if (!Array.isArray(row) || row.length !== 5) {
+          valid = false;
+          return;
+        }
+        row.forEach(function(p) {
+          if (!p || typeof p !== "object") {
+            valid = false;
+            return;
+          }
+          if (!p.name || !p.emoji || !p.spotlight || !p.superpower || !p.nextMove || !p.mantra) {
+            valid = false;
+          }
+        });
+      });
+      return valid;
+    }
+
+    function getActivePersonaGrid() {
+      return isValidPersonaGrid(personaGridOverride) ? personaGridOverride : defaultPersonaGrid();
+    }
+
+    var personaAsciiArt = {
+      "Quick Study": ".------..------..------..------..------.\n|Q.--. ||U.--. ||I.--. ||C.--. ||K.--. |\n| (\\/) || (\\/) || (\\/) || :/\\: || :/\\: |\n| :\\/: || :\\/: || :\\/: || :\\/: || :\\/: |\n| '--'Q|| '--'U|| '--'I|| '--'C|| '--'K|\n`------'`------'`------'`------'`------'\n.------..------..------..------..------.\n|S.--. ||T.--. ||U.--. ||D.--. ||Y.--. |\n| :/\\: || :/\\: || (\\/) || :/\\: || (\\/) |\n| :\\/: || (__) || :\\/: || (__) || :\\/: |\n| '--'S|| '--'T|| '--'U|| '--'D|| '--'Y|\n`------'`------'`------'`------'`------'",
+      "Insight Scout": "   ___   ___\n      / /\n     / /      __      ___     ( )  ___     / __    __  ___\n    / /    //   ) ) ((   ) ) / / //   ) ) //   ) )  / /\n   / /    //   / /   \\ \\    / / ((___/ / //   / /  / /\n__/ /___ //   / / //   ) ) / /   //__   //   / /  / /\n\n    //   ) )\n   ((         ___      ___             __  ___\n     \\\\     //   ) ) //   ) ) //   / /  / /\n       ) ) //       //   / / //   / /  / /\n((___ / / ((____   ((___/ / ((___( (  / /",
+      "Creative Spark": ".eeeee.eeeeeee..eeeeee..eeeeee..eeeeeeeee.eee.eee....eee.eeeeee.\n@@@@@@:@@@@@@@@:@@@@@@:@@@@@@@@:@@@@@@@@@:@@@:@@@::::@@@:@@@@@@:\n%%%----%%%--%%%-%%%----%%%--%%%----%%%----%%%-%%%----%%%-%%%----\n&&&++++&&&&&&&++&&&&&++&&&&&&&&++++&&&++++&&&+&&&++++&&&+&&&&&++\n|||****||||||***|||||**||||||||****|||****|||**|||**|||**|||||**\n!!!====!!!=!!!==!!!====!!!==!!!====!!!====!!!===!!!!!!===!!!====\n::::::#:::##:::#::::::#:::##:::####:::####:::####::::####::::::#\n@.....@...@@...@......@...@@...@@@@...@@@@...@@@@@..@@@@@......@\n\n.eeeeee.eeeeeee...eeeeee..eeeeeee..eee..eee.\n@@@@@@@:@@@@@@@@:@@@@@@@@:@@@@@@@@:@@@::@@@:\n%%%-----%%%--%%%-%%%--%%%-%%%--%%%-%%%-%%%--\n&&&&&&++&&&&&&&&+&&&&&&&&+&&&&&&&++&&&&&&+++\n*||||||*|||||||**||||||||*||||||***||||||***\n====!!!=!!!======!!!==!!!=!!!=!!!==!!!=!!!==\n:::::::#:::######:::##:::#:::##:::#:::##:::#\n......@@...@@@@@@...@@...@...@@...@...@@...@",
+      "Plan Starter": "    ____  __\n   / __ \\/ /___ _____\n  / /_/ / / __ `/ __ \\\n / ____/ / /_/ / / / /\n/_/   /_/\\__,_/_/ /_/\n\n   _____ __             __\n  / ___// /_____ ______/ /____  _____\n  \\__ \\/ __/ __ `/ ___/ __/ _ \\/ ___/\n ___/ / /_/ /_/ / /  / /_/  __/ /\n/____/\\__/\\__,_/_/   \\__/\\___/_/",
+      "Curious Drifter": "\n    //   ) )\n   //                  __     ( )  ___               ___\n  //        //   / / //  ) ) / / //   ) ) //   / / ((   ) )\n //        //   / / //      / / //   / / //   / /   \\ \\\n((____/ / ((___( ( //      / / ((___/ / ((___( ( //   ) )\n\n    //    ) )               //  ) )\n   //    / /  __     ( ) __//__  __  ___  ___      __\n  //    / / //  ) ) / /   //      / /   //___) ) //  ) )\n //    / / //      / /   //      / /   //       //\n//____/ / //      / /   //      / /   ((____   //",
+      "Tinkerer": "\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557\u2588\u2588\u2588\u2557   \u2588\u2588\u2557\u2588\u2588\u2557  \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557\n\u255a\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255d\u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2551\u2588\u2588\u2551 \u2588\u2588\u2554\u255d\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\n   \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2554\u2588\u2588\u2557 \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2554\u255d \u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\n   \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551\u255a\u2588\u2588\u2557\u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2588\u2588\u2557 \u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\n   \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551 \u255a\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\n   \u255a\u2550\u255d   \u255a\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d",
+      "Evidence Driver": "8888888888         d8b      888\n888                Y8P      888\n888                         888\n8888888   888  888 888  .d88888  .d88b.  88888b.   .d8888b .d88b.\n888       888  888 888 d88\" 888 d8P  Y8b 888 \"88b d88P\"   d8P  Y8b\n888       Y88  88P 888 888  888 88888888 888  888 888     88888888\n888        Y8bd8P  888 Y88b 888 Y8b.     888  888 Y88b.   Y8b.\n8888888888  Y88P   888  \"Y88888  \"Y8888  888  888  \"Y8888P \"Y8888\n\n\n\n8888888b.          d8b\n888  \"Y88b         Y8P\n888    888\n888    888 888d888 888 888  888  .d88b.  888d888\n888    888 888P\"   888 888  888 d8P  Y8b 888P\"\n888    888 888     888 Y88  88P 88888888 888\n888  .d88P 888     888  Y8bd8P  Y8b.     888\n8888888P\"  888     888   Y88P    \"Y8888  888",
+      "Story Crafter": "  _________ __\n /   _____//  |_  ___________ ___.__.\n \\_____  \\\\   __\\/  _ \\_  __ <   |  |\n /        \\|  | (  <_> )  | \\/\\___  |\n/_______  /|__|  \\____/|__|   / ____|\n        \\/                    \\/\n_________                _____  __\n\\_   ___ \\____________ _/ ____\\/  |_  ___________\n/    \\  \\/\\_  __ \\__  \\\\   __\\\\   __\\/ __ \\_  __ \\\n\\     \\____|  | \\// __ \\|  |   |  | \\  ___/|  | \\/\n \\______  /|__|  (____  /__|   |__|  \\___  >__|\n        \\/            \\/                 \\/",
+      "Execution Mapper": "\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557  \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557   \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2557   \u2588\u2588\u2557\n\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u255a\u2588\u2588\u2557\u2588\u2588\u2554\u255d\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2551   \u2588\u2588\u2551\u255a\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255d\u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2551\n\u2588\u2588\u2588\u2588\u2588\u2557   \u255a\u2588\u2588\u2588\u2554\u255d \u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2551     \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2554\u2588\u2588\u2557 \u2588\u2588\u2551\n\u2588\u2588\u2554\u2550\u2550\u255d   \u2588\u2588\u2554\u2588\u2588\u2557 \u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2551     \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551\u255a\u2588\u2588\u2557\u2588\u2588\u2551\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2554\u255d \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d   \u2588\u2588\u2551   \u2588\u2588\u2551\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2551 \u255a\u2588\u2588\u2588\u2588\u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d    \u255a\u2550\u255d   \u255a\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u255d  \u255a\u2550\u2550\u2550\u255d\n\n\u2588\u2588\u2588\u2557   \u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557\n\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\n\u2588\u2588\u2554\u2588\u2588\u2588\u2588\u2554\u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\n\u2588\u2588\u2551\u255a\u2588\u2588\u2554\u255d\u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u255d \u2588\u2588\u2554\u2550\u2550\u2550\u255d \u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\n\u2588\u2588\u2551 \u255a\u2550\u255d \u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2551     \u2588\u2588\u2551     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\n\u255a\u2550\u255d     \u255a\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u255d     \u255a\u2550\u255d     \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d",
+      "Momentum Explorer": "    __  ___                           __\n   /  |/  /___  ____ ___  ___  ____  / /___  ______ ___\n  / /|_/ / __ \\/ __ `__ \\/ _ \\/ __ \\/ __/ / / / __ `__ \\\n / /  / / /_/ / / / / / /  __/ / / / /_/ /_/ / / / / / /\n/_/  /_/\\____/_/ /_/ /_/\\___/_/ /_/\\__/\\__,_/_/ /_/ /_/\n\n    ______           __\n   / ____/  ______  / /___  ________  _____\n  / __/ | |/_/ __ \\/ / __ \\/ ___/ _ \\/ ___/\n / /____>  </ /_/ / / /_/ / /  /  __/ /\n/_____/_/|_/ .___/_/\\____/_/   \\___/_/\n          /_/",
+      "Automation Engineer": " ______           __                                 __\n/\\  _  \\         /\\ \\__                             /\\ \\__  __\n\\ \\ \\L\\ \\  __  __\\ \\ ,_\\   ___     ___ ___      __  \\ \\ ,_\\/\\_\\    ___     ___\n \\ \\  __ \\/\\ \\/\\ \\\\ \\ \\/  / __`\\ /' __` __`\\  /'__`\\ \\ \\ \\/\\/\\ \\  / __`\\ /' _ `\\\n  \\ \\ \\/\\ \\ \\ \\_\\ \\\\ \\ \\_/\\ \\L\\ \\/\\ \\/\\ \\/\\ \\/\\ \\L\\.\\_\\ \\ \\_\\ \\ \\/\\ \\L\\ \\/\\ \\/\\ \\\n   \\ \\_\\ \\_\\ \\____/ \\ \\__\\ \\____/\\ \\_\\ \\_\\ \\_\\ \\__/.\\_\\\\ \\__\\\\ \\_\\ \\____/\\ \\_\\ \\_\\\n    \\/_/\\/_/\\/___/   \\/__/\\/___/  \\/_/\\/_/\\/_/\\/__/\\/_/ \\/__/ \\/_/\\/___/  \\/_/\\/_/\n\n\n ____\n/\\  _`\\                   __\n\\ \\ \\L\\_\\    ___      __ /\\_\\    ___      __     __   _ __\n \\ \\  _\\L  /' _ `\\  /'_ `\\/\\ \\ /' _ `\\  /'__`\\ /'__`\\/\\`'__\\\n  \\ \\ \\L\\ \\/\\ \\/\\ \\/\\ \\L\\ \\ \\ \\/\\ \\/\\ \\/\\  __//\\  __/\\ \\ \\/\n   \\ \\____/\\ \\_\\ \\_\\ \\____ \\ \\_\\ \\_\\ \\_\\ \\____\\ \\____\\\\ \\_\\\n    \\/___/  \\/_/\\/_/\\/___L\\ \\/_/\\/_/\\/_/\\/____/\\/____/ \\/_/\n                      /\\____/\n                      \\_/__/",
+      "Decision Analyst": "________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/",
+      "Narrative Producer": "888b    888                                  888    d8b\n8888b   888                                  888    Y8P\n88888b  888                                  888\n888Y88b 888  8888b.  888d888 888d888 8888b.  888888 888 888  888  .d88b.\n888 Y88b888     \"88b 888P\"   888P\"      \"88b 888    888 888  888 d8P  Y8b\n888  Y88888 .d888888 888     888    .d888888 888    888 Y88  88P 88888888\n888   Y8888 888  888 888     888    888  888 Y88b.  888  Y8bd8P  Y8b.\n888    Y888 \"Y888888 888     888    \"Y888888  \"Y888 888   Y88P    \"Y8888\n\n\n\n8888888b.                       888\n888   Y88b                      888\n888    888                      888\n888   d88P 888d888 .d88b.   .d88888 888  888  .d8888b .d88b.  888d888\n8888888P\"  888P\"  d88\"\"88b d88\" 888 888  888 d88P\"   d8P  Y8b 888P\"\n888        888    888  888 888  888 888  888 888     88888888 888\n888        888    Y88..88P Y88b 888 Y88b 888 Y88b.   Y8b.     888\n888        888     \"Y88P\"   \"Y88888  \"Y88888  \"Y8888P \"Y8888  888",
+      "Operations Strategist": "   ____                        __  _\n  / __ \\____  ___  _________ _/ /_(_)___  ____  _____\n / / / / __ \\/ _ \\/ ___/ __ `/ __/ / __ \\/ __ \\/ ___/\n/ /_/ / /_/ /  __/ /  / /_/ / /_/ / /_/ / / / (__  )\n\\____/ .___/\\___/_/   \\__,_/\\__/_/\\____/_/ /_/____/\n    /_/\n   _____ __             __             _      __\n  / ___// /__________ _/ /____  ____ _(_)____/ /_\n  \\__ \\/ __/ ___/ __ `/ __/ _ \\/ __ `/ / ___/ __/\n ___/ / /_/ /  / /_/ / /_/  __/ /_/ / (__  ) /_\n/____/\\__/_/   \\__,_/\\__/\\___/\\__, /_/____/\\__/\n                             /____/",
+      "Versatility Navigator": "eee....eee.eeeeee.eeeeeee...eeeeee..eeeeee..eeeeeeeee.eee.eee....eee.eeeeeeeee.eee...eee.\n@@@::::@@@:@@@@@@:@@@@@@@@:@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@:@@@::::@@@:@@@@@@@@@:@@@:::@@@.\n%%%----%%%-%%%----%%%--%%%-%%%-----%%%--%%%----%%%----%%%-%%%----%%%----%%%----%%%---%%%-\n&&&++++&&&+&&&&&++&&&&&&&++&&&&&&++&&&&&&&&++++&&&++++&&&+&&&++++&&&++++&&&+++++&&&&&&&++\n*|||**|||**|||||**||||||****||||||*||||||||****|||****|||*|||****|||****|||******|||||***\n==!!!!!!===!!!====!!!=!!!======!!!=!!!==!!!====!!!====!!!=!!!====!!!====!!!=======!!!====\n###::::####::::::#:::##:::#:::::::#:::##:::####:::####:::#::::::#:::####:::#######:::####\n@@@@..@@@@@......@...@@...@......@@...@@...@@@@...@@@@...@......@...@@@@...@@@@@@@...@@@@\n\neeeeeee...eeeeee..eee....eee.eee..eeeeee...eeeeee..eeeeeeeee..eeeeee..eeeeeee..\n@@@@@@@@:@@@@@@@@:@@@::::@@@:@@@:@@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@@@@@@:@@@@@@@@:\n%%%--%%%-%%%--%%%-%%%----%%%-%%%-%%%------%%%--%%%----%%%----%%%--%%%-%%%--%%%-\n&&&++&&&+&&&&&&&&+&&&++++&&&+&&&+&&&++++++&&&&&&&&++++&&&++++&&&++&&&+&&&&&&&++\n|||**|||*||||||||**|||**|||**|||*|||*||||*||||||||****|||****|||**|||*||||||***\n!!!==!!!=!!!==!!!===!!!!!!===!!!=!!!==!!!=!!!==!!!====!!!====!!!==!!!=!!!=!!!==\n:::##:::#:::##:::####::::####:::#::::::::#:::##:::####:::####::::::::#:::##:::#\n...@@...@...@@...@@@@@..@@@@@...@@......@@...@@...@@@@...@@@@@......@@...@@...@",
+      "Orchestration Architect": "________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/",
+      "Intelligence Director": " ______          __           ___    ___\n/\\__  _\\        /\\ \\__       /\\_ \\  /\\_ \\    __\n\\/_/\\ \\/     ___\\ \\ ,_\\    __\\//\\ \\ \\//\\ \\  /\\_\\     __      __    ___     ___     __\n   \\ \\ \\   /' _ `\\ \\ \\/  /'__`\\\\ \\ \\  \\ \\ \\ \\/\\ \\  /'_ `\\  /'__`\\/' _ `\\  /'___\\ /'__`\\\n    \\_\\ \\__/\\ \\/\\ \\ \\ \\_/\\  __/ \\_\\ \\_ \\_\\ \\_\\ \\ \\/\\ \\L\\ \\/\\  __//\\ \\/\\ \\/\\ \\__//\\  __/\n    /\\_____\\ \\_\\ \\_\\ \\__\\ \\____\\/\\____\\/\\____\\\\ \\_\\ \\____ \\ \\____\\ \\_\\ \\_\\ \\____\\ \\____\\\n    \\/_____/\\/_/\\/_/\\/__/\\/____/\\/____/\\/____/ \\/_/\\/___L\\ \\/____/\\/_/\\/_/\\/____/\\/____/\n                                                     /\\____/\n                                                     \\_/__/\n ____                            __\n/\\  _`\\   __                    /\\ \\__\n\\ \\ \\/\\ \\/\\_\\  _ __    __    ___\\ \\ ,_\\   ___   _ __\n \\ \\ \\ \\ \\/\\ \\/\\`'__\\/'__`\\ /'___\\ \\ \\/  / __`\\/\\`'__\\\n  \\ \\ \\_\\ \\ \\ \\ \\ \\//\\  __//\\ \\__/\\ \\ \\_/\\ \\L\\ \\ \\ \\/\n   \\ \\____/\\ \\_\\ \\_\\\\ \\____\\ \\____\\\\ \\__\\ \\____/\\ \\_\\\n    \\/___/  \\/_/\\/_/ \\/____/\\/____/ \\/__/\\/___/  \\/_/",
+      "Creative Systems Lead": " \u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557\u2588\u2588\u2557   \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\n\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u255a\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255d\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\n\u2588\u2588\u2551     \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2557\n\u2588\u2588\u2551     \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551\u255a\u2588\u2588\u2557 \u2588\u2588\u2554\u255d\u2588\u2588\u2554\u2550\u2550\u255d\n\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551 \u255a\u2588\u2588\u2588\u2588\u2554\u255d \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\n \u255a\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d   \u255a\u2550\u255d   \u255a\u2550\u255d  \u255a\u2550\u2550\u2550\u255d  \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\n\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2557   \u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2557   \u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\n\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u255a\u2588\u2588\u2557 \u2588\u2588\u2554\u255d\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u255a\u2588\u2588\u2588\u2588\u2554\u255d \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557   \u2588\u2588\u2551   \u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2554\u2588\u2588\u2588\u2588\u2554\u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\n\u255a\u2550\u2550\u2550\u2550\u2588\u2588\u2551  \u255a\u2588\u2588\u2554\u255d  \u255a\u2550\u2550\u2550\u2550\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2551\u255a\u2588\u2588\u2554\u255d\u2588\u2588\u2551\u255a\u2550\u2550\u2550\u2550\u2588\u2588\u2551\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551 \u255a\u2550\u255d \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d   \u255a\u2550\u255d   \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d   \u255a\u2550\u255d   \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d     \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\n\n\u2588\u2588\u2557     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557\n\u2588\u2588\u2551     \u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255d\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\n\u2588\u2588\u2551     \u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2551\n\u2588\u2588\u2551     \u2588\u2588\u2554\u2550\u2550\u255d  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2551\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u255d",
+      "Workflow Commander": " __      __                 __         ___  ___\n/\\ \\  __/\\ \\               /\\ \\      /'___\\/\\_ \\\n\\ \\ \\/\\ \\ \\ \\    ___   _ __\\ \\ \\/'\\ /\\ \\__/\\//\\ \\     ___   __  __  __\n \\ \\ \\ \\ \\ \\ \\  / __`\\/\\`'__\\ \\ , < \\ \\ ,__\\ \\ \\ \\   / __`\\/\\ \\/\\ \\/\\ \\\n  \\ \\ \\_/ \\_\\ \\/\\ \\L\\ \\ \\ \\/ \\ \\ \\\\`\\\\ \\ \\_/  \\_\\ \\_/\\ \\L\\ \\ \\ \\_/ \\_/ \\\n   \\ `\\___x___/\\ \\____/\\ \\_\\  \\ \\_\\ \\_\\ \\_\\   /\\____\\ \\____/\\ \\___x___/'\n    '\\/__//__/  \\/___/  \\/_/   \\/_/\\/_/\\/_/   \\/____/\\/___/  \\/__//__/\n\n\n ____                                                         __\n/\\  _`\\                                                      /\\ \\\n\\ \\ \\/\\_\\    ___     ___ ___     ___ ___      __      ___    \\_\\ \\     __   _ __\n \\ \\ \\/_/_  / __`\\ /' __` __`\\ /' __` __`\\  /'__`\\  /' _ `\\  /'_` \\  /'__`\\/\\`'__\\\n  \\ \\ \\L\\ \\/\\ \\L\\ \\/\\ \\/\\ \\/\\ \\/\\ \\/\\ \\/\\ \\/\\ \\L\\.\\_/\\ \\/\\ \\/\\ \\L\\ \\/\\  __/\\ \\ \\/\n   \\ \\____/\\ \\____/\\ \\_\\ \\_\\ \\_\\ \\_\\ \\_\\ \\_\\ \\__/.\\_\\ \\_\\ \\_\\ \\___,_\\ \\____\\\\ \\_\\\n    \\/___/  \\/___/  \\/_/\\/_/\\/_/\\/_/\\/_/\\/_/\\/__/\\/_/\\/_/\\/_/\\/__,_ /\\/____/ \\/_/",
+      "Adaptive Polymath": "   _____       .___              __  .__\n  /  _  \\    __| _/____  _______/  |_|__|__  __ ____\n /  /_\\  \\  / __ |\\__  \\ \\____ \\   __\\  \\  \\/ // __ \\\n/    |    \\/ /_/ | / __ \\|  |_> >  | |  |\\   /\\  ___/\n\\____|__  /\\____ |(____  /   __/|__| |__| \\_/  \\___  >\n        \\/      \\/     \\/|__|                      \\/\n__________      .__                        __  .__\n\\______   \\____ |  | ___.__. _____ _____ _/  |_|  |__\n |     ___/  _ \\|  |<   |  |/     \\\\__  \\\\   __\\  |  \\\n |    |  (  <_> )  |_\\___  |  Y Y  \\/ __ \\|  | |   Y  \\\n |____|   \\____/|____/ ____|__|_|  (____  /__| |___|  /\n                     \\/          \\/     \\/          \\/",
+    };
+
+    function loadPersonaGridConfig() {
+      return fetch("/api/persona-config")
+        .then(function(res) {
+          if (!res.ok) throw new Error("persona config fetch failed");
+          return res.json();
+        })
+        .then(function(data) {
+          var grid = data && data.personaGrid;
+          if (isValidPersonaGrid(grid)) {
+            personaGridOverride = grid;
+          }
+        })
+        .catch(function() {
+          personaGridOverride = null;
+        });
+    }
+
+    function buildAiAstrologyRead(result) {
+      var responses = (result && result.responses) || {};
+      var tier = result && result.tier ? result.tier : "Tier 1";
+      var s0 = Array.isArray(responses.s0) ? responses.s0 : [];
+      var s1 = Array.isArray(responses.s1) ? responses.s1 : [];
+      var s2 = Array.isArray(responses.s2) ? responses.s2 : [];
+      var blockers = Array.isArray(responses.blockers) ? responses.blockers : [];
+      var topics = Array.isArray(responses.program_topics) ? responses.program_topics : [];
+      var formats = Array.isArray(responses.q15) ? responses.q15 : [];
+      var verificationChoice = responses.qv1 || "";
+      var flags = Array.isArray(result && result.flags) ? result.flags : [];
+      var domain = responses.d1 || "Generalist Orbit";
+      var q2Used = Array.isArray(responses.q2) ? responses.q2 : [];
+      var q2Comfort = normalizeUsageList(responses.q2b);
+      var tools = normalizeToolList(responses.t1);
+      var blockerCount = blockers.filter(function(opt) {
+        return opt !== "Nothing's blocking me — I just want to go deeper" && opt !== "Other";
+      }).length;
+
+      var seedSource = [
+        responses.q1,
+        responses.q2a,
+        responses.q3,
+        responses.qv1,
+        responses.d1,
+        tools.join("|"),
+        q2Used.join("|"),
+        blockers.join("|"),
+        topics.join("|"),
+        formats.join("|")
+      ].join("||");
+      var seed = 0;
+      for (var i = 0; i < seedSource.length; i++) {
+        seed = (seed * 31 + seedSource.charCodeAt(i)) % 100000;
+      }
+
+      var score = Number(result && result.score || 0);
+      var readinessIndex = 1;
+      if (tier === "Tier 1") {
+        readinessIndex = 3;
+      } else if (tier === "Tier 2") {
+        readinessIndex = 2;
+      } else {
+        readinessIndex = score < 4 ? 0 : 1;
+      }
+
+      var rigorCount = 0;
+      if (verificationChoice === "Verify against original sources/materials before proceeding") rigorCount += 2;
+      if (verificationChoice === "Ask AI to rerun with tighter constraints, then review carefully") rigorCount += 1;
+      if (verificationChoice === "Edit the wording/tone and use it") rigorCount -= 1;
+      var chaosCount = blockers.indexOf("Can't tell if the output is good") < 0 ? 1 : 0;
+      var pragmaticDelta = rigorCount - chaosCount;
+
+      var modeScores = [0, 0, 0, 0];
+
+      if (s1.indexOf("Connect AI to other tools or automations") >= 0) modeScores[0] += 3;
+      if (s1.indexOf("Write code that calls AI APIs") >= 0) modeScores[0] += 3;
+      if (s1.indexOf("Build custom tools/apps powered by AI") >= 0) modeScores[0] += 4;
+      if (q2Used.indexOf("Coding or building tools") >= 0) modeScores[0] += 2;
+      if (topics.indexOf("Vibe coding and building tools") >= 0 || topics.indexOf("Claude Code specifically") >= 0) modeScores[0] += 2;
+      if (tools.indexOf("Cursor / Claude Code / other coding tools") >= 0) modeScores[0] += 1;
+
+      if (q2Used.indexOf("Data analysis or spreadsheets") >= 0) modeScores[1] += 2;
+      if (q2Used.indexOf("Research and synthesis") >= 0) modeScores[1] += 2;
+      if (q2Comfort.indexOf("Data analysis or spreadsheets") >= 0) modeScores[1] += 1;
+      if (q2Comfort.indexOf("Research and synthesis") >= 0) modeScores[1] += 1;
+      if (responses.q4 === "Yes") modeScores[1] += 2;
+      if (verificationChoice === "Verify against original sources/materials before proceeding") modeScores[1] += 2;
+      if (verificationChoice === "Ask a teammate for a quick sense-check before deciding") modeScores[1] += 1;
+      if (topics.indexOf("Best practices and frameworks") >= 0 || topics.indexOf("RAG, knowledge graphs, and context systems") >= 0) modeScores[1] += 1;
+      if (pragmaticDelta >= 1) modeScores[1] += 1;
+
+      if (q2Used.indexOf("Image, video, or design generation") >= 0) modeScores[2] += 2;
+      if (q2Used.indexOf("Writing and editing") >= 0) modeScores[2] += 2;
+      if (q2Used.indexOf("Brainstorming and ideation") >= 0) modeScores[2] += 2;
+      if (q2Comfort.indexOf("Image, video, or design generation") >= 0) modeScores[2] += 1;
+      if (q2Comfort.indexOf("Writing and editing") >= 0) modeScores[2] += 1;
+      if (q2Comfort.indexOf("Brainstorming and ideation") >= 0) modeScores[2] += 1;
+      if (tools.indexOf("Midjourney") >= 0 || tools.indexOf("Weavy") >= 0) modeScores[2] += 2;
+      if (s0.indexOf("Media brief or creative brief") >= 0) modeScores[2] += 1;
+      if (formats.indexOf("Show-and-tell from GALE colleagues") >= 0 || formats.indexOf("Live demos of tools and workflows") >= 0) modeScores[2] += 1;
+
+      if (q2Used.indexOf("Client work and deliverables") >= 0) modeScores[3] += 2;
+      if (q2Used.indexOf("Internal ops (notes, summaries, emails)") >= 0) modeScores[3] += 2;
+      if (q2Used.indexOf("Slides, docs, decks") >= 0) modeScores[3] += 1;
+      if (s1.indexOf("Use AI as part of recurring workflows") >= 0) modeScores[3] += 2;
+      if (topics.indexOf("Agentic AI and autonomous workflows") >= 0) modeScores[3] += 2;
+      if (formats.indexOf("Guided tutorials with takeaway materials") >= 0 || formats.indexOf("Hands-on workshops where I build something") >= 0) modeScores[3] += 1;
+
+      var modeIndex = 4;
+      var maxModeScore = Math.max.apply(null, modeScores);
+      var minModeThreshold = readinessIndex === 0 ? 1 : 2;
+      if (maxModeScore >= minModeThreshold) {
+        var qualifyingModes = 0;
+        var minQualifying = maxModeScore;
+        modeScores.forEach(function(scoreVal) {
+          if (scoreVal >= minModeThreshold) {
+            qualifyingModes++;
+            if (scoreVal < minQualifying) minQualifying = scoreVal;
+          }
+        });
+        var modeSpread = maxModeScore - minQualifying;
+        if (qualifyingModes >= 3 && modeSpread <= 2) {
+          modeIndex = 4;
+        } else {
+          var topModes = [];
+          modeScores.forEach(function(scoreVal, idx) {
+            if (scoreVal === maxModeScore) topModes.push(idx);
+          });
+          modeIndex = topModes[seed % topModes.length];
+        }
+      }
+
+      var personaGrid = getActivePersonaGrid();
+      var persona = personaGrid[readinessIndex][modeIndex];
+
+      var eagernessScore = 0;
+      var q1Map = {
+        "Constantly — it's woven into how I work": 3,
+        "Daily for specific tasks": 2,
+        "A few times a week": 1,
+        "Rarely / not yet": -1
+      };
+      eagernessScore += q1Map[responses.q1] || 0;
+      if (responses.q2a === "Structured — I usually give it context, role, and constraints" || responses.q2a === "Prescriptive — detailed prompts with examples, format specs, the works") {
+        eagernessScore += 1;
+      }
+      if (responses.q3 === "Yes") eagernessScore += 1;
+
+      var versatilityScore = q2Used.length + Math.min(5, tools.length) + Math.min(3, topics.length / 3);
+      var stance = pragmaticDelta >= 1 ? "pragmatic" : (chaosCount > 0 ? "chaos-leaning" : "balanced");
+      var eagernessPhrase = eagernessScore >= 3 ? "high experimental energy" : (eagernessScore >= 1 ? "steady growth energy" : "early-stage momentum");
+      var versatilityPhrase = versatilityScore >= 9 ? "wide versatility" : (versatilityScore >= 6 ? "solid versatility" : "focused versatility");
+      var operatingStyleLabel = stance === "pragmatic"
+        ? "Operating style: quality-first"
+        : (stance === "chaos-leaning" ? "Operating style: speed-first" : "Operating style: balanced");
+
+      var signature = "You present as " + persona.name + " — combining " + eagernessPhrase + ", " + versatilityPhrase + ", and a " + stance + " operating style.";
+      if (responses.q3 === "Yes" || responses.q2a === "Structured — I usually give it context, role, and constraints" || responses.q2a === "Prescriptive — detailed prompts with examples, format specs, the works") {
+        signature += " Your prompt refinement signal is strong.";
+      } else if (responses.q3 === "Sometimes" || responses.q2a === "Go with the flow — I start loose and refine as I go") {
+        signature += " You’re close to a major quality jump with tighter prompt loops.";
+      }
+      if (s0.length > 0 && s0.indexOf("None of these yet") < 0) {
+        signature += " You also show real applied delivery evidence.";
+      }
+
+      var rising = s2[0] || "Curated tool recommendations for my role";
+      var watchout = flags[0] || "Protect consistency by keeping one clear QA step in every important workflow.";
+      if (!flags.length && blockerCount > 0) {
+        watchout = "You flagged " + blockerCount + " blocker" + (blockerCount > 1 ? "s" : "") + " — focus on one friction point at a time to compound progress quickly.";
+      }
+
+      var domainLabel = domain;
+      var asciiArt = personaAsciiArt[persona.name] || "";
+      var shareText = [
+        "```",
+        asciiArt,
+        "```",
+        "",
+        persona.emoji + " GALE AI Persona: " + persona.name,
+        "",
+        "Signature: " + signature,
+        "",
+        "Superpower: " + persona.superpower,
+        "",
+        "Next Move: " + persona.nextMove,
+        "",
+        "Mantra: " + persona.mantra,
+        "",
+        "Current vibe: " + rising,
+        "",
+        "Domain: " + domainLabel
+      ].join("\n");
+
+      return {
+        sign: persona.name,
+        emoji: persona.emoji,
+        asciiArt: asciiArt,
+        signature: signature,
+        spotlight: persona.spotlight,
+        superpower: persona.superpower,
+        nextMove: persona.nextMove,
+        mantra: persona.mantra,
+        rising: rising,
+        operatingStyleLabel: operatingStyleLabel,
+        domain: domainLabel,
+        watchout: watchout,
+        shareText: shareText
+      };
+    }
+
+    function buildAstrologyPreviewResult() {
+      var scoreData = computeScore();
+      var tier = computeTier(scoreData.total);
+      var flags = computeFlags(tier.name);
+      return {
+        score: scoreData.total,
+        tier: tier.name,
+        flags: flags,
+        responses: state.responses
+      };
     }
 
     function submitResults() {
@@ -708,20 +2602,58 @@
       var tier = computeTier(scoreData.total);
       var flags = computeFlags(tier.name);
       var subtags = computeSubtags();
+      var respondentKey = getRespondentKey();
       var payload = {
         submittedAt: new Date().toISOString(),
+        respondentKey: respondentKey,
+        quizVersion: QUIZ_VERSION,
+        scoreModel: SCORE_MODEL,
         score: scoreData.total,
         scoreBreakdown: scoreData.breakdown,
         tier: tier.name,
         tierLabel: tier.label,
         tierDesc: tier.desc,
+        trackRecommendation: tierTrackRecommendation(tier.name),
         flags: flags,
         subtags: subtags,
+        mergeRecommendation: false,
         responses: state.responses
       };
-      var existing = JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
-      existing.push(payload);
+      payload.aiProfile = buildAiAstrologyRead(payload);
+      var existing = getStoredSubmissions();
+      var localIndex = existing.findIndex(function(entry) {
+        return entry && entry.respondentKey === respondentKey;
+      });
+      if (localIndex >= 0) {
+        existing[localIndex] = payload;
+      } else {
+        existing.push(payload);
+        localIndex = existing.length - 1;
+      }
       localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
+
+      /* Recompute merge recommendation now that this submission is stored */
+      var shouldMerge = computeMergeRecommendation();
+      payload.mergeRecommendation = shouldMerge;
+      /* Update the stored copy with the recommendation */
+      existing[localIndex].mergeRecommendation = shouldMerge;
+      localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
+
+      sendSubmissionToApi(payload)
+        .then(function(resp) {
+          if (resp && resp.id) {
+            payload.remoteId = resp.id;
+            existing[localIndex].remoteId = resp.id;
+            if (resp.replaced) {
+              existing[localIndex].replaced = true;
+            }
+            localStorage.setItem(SUBMISSION_KEY, JSON.stringify(existing));
+          }
+        })
+        .catch(function(err) {
+          console.error("Remote submission failed:", err);
+        });
+
       state.lastResult = payload;
       saveDraft();
       return payload;
@@ -746,7 +2678,24 @@
     }
 
     function getStoredSubmissions() {
-      return JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
+      var parsed = JSON.parse(localStorage.getItem(SUBMISSION_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    }
+
+    function sendSubmissionToApi(payload) {
+      return fetch(SUBMISSION_API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function(res) {
+        if (!res.ok) {
+          return res.json().catch(function() { return {}; }).then(function(errBody) {
+            var message = errBody && errBody.error ? errBody.error : "Submission API request failed";
+            throw new Error(message);
+          });
+        }
+        return res.json().catch(function() { return {}; });
+      });
     }
 
     function downloadJsonSubmissions() {
@@ -762,9 +2711,12 @@
         return;
       }
       var headers = [
-        "submittedAt", "score", "tier", "tierLabel", "flags", "subtags",
-        "q1", "q1a", "q2", "q2a", "q3", "q3a", "q4", "q4a", "q5", "q5a", "q6", "q6a",
-        "c1", "c2", "c3", "s1", "s2", "s3"
+        "submittedAt", "score", "tier", "tierLabel", "mergeRecommendation", "flags", "subtags",
+        "d1", "d1_other_text", "c1", "q1", "q1a", "t1", "q2", "q2b", "q2a", "q2a1", "q3", "q3a", "q4", "q4a", "qv1",
+        "s0", "s1", "outside_ai", "blockers", "program_topics", "program_topics_other_text", "s2", "q15", "feedback_change", "share_segment_name", "share_segment_idea", "feedback_other",
+        "astro_feedback_choice", "astro_feedback_note",
+        "d1_note", "c1_note", "q1_note", "t1_note", "q2_note", "q2b_note", "q2a_note", "q3_note", "q4_note", "qv1_note",
+        "s0_note", "s1_note", "outside_ai_note", "blockers_note", "program_topics_note", "s2_note", "q15_note", "feedback_change_note", "share_segment_note", "feedback_other_note"
       ];
       var lines = [headers.join(",")];
       all.forEach(function(entry) {
@@ -774,18 +2726,55 @@
           score: entry.score,
           tier: entry.tier,
           tierLabel: entry.tierLabel,
+          mergeRecommendation: entry.mergeRecommendation ? "true" : "false",
           flags: Array.isArray(entry.flags) ? entry.flags.join(" | ") : "",
           subtags: Array.isArray(entry.subtags) ? entry.subtags.join(" | ") : "",
-          q1: r.q1 || "", q1a: r.q1a || "",
-          q2: r.q2 || "", q2a: r.q2a || "",
+          d1: r.d1 || "",
+          d1_other_text: r.d1_other_text || "",
+          c1: r.c1 || "",
+          q1: r.q1 || "",
+          q1a: r.q1a || "",
+          t1: Array.isArray(r.t1) ? r.t1.join(" | ") : (r.t1 || ""),
+          q2: Array.isArray(r.q2) ? r.q2.join(" | ") : (r.q2 || ""),
+          q2b: Array.isArray(r.q2b) ? r.q2b.join(" | ") : (r.q2b || ""),
+          q2a: r.q2a || "", q2a1: r.q2a1 || "",
           q3: r.q3 || "", q3a: r.q3a || "",
           q4: r.q4 || "", q4a: r.q4a || "",
-          q5: r.q5 || "", q5a: r.q5a || "",
-          q6: r.q6 || "", q6a: r.q6a || "",
-          c1: r.c1 || "", c2: r.c2 || "", c3: r.c3 || "",
+          qv1: r.qv1 || "",
+          s0: Array.isArray(r.s0) ? r.s0.join(" | ") : "",
           s1: Array.isArray(r.s1) ? r.s1.join(" | ") : "",
+          outside_ai: Array.isArray(r.outside_ai) ? r.outside_ai.join(" | ") : "",
+          blockers: Array.isArray(r.blockers) ? r.blockers.join(" | ") : "",
+          program_topics: Array.isArray(r.program_topics) ? r.program_topics.join(" | ") : "",
+          program_topics_other_text: r.program_topics_other_text || "",
           s2: Array.isArray(r.s2) ? r.s2.join(" | ") : "",
-          s3: Array.isArray(r.s3) ? r.s3.join(" | ") : ""
+          q15: Array.isArray(r.q15) ? r.q15.join(" | ") : "",
+          feedback_change: r.feedback_change || "",
+          share_segment_name: r.share_segment_name || "",
+          share_segment_idea: r.share_segment_idea || "",
+          feedback_other: r.feedback_other || "",
+          astro_feedback_choice: r.astro_feedback_choice || "",
+          astro_feedback_note: r.astro_feedback_note || "",
+          d1_note: r.d1_note || "",
+          c1_note: r.c1_note || "",
+          q1_note: r.q1_note || "",
+          t1_note: r.t1_note || "",
+          q2_note: r.q2_note || "",
+          q2b_note: r.q2b_note || "",
+          q2a_note: r.q2a_note || "",
+          q3_note: r.q3_note || "",
+          q4_note: r.q4_note || "",
+          qv1_note: r.qv1_note || "",
+          s0_note: r.s0_note || "",
+          s1_note: r.s1_note || "",
+          outside_ai_note: r.outside_ai_note || "",
+          blockers_note: r.blockers_note || "",
+          program_topics_note: r.program_topics_note || "",
+          s2_note: r.s2_note || "",
+          q15_note: r.q15_note || "",
+          feedback_change_note: r.feedback_change_note || "",
+          share_segment_note: r.share_segment_note || "",
+          feedback_other_note: r.feedback_other_note || ""
         };
         lines.push(headers.map(function(key) { return csvEscape(row[key]); }).join(","));
       });
@@ -796,38 +2785,79 @@
     function renderIntro() {
       var step = Math.max(0, Math.min(state.introStep, introSlides.length - 1));
       var copy = introSlides[step];
-      slideIndex.textContent = "Welcome / " + (step + 1) + " of " + introSlides.length;
+      slideIndex.textContent = "";
+      slideIndex.style.display = "none";
       slideCard.innerHTML =
         '<span class="watermark-num">01</span>' +
         '<div class="accent-bar"></div>' +
-        '<div class="style-display">AI Skills Assessment</div>' +
         '<div class="intro-copy"><p>' + copy + '</p></div>' +
         '<div class="intro-nav">' +
           '<button class="intro-arrow" type="button" data-intro-action="prev" ' + (step === 0 ? 'disabled' : '') + '>←</button>' +
           '<button class="intro-arrow" type="button" data-intro-action="next">→</button>' +
           '<span class="intro-step">Click anywhere or press any key to continue</span>' +
         '</div>';
-      statusLine.textContent = step === introSlides.length - 1 ? "Any click or key starts the quiz." : "Any click or key moves to the next intro slide.";
+      statusLine.textContent = "";
+    }
+
+    function applyIntroCopyMinHeight() {
+      if (!document || !document.body || !Array.isArray(introSlides) || !introSlides.length) return;
+      var probe = document.createElement("div");
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      probe.style.pointerEvents = "none";
+      probe.style.left = "-9999px";
+      probe.style.top = "-9999px";
+      probe.style.width = "min(860px, calc(100vw - 120px))";
+      probe.className = "intro-copy";
+      var maxHeight = 0;
+      introSlides.forEach(function(copy) {
+        probe.innerHTML = '<p>' + copy + '</p>';
+        document.body.appendChild(probe);
+        maxHeight = Math.max(maxHeight, Math.ceil(probe.getBoundingClientRect().height));
+        probe.remove();
+      });
+      if (maxHeight > 0) {
+        document.documentElement.style.setProperty("--intro-copy-min-height", maxHeight + "px");
+      }
+    }
+
+    function renderSectionIntro(slideId) {
+      var copy = sectionIntroSlides[slideId];
+      if (!copy) return;
+      slideIndex.textContent = "";
+      slideIndex.style.display = "none";
+      slideCard.innerHTML =
+        '<span class="watermark-num">' + copy.watermark + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-display">' + copy.title + '</div>' +
+        (copy.body ? '<div class="style-body">' + copy.body + '</div>' : '');
+      statusLine.textContent = "";
     }
 
     function renderCoreQuestion(q) {
-      slideIndex.textContent = q.stage + " / " + q.label + " \u2014 " + q.area;
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
       var mainVal = state.responses[q.id];
-      var fuVal = state.responses[q.followup.id];
+      var fuVal = q.followup ? state.responses[q.followup.id] : "";
 
       var html =
-        '<span class="watermark-num">' + q.label + '</span>' +
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
         '<div class="accent-bar"></div>' +
-        '<div class="style-section">' + q.label + '</div>' +
         '<div class="style-body">' + q.prompt + '</div>' +
         '<div class="option-list">' +
-          '<button class="option-btn" data-qid="' + q.id + '" data-val="Yes" aria-pressed="' + (mainVal === "Yes") + '">Yes</button>' +
-          '<button class="option-btn" data-qid="' + q.id + '" data-val="No" aria-pressed="' + (mainVal === "No") + '">No</button>' +
+          (q.mainOptions || ["Yes", "No"]).map(function(opt) {
+            return '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (mainVal === opt) + '">' + opt + '</button>';
+          }).join("") +
         '</div>';
 
-      if (mainVal === "No") {
+      var needsFollowup = !!q.followup && (
+        Array.isArray(q.followupTriggerValues)
+          ? q.followupTriggerValues.indexOf(mainVal) >= 0
+          : mainVal === "No"
+      );
+      if (needsFollowup && q.followup) {
         html += '<div class="followup-area">' +
-          '<div class="style-label-tag">' + q.followup.label + ' \u2014 Tell us more</div>' +
+          '<div class="style-label-tag">Tell us more</div>' +
           '<div class="style-body">' + q.followup.prompt + '</div>' +
           '<div class="option-list">';
         q.followup.options.forEach(function(opt) {
@@ -836,51 +2866,285 @@
         html += '</div></div>';
       }
 
+      html += renderClarifyField(q.id);
+
       slideCard.innerHTML = html;
 
       if (!mainVal) {
-        statusLine.textContent = "Select Yes or No.";
-      } else if (mainVal === "No" && !fuVal) {
-        statusLine.textContent = "Tell us a bit more, then continue.";
+        statusLine.textContent = "Select an answer to continue.";
+      } else {
+        var needsFollowup = !!q.followup && (
+          Array.isArray(q.followupTriggerValues)
+            ? q.followupTriggerValues.indexOf(mainVal) >= 0
+            : mainVal === "No"
+        );
+        if (needsFollowup && !fuVal) {
+          statusLine.textContent = "Tell us a bit more, then continue.";
+        } else {
+          statusLine.textContent = "";
+        }
+      }
+    }
+
+    function renderCalibration(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = q.type === "multi" ? (Array.isArray(state.responses[q.id]) ? state.responses[q.id] : []) : state.responses[q.id];
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list">';
+      if (q.type === "multi") {
+        q.options.forEach(function(opt) {
+          var checked = val.indexOf(opt) >= 0;
+          html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
+        });
+      } else {
+        q.options.forEach(function(opt) {
+          html += '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (val === opt) + '">' + opt + '</button>';
+        });
+      }
+      html += '</div>';
+      html += renderClarifyField(q.id);
+      slideCard.innerHTML = html;
+      statusLine.textContent = q.type === "multi" ? (val.length > 0 ? "" : "Select one or more options, then click Next.") : (val ? "" : "Select an answer to continue.");
+    }
+
+    function renderUsageQuestion(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = q.id === "q2b"
+        ? normalizeQ2bList(state.responses[q.id])
+        : (q.id === "q2c" ? normalizeQ2cList(state.responses[q.id]) : normalizeUsageList(state.responses[q.id]));
+      var opts = getUsageOptions(q);
+      if (q.id === "q2b" || q.id === "q2c") {
+        val = val.filter(function(choice) { return opts.indexOf(choice) >= 0; });
+      }
+      state.responses[q.id] = val;
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list usage-grid">';
+
+      opts.forEach(function(opt) {
+        var checked = val.indexOf(opt) >= 0;
+        html += '' +
+          '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' +
+            '<div class="usage-option-row">' +
+              '<span class="usage-label">' + renderUsageOptionLabel(opt) + '</span>' +
+              '<span class="help-wrap">' +
+                '<button class="help-trigger" type="button" aria-label="Show use case examples for ' + escapeHtml(opt) + '">?</button>' +
+                '<span class="help-popover">' + escapeHtml(usageHelpFor(opt)) + '</span>' +
+              '</span>' +
+            '</div>' +
+          '</div>';
+      });
+
+      html += '</div>';
+      html += renderClarifyField(q.id);
+      slideCard.innerHTML = html;
+      if (q.id === "q2b" && opts.filter(function(opt) { return opt !== Q2B_NONE_OPTION; }).length === 0) {
+        statusLine.textContent = "Select at least one area in the previous question first.";
+      } else if (q.id === "q2c" && opts.filter(function(opt) { return opt !== Q2C_NONE_OPTION; }).length === 0) {
+        statusLine.textContent = "You selected all areas above, so there are no remaining blind-spot options.";
+      } else {
+        statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+      }
+    }
+
+    function renderDomainQuestion(q) {
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+      var val = state.responses[q.id];
+      var otherVal = state.responses[otherTextKey(q.id)] || "";
+      var subdomain = state.responses.d1_subdomain || "";
+      var subOptions = (q.subdomains && q.subdomains[val]) ? q.subdomains[val] : [];
+      var html =
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-body">' + q.prompt + '</div>' +
+        '<div class="option-list two-col">';
+      q.options.forEach(function(opt) {
+        html += '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (val === opt) + '">' + opt + '</button>';
+      });
+      html += '</div>';
+      if (val === "Other") {
+        html += '<div class="other-input-wrap">' +
+          '<div class="style-label-tag">Other Role</div>' +
+          '<input class="other-input" data-other-qid="' + q.id + '" type="text" placeholder="Type your role" value="' + escapeHtml(otherVal) + '">' +
+        '</div>';
+      }
+
+      if (val && Array.isArray(subOptions) && subOptions.length) {
+        html += '<div class="clarify-area">' +
+          '<div class="style-label-tag">Subdomain</div>' +
+          '<div class="option-list">';
+        subOptions.forEach(function(opt) {
+          html += '<button class="option-btn" data-qid="d1_subdomain" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (subdomain === opt) + '">' + opt + '</button>';
+        });
+        html += '</div></div>';
+      }
+
+      html += renderClarifyField(q.id);
+      slideCard.innerHTML = html;
+      if (!val) {
+        statusLine.textContent = "Select your domain to continue.";
+      } else if (val === "Other" && !String(otherVal).trim()) {
+        statusLine.textContent = "Please enter your role to continue.";
+      } else if (Array.isArray(subOptions) && subOptions.length && !subdomain) {
+        statusLine.textContent = "Select your subdomain to continue.";
       } else {
         statusLine.textContent = "";
       }
     }
 
-    function renderCalibration(q) {
-      slideIndex.textContent = q.stage + " / " + q.label;
-      var val = state.responses[q.id];
-      var html =
-        '<span class="watermark-num">' + q.label + '</span>' +
-        '<div class="accent-bar"></div>' +
-        '<div class="style-section">' + q.label + '</div>' +
-        '<div class="style-body">' + q.prompt + '</div>' +
-        '<div class="option-list">';
-      q.options.forEach(function(opt) {
-        html += '<button class="option-btn" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" aria-pressed="' + (val === opt) + '">' + opt + '</button>';
-      });
-      html += '</div>';
-      slideCard.innerHTML = html;
-      statusLine.textContent = val ? "" : "Select an answer to continue.";
-    }
-
     function renderSignal(q) {
-      slideIndex.textContent = q.stage + " / " + q.label;
+      var num = getQuestionNumber(q.id);
+      slideIndex.textContent = "Question " + num + " of " + TOTAL_QUESTIONS;
+
+      if (q.type === "text") {
+        var textVal = state.responses[q.id] || "";
+        var htmlText =
+          '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+          '<div class="accent-bar"></div>' +
+          '<div class="style-body">' + q.prompt + '</div>' +
+          '<div class="clarify-area" style="margin-top:14px; max-width:760px;">' +
+            '<textarea class="clarify-input" data-open-text-qid="' + q.id + '" placeholder="' + escapeHtml(q.placeholder || "Write your response") + '">' + escapeHtml(textVal) + '</textarea>' +
+          '</div>';
+        slideCard.innerHTML = htmlText;
+        statusLine.textContent = "Optional — add a response or click Next.";
+        return;
+      }
+
+      if (q.type === "text_pair") {
+        var nameVal = state.responses[q.id + "_name"] || "";
+        var ideaVal = state.responses[q.id + "_idea"] || "";
+        var htmlPair =
+          '<span class="watermark-num">' + zeroPad(num) + '</span>' +
+          '<div class="accent-bar"></div>' +
+          '<div class="style-body">' + q.prompt + '</div>' +
+          '<div class="style-body" style="margin-top:10px; max-width:820px;">' + escapeHtml(q.helperText || "") + '</div>' +
+          '<div class="other-input-wrap" style="margin-top:14px; max-width:760px;">' +
+            '<div class="style-label-tag">Name</div>' +
+            '<input class="other-input" data-open-pair-qid="' + q.id + '" data-open-pair-key="name" type="text" placeholder="Your name (optional)" value="' + escapeHtml(nameVal) + '">' +
+          '</div>' +
+          '<div class="clarify-area" style="margin-top:12px; max-width:760px;">' +
+            '<div class="style-label-tag">Idea</div>' +
+            '<textarea class="clarify-input" data-open-pair-qid="' + q.id + '" data-open-pair-key="idea" placeholder="Share your idea in a sentence">' + escapeHtml(ideaVal) + '</textarea>' +
+          '</div>';
+        slideCard.innerHTML = htmlPair;
+        statusLine.textContent = "Optional — add details or click Next.";
+        return;
+      }
+
       var val = Array.isArray(state.responses[q.id]) ? state.responses[q.id] : [];
+      var helper = "<em>(select all that apply)</em>";
+      var otherVal = state.responses[otherTextKey(q.id)] || "";
       var html =
-        '<span class="watermark-num">' + q.label + '</span>' +
+        '<span class="watermark-num">' + zeroPad(num) + '</span>' +
         '<div class="accent-bar"></div>' +
-        '<div class="style-section">' + q.label + '</div>' +
-        '<div class="style-body">' + q.prompt + ' <em>(select all that apply)</em></div>' +
+        '<div class="style-body">' + q.prompt + ' ' + helper + '</div>' +
         '<div class="option-list">';
       q.options.forEach(function(opt) {
         var checked = val.indexOf(opt) >= 0;
-        html += '<div class="check-item ' + (checked ? "active" : "") + '">' +
-          '<label><input type="checkbox" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '" ' + (checked ? "checked" : "") + '>' + opt + '</label></div>';
+        html += '<div class="check-item ' + (checked ? "active" : "") + '" data-qid="' + q.id + '" data-val="' + encodeURIComponent(opt) + '">' + opt + '</div>';
       });
       html += '</div>';
+      if (q.id === "program_topics" && val.indexOf("Other") >= 0) {
+        html += '<div class="other-input-wrap">' +
+          '<div class="style-label-tag">Other Topic</div>' +
+          '<input class="other-input" data-other-qid="' + q.id + '" type="text" placeholder="Type your topic" value="' + escapeHtml(otherVal) + '">' +
+        '</div>';
+      }
+      html += renderClarifyField(q.id);
       slideCard.innerHTML = html;
-      statusLine.textContent = val.length > 0 ? "" : "Select one or more options, then click Next.";
+      if (!val.length) {
+        statusLine.textContent = "Select one or more options, then click Next.";
+      } else if (q.id === "program_topics" && val.indexOf("Other") >= 0 && !String(otherVal).trim()) {
+        statusLine.textContent = "Please enter your other topic to continue.";
+      } else {
+        statusLine.textContent = "";
+      }
+    }
+
+    function renderAstrology() {
+      slideIndex.textContent = "AI Read";
+      if (!state.astroReadyAt || Date.now() > state.astroReadyAt + 120000) {
+        state.astroReadyAt = Date.now() + 3600;
+        saveDraft();
+      }
+      var waiting = Date.now() < state.astroReadyAt;
+      var astroChoice = state.responses.astro_feedback_choice || "";
+      var astroNote = state.responses.astro_feedback_note || "";
+      var nailedActive = astroChoice === "nailed_it";
+      var notQuiteActive = astroChoice === "not_quite";
+
+      if (waiting) {
+        var moonPhases = ["🌚", "🌑", "🌒", "🌓", "🌔", "🌕", "🌝", "🌕", "🌖", "🌗", "🌘", "🌑"];
+        var phaseIndex = Math.floor(Date.now() / 160) % moonPhases.length;
+        var moonHtml = moonPhases.map(function(phase, idx) {
+          return '<span class="moon-phase ' + (idx === phaseIndex ? 'active' : '') + '">' + phase + '</span>';
+        }).join('');
+
+        slideCard.innerHTML =
+          '<span class="watermark-num">AI</span>' +
+          '<div class="accent-bar"></div>' +
+          '<div class="style-section">Reading Your AI Pattern</div>' +
+          '<div class="style-body">Taking one quick pass through your responses to generate your AI Astrology read...</div>' +
+          '<div class="processing-wrap processing-moons">' + moonHtml + '</div>' +
+          '<div class="processing-caption">Aligning lunar signals across your response pattern...</div>' +
+          '<div class="processing-caption">Calibrating your sign, superpower, and next-move forecast...</div>' +
+          '<div class="processing-caption">One more pass through the constellation map...</div>';
+        statusLine.textContent = "Processing your profile...";
+        setTimeout(function() {
+          if (state.currentSlide === "astro") render();
+        }, 160);
+        return;
+      }
+
+      var preview = buildAstrologyPreviewResult();
+      var profile = buildAiAstrologyRead(preview);
+
+      slideCard.innerHTML =
+        '<span class="watermark-num">AI</span>' +
+        '<div class="accent-bar"></div>' +
+        '<div class="style-section">AI Astrology Read ✦</div>' +
+        '<div class="style-body" style="font-size:18px;line-height:1.6;">Before we submit, here’s your AI persona read based on usage style, readiness, versatility, and decision posture.</div>' +
+        '<div class="astro-card">' +
+          (profile.asciiArt ? '<pre class="astro-ascii">' + escapeHtml(profile.asciiArt) + '</pre>' : '') +
+          '<div class="astro-title-row">' +
+            '<div class="astro-emoji">' + escapeHtml(profile.emoji || "✨") + '</div>' +
+            '<div class="astro-sign-name">' + escapeHtml(profile.sign) + '</div>' +
+          '</div>' +
+          '<div class="astro-signature">' + escapeHtml(profile.signature) + '</div>' +
+          '<div class="astro-meta">' +
+            '<span class="astro-chip">Current vibe: ' + escapeHtml(profile.rising) + '</span>' +
+            '<span class="astro-chip">' + escapeHtml(profile.operatingStyleLabel || "Operating style: balanced") + '</span>' +
+          '</div>' +
+          '<div class="astro-lines">' +
+            '<div class="astro-line"><span class="astro-label">Spotlight</span>' + escapeHtml(profile.spotlight) + '</div>' +
+            '<div class="astro-line"><span class="astro-label">Superpower</span>' + escapeHtml(profile.superpower) + '</div>' +
+            '<div class="astro-line"><span class="astro-label">Next Move</span>' + escapeHtml(profile.nextMove) + '</div>' +
+            '<div class="astro-line"><span class="astro-label">Mantra</span>' + escapeHtml(profile.mantra) + '</div>' +
+            '<div class="astro-line"><span class="astro-label">Watchout</span>' + escapeHtml(profile.watchout) + '</div>' +
+          '</div>' +
+          '<div class="result-actions" style="margin-top:18px;">' +
+            (nailedActive
+              ? '<button class="btn" type="button" data-astro-copy="true">Share Results</button>'
+              : '<button class="btn" type="button" data-astro-feedback="nailed_it" aria-pressed="false">Nailed It!</button>') +
+            '<button class="btn" type="button" data-astro-feedback="not_quite" aria-pressed="' + notQuiteActive + '">Not quite</button>' +
+          '</div>' +
+          (notQuiteActive ?
+            '<div class="clarify-area" style="margin-top:10px;">' +
+              '<div class="style-label-tag">Tell us what missed</div>' +
+              '<textarea class="clarify-input" data-astro-feedback-note="true" placeholder="Optional: what felt off or what should be emphasized?">' + escapeHtml(astroNote) + '</textarea>' +
+            '</div>' :
+            '') +
+        '</div>';
+
+      statusLine.textContent = "If needed, select Not quite and add a note. Then click Next to submit.";
     }
 
     function renderSummary() {
@@ -896,42 +3160,85 @@
         '<div class="result-panel">' +
           '<div class="style-label-tag">What Happens Next</div>' +
           '<div class="style-body">The training team reviews responses in aggregate and maps participants into learning groups. Individual readiness placement is shared through training coordination, not this form.</div>' +
+          '<div class="result-actions"><button class="btn" type="button" data-edit-resubmit="true">Edit Answers & Resubmit</button></div>' +
         '</div>';
 
-      statusLine.textContent = "You can close this tab or select Restart to collect another response.";
+      statusLine.textContent = "Submission complete. Use Edit Answers & Resubmit if you need to make changes.";
     }
 
     function render() {
+      nextBtn.disabled = false;
       backBtn.disabled = state.currentSlide === "intro" ? state.introStep === 0 : state.history.length === 0;
       var s = state.currentSlide;
 
+      if (s !== "intro") {
+        slideIndex.style.display = "flex";
+      }
+
       if (s === "intro") {
-        nextBtn.textContent = "Begin";
+        nextBtn.textContent = state.introStep >= introSlides.length - 1 ? "Start Quiz" : "Continue";
         renderIntro();
+      } else if (s === "section_aptitude" || s === "section_interest" || s === "section_feedback") {
+        nextBtn.textContent = "Continue";
+        renderSectionIntro(s);
+      } else if (s === "astro") {
+        nextBtn.textContent = "Submit";
+        renderAstrology();
       } else if (s === "summary") {
-        nextBtn.textContent = "Restart";
+        nextBtn.textContent = "Submitted";
+        nextBtn.disabled = true;
         renderSummary();
+      } else if (usageMap[s]) {
+        nextBtn.textContent = "Next";
+        renderUsageQuestion(usageMap[s]);
       } else if (coreMap[s]) {
         nextBtn.textContent = "Next";
         renderCoreQuestion(coreMap[s]);
+      } else if (calMap[s] && calMap[s].type === "logo-multi") {
+        nextBtn.textContent = "Next";
+        renderLogoQuestion(calMap[s]);
       } else if (calMap[s]) {
         nextBtn.textContent = "Next";
         renderCalibration(calMap[s]);
       } else if (sigMap[s]) {
         nextBtn.textContent = "Next";
         renderSignal(sigMap[s]);
+      } else if (domainMap[s]) {
+        nextBtn.textContent = "Next";
+        renderDomainQuestion(domainMap[s]);
       }
 
       wireInteractions();
       updateProgress();
     }
 
+    function showCopyToast() {
+      var existing = document.querySelector(".copy-toast");
+      if (existing) existing.remove();
+      var toast = document.createElement("div");
+      toast.className = "copy-toast";
+      toast.textContent = "Copied to clipboard";
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 1600);
+    }
+
     function wireInteractions() {
       slideCard.onclick = null;
       if (state.currentSlide === "intro") {
         slideCard.onclick = function(evt) {
-          if (evt.target.closest('[data-intro-action]')) return;
+          if (Date.now() < state.suppressAutoAdvanceUntil) return;
+          if (evt.target.closest('[data-intro-action], [data-contribute-open]')) return;
           goToNextSlide(true);
+        };
+      } else if (state.currentSlide !== "summary" && state.currentSlide !== "astro") {
+        slideCard.onclick = function(evt) {
+          if (Date.now() < state.suppressAutoAdvanceUntil) return;
+          if (evt.target.closest('.option-btn, .check-item, textarea, input, button, [data-intro-action], [data-astro-feedback], [data-edit-resubmit]')) return;
+          if (isSlideAnswered(state.currentSlide)) {
+            goToNextSlide(true);
+          }
         };
       }
 
@@ -951,6 +3258,22 @@
         });
       });
 
+      slideCard.querySelectorAll("[data-contribute-open]").forEach(function(btn) {
+        btn.addEventListener("click", function(evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          openContributeModal();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-section-next]").forEach(function(btn) {
+        btn.addEventListener("click", function(evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          goToNextSlide(true);
+        });
+      });
+
       slideCard.querySelectorAll(".option-btn").forEach(function(btn) {
         btn.addEventListener("click", function() {
           var qid = btn.getAttribute("data-qid");
@@ -960,60 +3283,247 @@
           if (core) {
             var old = state.responses[qid];
             state.responses[qid] = val;
-            if (old && old !== val) {
+            if (core.followup && old && old !== val) {
               delete state.responses[core.followup.id];
             }
-            if (val === "Yes") {
+            var needsFollowup = !!core.followup && (
+              Array.isArray(core.followupTriggerValues)
+                ? core.followupTriggerValues.indexOf(val) >= 0
+                : val === "No"
+            );
+            if (core.followup && !needsFollowup) {
               delete state.responses[core.followup.id];
             }
             state.lastResult = null;
             saveDraft();
-            if (val === "Yes") {
-              goToNextSlide(true);
-            } else {
-              render();
-            }
+            render();
             return;
           }
 
-          var parentCore = coreQuestions.find(function(q) { return q.followup.id === qid; });
+          var parentCore = coreQuestions.find(function(q) { return q.followup && q.followup.id === qid; });
           if (parentCore) {
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            goToNextSlide(true);
+            render();
             return;
           }
 
-          if (calMap[qid]) {
+          if (calMap[qid] && calMap[qid].type !== "multi") {
             state.responses[qid] = val;
             state.lastResult = null;
             saveDraft();
-            goToNextSlide(true);
+            render();
+            return;
+          }
+
+          if (domainMap[qid] || qid === "d1_subdomain") {
+            if (qid === "d1") {
+              var oldDomain = state.responses.d1;
+              state.responses.d1 = val;
+              if (oldDomain && oldDomain !== val) {
+                delete state.responses.d1_subdomain;
+                delete state.responses[otherTextKey("d1")];
+              }
+              if (val !== "Other") delete state.responses[otherTextKey("d1")];
+            } else if (qid === "d1_subdomain") {
+              state.responses.d1_subdomain = val;
+            } else {
+              state.responses[qid] = val;
+            }
+            state.lastResult = null;
+            saveDraft();
+            render();
             return;
           }
         });
       });
 
-      slideCard.querySelectorAll("input[type='checkbox']").forEach(function(input) {
-        input.addEventListener("change", function() {
-          var qid = input.getAttribute("data-qid");
-          var val = decodeURIComponent(input.getAttribute("data-val"));
-          var current = Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : [];
+      slideCard.querySelectorAll(".check-item[data-qid]").forEach(function(item) {
+        item.addEventListener("click", function(evt) {
+          if (evt.target && evt.target.closest('.help-trigger')) return;
+          var qid = item.getAttribute("data-qid");
+          var val = decodeURIComponent(item.getAttribute("data-val"));
+          var usageQuestion = isUsageQuestionId(qid);
+          var current = usageQuestion
+            ? (qid === "q2b"
+              ? normalizeQ2bList(state.responses[qid])
+              : (qid === "q2c" ? normalizeQ2cList(state.responses[qid]) : normalizeUsageList(state.responses[qid])))
+            : (Array.isArray(state.responses[qid]) ? state.responses[qid].slice() : []);
           var exists = current.indexOf(val) >= 0;
           var updated;
+          var isNoneOption = /^None of these/i.test(val);
 
-          if (val === "None of these") {
-            updated = exists ? [] : ["None of these"];  
+          if (isNoneOption) {
+            updated = exists ? [] : [val];
           } else {
             updated = exists ? current.filter(function(x) { return x !== val; }) : current.concat([val]);
-            updated = updated.filter(function(e) { return e !== "None of these"; });
+            updated = updated.filter(function(e) { return !/^None of these/i.test(e); });
           }
 
-          state.responses[qid] = updated;
+          if (usageQuestion) {
+            updated = qid === "q2b"
+              ? normalizeQ2bList(updated)
+              : (qid === "q2c" ? normalizeQ2cList(updated) : normalizeUsageList(updated));
+          }
+
+          if (qid === "t1") {
+            state.responses.t1 = normalizeToolList(updated);
+            state.responses.t1b = filterToolFollowupSelections(state.responses.t1b, state.responses.t1, T1B_NONE_OPTION);
+            state.responses.t1d = filterToolDiscoverySelections(state.responses.t1d, getUnselectedToolsInMasterOrder());
+            state.responses.t1c = filterToolFollowupSelections(state.responses.t1c, state.responses.t1, T1C_NONE_OPTION);
+          } else if (qid === "t1b") {
+            state.responses.t1b = filterToolFollowupSelections(updated, state.responses.t1, T1B_NONE_OPTION);
+          } else if (qid === "t1d") {
+            state.responses.t1d = filterToolDiscoverySelections(updated, getUnselectedToolsInMasterOrder());
+          } else if (qid === "t1c") {
+            state.responses.t1c = filterToolFollowupSelections(updated, state.responses.t1, T1C_NONE_OPTION);
+          } else if (qid === "q2") {
+            state.responses.q2 = updated;
+            state.responses.q2b = filterQ2bSelections(state.responses.q2b, updated);
+            state.responses.q2c = filterQ2cSelections(state.responses.q2c, updated);
+          } else if (qid === "q2b" || qid === "q2c") {
+            var q2Selected = normalizeUsageList(state.responses.q2);
+            if (qid === "q2b") {
+              state.responses[qid] = filterQ2bSelections(updated, q2Selected);
+            } else {
+              state.responses[qid] = filterQ2cSelections(updated, q2Selected);
+            }
+          } else {
+            state.responses[qid] = updated;
+          }
+          if (qid === "program_topics" && updated.indexOf("Other") < 0) {
+            delete state.responses[otherTextKey("program_topics")];
+          }
           state.lastResult = null;
           saveDraft();
           render();
+        });
+      });
+
+      slideCard.querySelectorAll(".other-input[data-other-qid]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          var qid = input.getAttribute("data-other-qid");
+          state.responses[otherTextKey(qid)] = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll(".clarify-input[data-clarify-qid]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          var qid = input.getAttribute("data-clarify-qid");
+          state.responses[noteKeyFor(qid)] = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll(".clarify-input[data-domain-specialty]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          state.responses.d1_specialty = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-open-text-qid]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          var qid = input.getAttribute("data-open-text-qid");
+          state.responses[qid] = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-open-pair-qid][data-open-pair-key]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          var qid = input.getAttribute("data-open-pair-qid");
+          var key = input.getAttribute("data-open-pair-key");
+          state.responses[qid + "_" + key] = input.value;
+          state.lastResult = null;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-edit-resubmit]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          state.lastResult = null;
+          state.astroReadyAt = 0;
+          state.currentSlide = questionSlideIds[0];
+          state.history = [];
+          saveDraft();
+          render();
+          statusLine.textContent = "Update any answers and submit again; your previous response will be replaced.";
+        });
+      });
+
+      slideCard.querySelectorAll("[data-clear-domain]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          delete state.responses.d1;
+          delete state.responses.d1_subdomain;
+          state.lastResult = null;
+          saveDraft();
+          render();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-astro-feedback]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var choice = btn.getAttribute("data-astro-feedback");
+          state.responses.astro_feedback_choice = choice;
+          if (choice !== "not_quite") {
+            delete state.responses.astro_feedback_note;
+          }
+          state.lastResult = null;
+          saveDraft();
+          render();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-astro-feedback-note]").forEach(function(input) {
+        input.addEventListener("input", function() {
+          state.responses.astro_feedback_note = input.value;
+          saveDraft();
+        });
+      });
+
+      slideCard.querySelectorAll("[data-astro-copy]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var preview = buildAstrologyPreviewResult();
+          var profile = buildAiAstrologyRead(preview);
+          var text = profile.shareText || (profile.sign + "\n" + profile.signature);
+
+          function fallbackCopy() {
+            var tmp = document.createElement("textarea");
+            tmp.value = text;
+            tmp.setAttribute("readonly", "readonly");
+            tmp.style.position = "absolute";
+            tmp.style.left = "-9999px";
+            document.body.appendChild(tmp);
+            tmp.select();
+            try {
+              document.execCommand("copy");
+              statusLine.textContent = "Persona copied. Paste it anywhere.";
+              showCopyToast();
+            } catch (e) {
+              statusLine.textContent = "Copy failed — you can still select and copy manually.";
+            }
+            document.body.removeChild(tmp);
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+              .then(function() {
+                statusLine.textContent = "Persona copied. Paste it anywhere.";
+                showCopyToast();
+              })
+              .catch(function() {
+                fallbackCopy();
+              });
+          } else {
+            fallbackCopy();
+          }
         });
       });
 
@@ -1034,20 +3544,55 @@
     }
 
     function updateProgress() {
-      var total = 12;
-      var answered = 0;
-      coreQuestions.forEach(function(q) {
-        if (isSlideAnswered(q.id)) answered++;
+      if (!progressAptitude || !progressInterest || !progressFeedback) return;
+
+      var bySection = {
+        aptitude: progressAptitude,
+        interest: progressInterest,
+        feedback: progressFeedback
+      };
+      var segments = {
+        aptitude: segmentAptitude,
+        interest: segmentInterest,
+        feedback: segmentFeedback
+      };
+      var currentIdx = slideOrder.indexOf(state.currentSlide);
+      if (currentIdx < 0) currentIdx = 0;
+
+      sectionConfigs.forEach(function(section) {
+        var total = section.questionIds.length || 1;
+        var complete = 0;
+        section.questionIds.forEach(function(qid) {
+          var idx = slideOrder.indexOf(qid);
+          if (idx >= 0 && idx <= currentIdx) complete += 1;
+        });
+        var pct = Math.round((complete / total) * 100);
+        bySection[section.id].style.width = Math.min(100, Math.max(0, pct)) + "%";
+        if (segments[section.id]) {
+          segments[section.id].style.flexGrow = String(total);
+        }
       });
-      calibrationQuestions.forEach(function(q) {
-        if (state.responses[q.id]) answered++;
-      });
-      signalQuestions.forEach(function(q) {
-        var v = state.responses[q.id];
-        if (Array.isArray(v) && v.length > 0) answered++;
-      });
-      var pct = Math.round((answered / total) * 100);
-      progressFill.style.width = Math.min(100, Math.max(0, pct)) + "%";
+
+      if (segmentAptitude && segmentInterest && segmentFeedback) {
+        segmentAptitude.classList.remove("intro-pulse-aptitude");
+        segmentInterest.classList.remove("intro-pulse-interest");
+        segmentFeedback.classList.remove("intro-pulse-feedback");
+        if (state.currentSlide === "section_aptitude") {
+          segmentAptitude.classList.add("intro-pulse-aptitude");
+        } else if (state.currentSlide === "section_interest") {
+          segmentInterest.classList.add("intro-pulse-interest");
+        } else if (state.currentSlide === "section_feedback") {
+          segmentFeedback.classList.add("intro-pulse-feedback");
+        }
+      }
+
+      if (astroProgressMarker) {
+        var astroIdx = slideOrder.indexOf("astro");
+        var isAstroActive = state.currentSlide === "astro";
+        var astroReached = astroIdx >= 0 && currentIdx >= astroIdx;
+        astroProgressMarker.classList.toggle("active", isAstroActive);
+        astroProgressMarker.style.opacity = astroReached ? "1" : "0.55";
+      }
     }
 
     function goToNextSlide(skipCheck) {
@@ -1057,19 +3602,31 @@
         render();
         return;
       }
-      if (state.currentSlide === "summary") {
-        state = { currentSlide: "intro", history: [], responses: {}, lastResult: null, introStep: 0 };
-        localStorage.removeItem(DRAFT_KEY);
-        saveStatus.textContent = "Draft cleared";
-        render();
-        return;
-      }
+      if (state.currentSlide === "summary") return;
       if (!skipCheck && !isSlideAnswered(state.currentSlide)) {
-        statusLine.textContent = "Please answer before continuing.";
+        if (state.currentSlide === "d1" && state.responses.d1 === "Other" && !getOtherText("d1")) {
+          window.alert("Please enter your role before continuing.");
+        }
+        if (state.currentSlide === "program_topics" && isOtherChosen("program_topics") && !getOtherText("program_topics")) {
+          window.alert("Please enter your other topic before continuing.");
+        }
+        if (state.currentSlide === "share_segment") {
+          var segName = String(state.responses.share_segment_name || "").trim();
+          var segIdea = String(state.responses.share_segment_idea || "").trim();
+          if (segIdea && !segName) {
+            statusLine.innerHTML = '<span class="status-attention">Please add your name if you entered an idea.</span>';
+            return;
+          }
+        }
+        statusLine.innerHTML = '<span class="status-attention">Please answer before continuing.</span>';
         return;
       }
       statusLine.textContent = "";
       var next = getNextSlide(state.currentSlide);
+      if (next === "astro") {
+        delete state.responses.astro_feedback_choice;
+        delete state.responses.astro_feedback_note;
+      }
       state.history.push(state.currentSlide);
       state.currentSlide = next;
       if (next === "summary" && !state.lastResult) {
@@ -1080,7 +3637,10 @@
       render();
     }
 
-    backBtn.addEventListener("click", function() {
+    backBtn.addEventListener("click", function(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      state.suppressAutoAdvanceUntil = Date.now() + 350;
       if (state.currentSlide === "intro" && state.introStep > 0) {
         state.introStep -= 1;
         saveDraft();
@@ -1097,14 +3657,99 @@
       goToNextSlide(false);
     });
 
-    document.addEventListener("keydown", function(evt) {
-      if (state.currentSlide !== "intro") return;
-      if (evt.repeat) return;
-      if (evt.key === "Shift" || evt.key === "Control" || evt.key === "Alt" || evt.key === "Meta") return;
-      goToNextSlide(true);
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        closeContributeModal();
+        closeAdminModal();
+        return;
+      }
+      if ((contributeModalBackdrop && contributeModalBackdrop.classList.contains("open")) || (adminModalBackdrop && adminModalBackdrop.classList.contains("open"))) {
+        return;
+      }
+      var target = e.target;
+      var isTypingTarget = !!(target && (
+        target.closest("textarea, input, select, [contenteditable='true']") ||
+        target.isContentEditable
+      ));
+      if (isTypingTarget) return;
+      if (state.currentSlide === "astro") return;
+      if (e.repeat) return;
+      if (e.key === "Shift" || e.key === "Control" || e.key === "Alt" || e.key === "Meta") return;
+      goToNextSlide(false);
     });
 
+    if (resetResponsesBtn) {
+      resetResponsesBtn.addEventListener("click", function() {
+        resetResponsesWithConfirm();
+      });
+    }
+
+    if (adminLink) {
+      adminLink.addEventListener("click", function(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        openAdminModal();
+      });
+    }
+    if (adminModalCancel) {
+      adminModalCancel.addEventListener("click", function() {
+        closeAdminModal();
+      });
+    }
+    if (adminModalOpen) {
+      adminModalOpen.addEventListener("click", function() {
+        tryAdminAccess();
+      });
+    }
+    if (adminModalPassword) {
+      adminModalPassword.addEventListener("keydown", function(evt) {
+        if (evt.key === "Enter") tryAdminAccess();
+        if (evt.key === "Escape") closeAdminModal();
+      });
+    }
+    if (adminModalBackdrop) {
+      adminModalBackdrop.addEventListener("click", function(evt) {
+        if (evt.target === adminModalBackdrop) closeAdminModal();
+      });
+    }
+    if (contributeModalCancel) {
+      contributeModalCancel.addEventListener("click", function() {
+        closeContributeModal();
+      });
+    }
+    if (contributeModalSave) {
+      contributeModalSave.addEventListener("click", function() {
+        saveContributeModal();
+      });
+    }
+    if (contributeIdea) {
+      contributeIdea.addEventListener("keydown", function(evt) {
+        if ((evt.metaKey || evt.ctrlKey) && evt.key === "Enter") {
+          evt.preventDefault();
+          saveContributeModal();
+        }
+      });
+    }
+    if (contributeName) {
+      contributeName.addEventListener("keydown", function(evt) {
+        if (evt.key === "Enter") {
+          evt.preventDefault();
+          saveContributeModal();
+        }
+      });
+    }
+    if (contributeModalBackdrop) {
+      contributeModalBackdrop.addEventListener("click", function(evt) {
+        if (evt.target === contributeModalBackdrop) closeContributeModal();
+      });
+    }
+
     loadDraft();
+    applyIntroCopyMinHeight();
+    window.addEventListener("resize", applyIntroCopyMinHeight);
+    loadPersonaGridConfig().then(function() {
+      if (state.currentSlide === "astro") render();
+    });
     render();
   </script>
 </body>

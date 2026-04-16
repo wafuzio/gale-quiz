@@ -1,9 +1,179 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
+  "cleanUrls": false,
+  "redirects": [
     {
       "source": "/",
-      "destination": "/gale-quiz_Version2.html"
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/index.html",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/gale-quiz",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/gale-quiz_Version2",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/gale-quiz_Version2.html",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/gale-quiz-revised",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/gale-quiz-revised.html",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    },
+    {
+      "source": "/ops-console",
+      "destination": "/ops-console.html",
+      "permanent": false
+    },
+    {
+      "source": "/ops-console-revised",
+      "destination": "/ops-console.html",
+      "permanent": false
+    },
+    {
+      "source": "/ops-console-revised.html",
+      "destination": "/ops-console.html",
+      "permanent": false
+    },
+    {
+      "source": "/old/:path*",
+      "destination": "/gale-quiz.html",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gale-quiz",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gale-quiz.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gale-quiz_Version2",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gale-quiz_Version2.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gale-quiz-revised",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gale-quiz-revised.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/ops-console",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/ops-console.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/ops-console-revised",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/ops-console-revised.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/old/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ops Console Revised</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --panel: #121212;
+      --panel-soft: #171717;
+      --muted: rgba(255,255,255,0.65);
+      --line: rgba(255,255,255,0.14);
+      --accent: #fd6453;
+      --text: #f6f6f6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top right, #1a1a1a 0%, var(--bg) 55%);
+      color: var(--text);
+      font-family: Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 28px 16px;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .grow { flex: 1; min-width: 240px; }
+    input, button, textarea {
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    input, textarea { width: 100%; }
+    button { cursor: pointer; }
+    .btn-primary { border-color: var(--accent); background: var(--accent); color: #111; }
+    .btn-danger {
+      border-color: rgba(255,99,99,0.7);
+      color: #ff9a9a;
+      background: rgba(255,99,99,0.08);
+    }
+    .btn-danger:hover { background: rgba(255,99,99,0.16); }
+    .btn-edit {
+      border-color: rgba(120,190,255,0.7);
+      color: #9dd3ff;
+      background: rgba(120,190,255,0.1);
+    }
+    .btn-edit:hover { background: rgba(120,190,255,0.18); }
+    .meta { color: var(--muted); font-size: 12px; }
+    .pill {
+      display: inline-block;
+      border: 1px solid rgba(253,100,83,0.45);
+      color: var(--accent);
+      padding: 4px 8px;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .stat {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .stat-value { margin-top: 4px; font-size: 24px; font-weight: 600; line-height: 1.2; }
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .panel-soft {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .list-inline {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .list-inline li { margin: 6px 0; }
+    .list { display: grid; gap: 10px; }
+    .entry { border: 1px solid var(--line); background: #0d0d0d; padding: 12px; }
+    .entry-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .entry-title { font-size: 16px; font-weight: 600; }
+    .entry-meta { color: var(--muted); font-size: 12px; }
+    .entry-detail {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      display: none;
+    }
+    .entry-detail.open { display: block; }
+    .doc-section { margin-top: 10px; }
+    .doc-section-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .doc-section p { margin: 6px 0; line-height: 1.35; }
+    .score-guide {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      padding: 10px;
+    }
+    .score-guide p { margin: 6px 0; line-height: 1.4; }
+    .edit-wrap {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      display: none;
+    }
+    .edit-wrap.open { display: block; }
+    .edit-wrap textarea {
+      min-height: 220px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .hidden { display: none; }
+    #status { min-height: 18px; color: var(--muted); }
+    .raw-wrap { margin-top: 10px; }
+    #raw { min-height: 180px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    #personaConfigInput {
+      min-height: 320px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .analysis-wrap {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      padding: 10px;
+    }
+    .analysis-wrap ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    .analysis-wrap li { margin: 6px 0; }
+    .analysis-summary { margin-top: 8px; line-height: 1.45; }
+    .analysis-theme {
+      margin-top: 10px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+    }
+    .analysis-theme-title { font-weight: 600; }
+    .tool-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+    .tool-chip img {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: block;
+    }
+    .app-icons-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .app-icon-large {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .app-icon-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .app-icon-large .fallback {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .pie-wrap {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .pie-chart {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: #222;
+      flex: 0 0 auto;
+    }
+    .pie-legend {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-width: 170px;
+    }
+    .pie-legend li {
+      margin: 6px 0;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pie-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+    .question-catalog {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+    .question-item {
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      padding: 10px;
+    }
+    .question-item-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+    .question-item-prompt {
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .question-item ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .question-item li {
+      margin: 4px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="loginCard">
+      <div class="meta">Internal access</div>
+      <div class="row" style="margin-top:8px;">
+        <div class="grow"><input id="pwd" type="password" placeholder="Passphrase" autocomplete="off" /></div>
+        <button id="unlock" class="btn-primary">Unlock</button>
+      </div>
+      <div id="status" style="margin-top:10px;"></div>
+    </div>
+
+    <div id="panel" class="hidden">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;">
+          <div>
+            <span class="pill">Ops Revised</span>
+            <span id="countText">0 responses</span>
+          </div>
+          <div class="row">
+            <button id="refresh">Refresh</button>
+            <button id="copyJson">Copy JSON</button>
+            <button id="downloadJson">Download JSON</button>
+            <button id="toggleRaw">Show Raw</button>
+          </div>
+        </div>
+        <div class="meta" id="lastSync" style="margin-top:8px;">Not synced yet</div>
+
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-label">Submissions</div><div id="statSubmissions" class="stat-value">0</div></div>
+          <div class="stat"><div class="stat-label">Average Score</div><div id="statAvgScore" class="stat-value">0.0</div></div>
+          <div class="stat"><div class="stat-label">Most Common Tier</div><div id="statTopTier" class="stat-value">—</div></div>
+          <div class="stat"><div class="stat-label">Most Common Domain</div><div id="statTopDomain" class="stat-value">—</div></div>
+          <div class="stat"><div class="stat-label">Top App In Use</div><div id="statTopApp" class="stat-value">—</div></div>
+        </div>
+
+        <div class="split">
+          <div class="panel-soft">
+            <div class="stat-label">Tier Breakdown</div>
+            <ul id="tierBreakdown" class="list-inline"></ul>
+            <div class="meta" style="margin-top:10px;border-top:1px solid var(--line);padding-top:10px;">
+              <strong>Tier 1:</strong> 23.0+ · <strong>Tier 2:</strong> 16.0–22.9 · <strong>Tier 3:</strong> &lt;16.0
+            </div>
+          </div>
+          <div class="panel-soft">
+            <div class="stat-label">Domain Breakdown</div>
+            <div id="domainBreakdown"></div>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="panel-soft">
+            <div class="stat-label">Top Apps In Use</div>
+            <div id="appBreakdown" class="app-icons-row"></div>
+          </div>
+          <div class="panel-soft">
+            <div class="stat-label">Top Apps People Want To Learn</div>
+            <div id="wishAppBreakdown" class="app-icons-row"></div>
+          </div>
+          <div class="panel-soft">
+            <div class="stat-label">Top Support Requests</div>
+            <ul id="q19Breakdown" class="list-inline"></ul>
+          </div>
+        </div>
+
+        <div class="panel-soft" style="margin-top:10px;">
+          <div class="stat-label">What Each Tier Wants</div>
+          <ul id="insights" class="list-inline"></ul>
+        </div>
+
+        <div class="analysis-wrap">
+          <div class="row" style="justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div class="stat-label">Ask Alchemy Anything</div>
+              <div class="meta" style="margin-top:6px; max-width:700px;">Ask a question about all quiz responses and answers.</div>
+            </div>
+            <button id="analyzeNotes" class="btn-primary">Ask</button>
+          </div>
+          <textarea id="analyzeFocus" rows="2" placeholder="e.g. Any interesting patterns in the notes? Which domains seem most ready for advanced training?" style="margin-top:8px;"></textarea>
+          <div id="analyzeStatus" class="meta" style="margin-top:8px;"></div>
+          <div id="analyzeOutput" style="margin-top:8px;"></div>
+        </div>
+
+      </div>
+
+      <div class="card raw-wrap hidden" id="rawWrap">
+        <textarea id="raw" rows="10" readonly></textarea>
+      </div>
+
+      <div class="card" id="questionCatalogCard">
+        <div class="stat-label">Questions & Options Reference</div>
+        <div id="questionCatalog" class="question-catalog"></div>
+      </div>
+
+      <div class="list" id="entries"></div>
+
+      <div class="card" id="personaConfigCard">
+        <div class="row" style="justify-content:space-between; align-items:center; cursor:pointer;" id="personaConfigToggle">
+          <div class="stat-label">Persona Copy Config</div>
+          <button type="button" id="personaConfigExpandBtn" style="padding:4px 10px;font-size:12px;">Expand</button>
+        </div>
+        <div id="personaConfigBody" class="hidden">
+          <div class="meta" style="margin-top:8px; max-width:700px;">Edit persona names, emojis, and copy used by the astrology result. Save to apply immediately for new reads.</div>
+          <div class="row" style="margin-top:10px;">
+            <button id="reloadPersonaConfig">Reload Config</button>
+            <button id="savePersonaConfig" class="btn-primary">Save Persona Config</button>
+          </div>
+          <textarea id="personaConfigInput" rows="14" placeholder='{"personaGrid": [...]} ' style="margin-top:10px;"></textarea>
+          <div id="personaConfigStatus" class="meta" style="margin-top:8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var passwordInput = document.getElementById("pwd");
+    var unlockBtn = document.getElementById("unlock");
+    var loginCard = document.getElementById("loginCard");
+    var panel = document.getElementById("panel");
+    var statusEl = document.getElementById("status");
+    var refreshBtn = document.getElementById("refresh");
+    var copyBtn = document.getElementById("copyJson");
+    var downloadBtn = document.getElementById("downloadJson");
+    var toggleRawBtn = document.getElementById("toggleRaw");
+    var rawEl = document.getElementById("raw");
+    var rawWrap = document.getElementById("rawWrap");
+    var personaConfigInput = document.getElementById("personaConfigInput");
+    var personaConfigStatus = document.getElementById("personaConfigStatus");
+    var reloadPersonaConfigBtn = document.getElementById("reloadPersonaConfig");
+    var savePersonaConfigBtn = document.getElementById("savePersonaConfig");
+    var personaConfigToggle = document.getElementById("personaConfigToggle");
+    var personaConfigBody = document.getElementById("personaConfigBody");
+    var personaConfigExpandBtn = document.getElementById("personaConfigExpandBtn");
+    var countText = document.getElementById("countText");
+    var lastSync = document.getElementById("lastSync");
+    var entries = document.getElementById("entries");
+    var statSubmissions = document.getElementById("statSubmissions");
+    var statAvgScore = document.getElementById("statAvgScore");
+    var statTopTier = document.getElementById("statTopTier");
+    var statTopDomain = document.getElementById("statTopDomain");
+    var statTopApp = document.getElementById("statTopApp");
+    var tierBreakdown = document.getElementById("tierBreakdown");
+    var domainBreakdown = document.getElementById("domainBreakdown");
+    var appBreakdown = document.getElementById("appBreakdown");
+    var wishAppBreakdown = document.getElementById("wishAppBreakdown");
+    var q19Breakdown = document.getElementById("q19Breakdown");
+    var questionCatalogEl = document.getElementById("questionCatalog");
+    var insightsEl = document.getElementById("insights");
+    var analyzeNotesBtn = document.getElementById("analyzeNotes");
+    var analyzeFocusInput = document.getElementById("analyzeFocus");
+    var analyzeStatus = document.getElementById("analyzeStatus");
+    var analyzeOutput = document.getElementById("analyzeOutput");
+
+    var ADMIN_SESSION_KEY = "galeOpsPanelAuth";
+    var REVISED_QUIZ_VERSION = "revised";
+    var REVISED_SCORE_MODEL = "revised_v1";
+    var apiKey = "";
+    var latestData = { count: 0, submissions: [] };
+    var entryOpenState = {};
+    var entryEditState = {};
+
+    function isRevisedSubmission(entry) {
+      var payload = entry && entry.payload ? entry.payload : (entry || {});
+      return payload && (payload.quizVersion === REVISED_QUIZ_VERSION || payload.scoreModel === REVISED_SCORE_MODEL);
+    }
+
+    function setStatus(text, isError) {
+      statusEl.textContent = text || "";
+      statusEl.style.color = isError ? "#ff8f84" : "rgba(255,255,255,0.68)";
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatValue(val) {
+      if (Array.isArray(val)) return val.length ? val.join("; ") : "—";
+      if (val == null || val === "") return "—";
+      return String(val);
+    }
+
+    function scoreInterpretation(score) {
+      var n = Number(score || 0);
+      if (n >= 23) {
+        return "23.0+ => Tier 1 (Advanced): systems-level application and robust quality controls.";
+      }
+      if (n >= 16) {
+        return "16.0–22.9 => Tier 2 (Intermediate): consistent practical use with room to scale.";
+      }
+      return "<16.0 => Tier 3 (Foundational): build repeatable core workflows and quality habits.";
+    }
+
+    function scoreBandLabel(score) {
+      var n = Number(score || 0);
+      if (n >= 23) return "high-tier 1";
+      if (n >= 16) return "mid-tier 2";
+      return "low-tier 3";
+    }
+
+    function setPersonaConfigStatus(text, isError) {
+      personaConfigStatus.textContent = text || "";
+      personaConfigStatus.style.color = isError ? "#ff8f84" : "rgba(255,255,255,0.68)";
+    }
+
+    function isValidPersonaConfig(config) {
+      if (!config || typeof config !== "object") return false;
+      var grid = config.personaGrid;
+      if (!Array.isArray(grid) || grid.length !== 4) return false;
+      var valid = true;
+      grid.forEach(function(row) {
+        if (!Array.isArray(row) || row.length !== 5) {
+          valid = false;
+          return;
+        }
+        row.forEach(function(p) {
+          if (!p || typeof p !== "object") {
+            valid = false;
+            return;
+          }
+          if (!p.name || !p.emoji || !p.spotlight || !p.superpower || !p.nextMove || !p.mantra) {
+            valid = false;
+          }
+        });
+      });
+      return valid;
+    }
+
+    function normalizeSubmission(entry, index) {
+      var payload = entry && entry.payload ? entry.payload : (entry || {});
+      var responses = payload.responses && typeof payload.responses === "object" ? payload.responses : {};
+      var id = (entry && entry.id) || payload.remoteId || payload.respondentKey || ("submission-" + index);
+      return {
+        id: id,
+        score: Number(payload.score || 0),
+        tier: payload.tier || "—",
+        when: payload.submittedAt || (entry && (entry.updatedAt || entry.receivedAt || entry.createdAt)) || "",
+        domain: responses.d1 || "Unknown",
+        subdomain: responses.d1_subdomain || "",
+        quizVersion: payload.quizVersion || "",
+        scoreModel: payload.scoreModel || "",
+        trackRecommendation: payload.trackRecommendation || "",
+        payload: payload,
+        responses: responses
+      };
+    }
+
+    function tallyBy(items, keyGetter) {
+      var out = {};
+      items.forEach(function(item) {
+        var key = keyGetter(item);
+        out[key] = (out[key] || 0) + 1;
+      });
+      return out;
+    }
+
+    function topKey(counts) {
+      var best = "—";
+      var max = -1;
+      Object.keys(counts).forEach(function(k) {
+        if (counts[k] > max) {
+          max = counts[k];
+          best = k;
+        }
+      });
+      return best;
+    }
+
+    function getQuestionCatalog() {
+      return [
+        { id: "Q1 (d1)", prompt: "What's your primary role at GALE?", options: ["Strategy", "Creative / Design", "Product Management", "Engineering / Development", "Data Science / Analytics", "Marketing", "Account / Client Services", "Operations", "Leadership", "Other"] },
+        { id: "Q2 (c1)", prompt: "Where are you on the AI curve right now?", options: ["Just getting started — still figuring out what to use it for", "Dabbling — I use it for some things, mostly the basics", "Comfortable — it's part of my regular workflow", "Building — I'm making things with it (prompts, workflows, tools, code)", "Deep end — agents, APIs, vibe coding, the works"] },
+        { id: "Q3 (q1)", prompt: "How often are you using AI in a typical work week?", options: ["Rarely / not yet", "A few times a week", "Daily for specific tasks", "Constantly — it's woven into how I work"] },
+        { id: "Q3a (q1a follow-up)", prompt: "Which best describes where you are?", options: ["I haven’t really had the chance to try AI tools yet", "I’ve tried them a couple of times but they didn’t stick", "I use them for personal stuff but not for work"] },
+        { id: "Q4 (t1)", prompt: "Which AI tools do you actually use?", options: ["ChatGPT", "Claude", "Gemini", "Perplexity", "Copilot (Microsoft / GitHub)", "ALCHEMY AI", "Midjourney", "Nano Banana", "Weavy", "NotebookLM", "Cursor / Claude Code / other coding tools", "Other"] },
+        { id: "Q5 (q2)", prompt: "What are you using AI for right now?", options: ["Writing and editing", "Research and synthesis", "Brainstorming and ideation", "Image, video, or design generation", "Slides, docs, decks", "Data analysis or spreadsheets", "Coding or building tools", "Client work and deliverables", "Internal ops (notes, summaries, emails)", "Personal stuff outside work"] },
+        { id: "Q6 (q2b)", prompt: "From your selected use cases, which ones do you feel confident doing in real work today?", options: ["(Options are based on Q5 selections)", "None of these"] },
+        { id: "Q7 (q2a)", prompt: "How would you describe your prompting style?", options: ["Casual and conversational — I just talk to it like a person", "Go with the flow — I start loose and refine as I go", "Structured — I usually give it context, role, and constraints", "Prescriptive — detailed prompts with examples, format specs, the works", "Honestly, I don't have a style yet"] },
+        { id: "Q7a (q2a1 follow-up)", prompt: "Which sounds most like your current prompting style?", options: ["I usually keep prompts short and unstructured", "I add some detail, but not consistently", "I include some structure, but I’m still refining what works"] },
+        { id: "Q8 (q3)", prompt: "When AI gives you a weak result, do you rewrite your prompt — changing what you asked for or how you asked it — rather than just trying again?", options: ["Yes", "Sometimes", "No"] },
+        { id: "Q8a (q3a follow-up)", prompt: "What do you usually do with a bad result?", options: ["I usually accept the first result or stop there", "I retry sometimes, but mostly with minor wording tweaks", "I intentionally revise instructions/context, but not consistently"] },
+        { id: "Q9 (q4)", prompt: "Have you given AI a document, spreadsheet, or dataset and used the output in actual work — not just tested it?", options: ["Yes", "No"] },
+        { id: "Q9a (q4a follow-up)", prompt: "Which is closest?", options: ["I didn’t realize AI could work well with files/data for this", "I’ve tried once or twice, but it’s not repeatable yet", "I can do this in limited cases, but not consistently"] },
+        { id: "Q10 (s0)", prompt: "Which GALE-relevant work outputs have you used AI to help produce in real work?", options: ["Media brief or creative brief", "Competitive or market research synthesis", "Campaign reporting or performance summary", "Audience segmentation or persona draft", "None of these yet"] },
+        { id: "Q11 (s1)", prompt: "Which of these applied AI activities have you done in real work?", options: ["Use role/context-rich prompts (beyond basic ask/answer)", "Use AI with documents or data to produce analysis or recommendations", "Turn AI output into deliverables shared with others", "Use AI as part of recurring workflows", "Connect AI to other tools or automations", "Write code that calls AI APIs", "Build custom tools/apps powered by AI", "None of these yet"] },
+        { id: "Q12 (blockers)", prompt: "whats actually blocking you from doing more at work?", options: ["Don't know where to start", "Don't know which tool to use when", "My prompts don't get great results", "Not sure what's safe for client work", "Can't tell if the output is good", "Tools change too fast to keep up", "Nothing's blocking me — I just want to go deeper", "Other"] },
+        { id: "Q13 (program_topics)", prompt: "What topics do you want GWP to cover?", options: ["AI fundamentals and the basics", "Prompt engineering and craft", "GALE tools and ALCHEMY AI", "Image, video, and multimodal generation", "Slides, docs, and content creation", "Agentic AI and autonomous workflows", "Vibe coding and building tools", "Claude Code specifically", "Claude Skills, Projects, and memory", "RAG, knowledge graphs, and context systems", "Best practices and frameworks", "Legal, ethics, IP, and disclosure", "AI in society and where it's headed", "Tool comparisons and what's new", "Industry-specific applications", "Other"] },
+        { id: "Q14 (s2)", prompt: "What support would be most useful next?", options: ["1:1 office hours with someone more advanced", "Curated tool recommendations for my role", "Templates and starter prompts I can steal", "A Teams channel for ongoing questions", "Recordings of past sessions", "A library of GALE-built Skills and workflows", "Cohort-based learning (small group, multiple sessions)", "Just keep doing what you're doing", "Other"] },
+        { id: "Astrology Read", prompt: "AI Astrology read is shown here before feedback and before submit.", options: ["Persona read + optional feedback"] },
+        { id: "Q15 (q14)", prompt: "What are your near-term concerns about AI?", options: ["Job displacement and role changes", "Quality and accuracy of output", "Client confidentiality and data privacy", "Copyright, IP, and ownership questions", "Regulation and legal exposure", "Loss of craft and original thinking", "Misinformation and deepfakes", "Tools changing too fast to keep up", "Honestly, not that worried right now", "Other"] },
+        { id: "Q16 (q15)", prompt: "what would be the most helpful format to learn this?", options: ["State of the Union briefings on what's new", "Live demos of tools and workflows", "Hands-on workshops where I build something", "Show-and-tell from GALE colleagues", "Guided tutorials with takeaway materials", "Discussion and Q&A", "Guest speakers from outside GALE", "Short tactical tips (5-min segments)", "Other"] }
+      ];
+    }
+
+    function renderQuestionCatalog() {
+      if (!questionCatalogEl) return;
+      var items = getQuestionCatalog();
+      questionCatalogEl.innerHTML = "";
+      items.forEach(function(item) {
+        var block = document.createElement("div");
+        block.className = "question-item";
+        var optionsHtml = (item.options || []).map(function(opt) {
+          return "<li>" + escapeHtml(opt) + "</li>";
+        }).join("");
+        block.innerHTML =
+          '<div class="question-item-title">' + escapeHtml(item.id || "Question") + '</div>' +
+          '<div class="question-item-prompt">' + escapeHtml(item.prompt || "") + '</div>' +
+          '<ul>' + optionsHtml + '</ul>';
+        questionCatalogEl.appendChild(block);
+      });
+    }
+
+    function renderBreakdownList(el, counts) {
+      var keys = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      el.innerHTML = keys.length ? "" : "<li>No data yet.</li>";
+      keys.forEach(function(k) {
+        var li = document.createElement("li");
+        li.textContent = k + ": " + counts[k];
+        el.appendChild(li);
+      });
+    }
+
+    function tierBandFromScore(score) {
+      var n = Number(score || 0);
+      if (n >= 23) return "Tier 1 (Advanced)";
+      if (n >= 16) return "Tier 2 (Intermediate)";
+      return "Tier 3 (Foundational)";
+    }
+
+    function renderTierBreakdown(el, rows) {
+      var counts = {
+        "Tier 1 (Advanced)": 0,
+        "Tier 2 (Intermediate)": 0,
+        "Tier 3 (Foundational)": 0
+      };
+      rows.forEach(function(row) {
+        var tier = tierBandFromScore(row.score);
+        counts[tier] += 1;
+      });
+      el.innerHTML = "";
+      ["Tier 1 (Advanced)", "Tier 2 (Intermediate)", "Tier 3 (Foundational)"].forEach(function(label) {
+        var li = document.createElement("li");
+        li.textContent = label + ": " + counts[label];
+        el.appendChild(li);
+      });
+      return counts;
+    }
+
+    function renderDomainPieChart(container, counts) {
+      var keys = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      if (!keys.length) {
+        container.innerHTML = '<div class="meta">No data yet.</div>';
+        return;
+      }
+      var colors = ["#fd6453", "#42b3ff", "#ffd166", "#7bd389", "#c792ea", "#ff8fab", "#9ad1d4", "#f4a261"];
+      var total = keys.reduce(function(sum, key) { return sum + counts[key]; }, 0);
+      var cursor = 0;
+      var parts = [];
+      var legendHtml = "";
+      keys.forEach(function(key, idx) {
+        var value = counts[key];
+        var start = (cursor / total) * 360;
+        cursor += value;
+        var end = (cursor / total) * 360;
+        var color = colors[idx % colors.length];
+        parts.push(color + " " + start.toFixed(2) + "deg " + end.toFixed(2) + "deg");
+        legendHtml += '<li><span class="pie-dot" style="background:' + color + '"></span>' + escapeHtml(key) + ': ' + value + '</li>';
+      });
+      container.innerHTML =
+        '<div class="pie-wrap">' +
+          '<div class="pie-chart" style="background:conic-gradient(' + parts.join(",") + ')"></div>' +
+          '<ul class="pie-legend">' + legendHtml + '</ul>' +
+        '</div>';
+    }
+
+    function topTierLabelFromCounts(counts) {
+      var ordered = ["Tier 1 (Advanced)", "Tier 2 (Intermediate)", "Tier 3 (Foundational)"];
+      var best = ordered[0];
+      var max = -1;
+      ordered.forEach(function(label) {
+        if ((counts[label] || 0) > max) {
+          max = counts[label] || 0;
+          best = label;
+        }
+      });
+      return best;
+    }
+
+    function tallySelections(rows, key, excludes) {
+      var skip = Array.isArray(excludes) ? excludes : [];
+      var counts = {};
+      rows.forEach(function(row) {
+        var values = row && row.responses && row.responses[key];
+        if (!Array.isArray(values)) return;
+        values.forEach(function(raw) {
+          var value = String(raw || "").trim();
+          if (!value || skip.indexOf(value) >= 0) return;
+          counts[value] = (counts[value] || 0) + 1;
+        });
+      });
+      return counts;
+    }
+
+    function topSupportForRows(rows) {
+      var counts = tallySelections(rows, "s2", []);
+      var best = topKey(counts);
+      return best === "—" ? "No clear support pattern yet" : best;
+    }
+
+    function buildInsights(rows, tierCounts, domainCounts) {
+      var insights = [];
+      var total = rows.length || 1;
+
+      var tier1Rows = rows.filter(function(r) { return r.tier === "Tier 1"; });
+      var tier2Rows = rows.filter(function(r) { return r.tier === "Tier 2"; });
+      var tier3Rows = rows.filter(function(r) { return r.tier === "Tier 3"; });
+
+      insights.push("Tier 1 wants: " + topSupportForRows(tier1Rows) + ".");
+      insights.push("Tier 2 wants: " + topSupportForRows(tier2Rows) + ".");
+      insights.push("Tier 3 wants: " + topSupportForRows(tier3Rows) + ".");
+
+      var topTier = topKey(tierCounts);
+      if (topTier !== "—" && tierCounts[topTier] / total >= 0.45) {
+        insights.push(topTier + " is the largest cohort. Prioritize that tier's content track first.");
+      }
+
+      if (!insights.length) {
+        insights.push("More submissions will sharpen tier demand patterns. Current data is still too sparse for directional planning.");
+      }
+
+      return insights.slice(0, 5);
+    }
+
+    function renderAppIconsRow(container, counts, limit) {
+      container.innerHTML = "";
+      var sorted = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      sorted.slice(0, limit || 5).forEach(function(tool) {
+        var domain = toolLogoDomain(tool);
+        var div = document.createElement("div");
+        div.className = "app-icon-large";
+        div.title = tool + " (" + counts[tool] + ")";
+        if (domain) {
+          var img = document.createElement("img");
+          img.src = "https://www.google.com/s2/favicons?sz=64&domain=" + encodeURIComponent(domain);
+          img.alt = tool;
+          div.appendChild(img);
+        } else {
+          var span = document.createElement("span");
+          span.className = "fallback";
+          span.textContent = tool.charAt(0);
+          div.appendChild(span);
+        }
+        container.appendChild(div);
+      });
+      if (!sorted.length) {
+        container.innerHTML = '<span class="meta">No data yet</span>';
+      }
+    }
+
+    function renderDashboard(rows) {
+      var tierCounts = tallyBy(rows, function(r) { return r.tier || "Unknown"; });
+      var domainCounts = tallyBy(rows, function(r) { return r.domain || "Unknown"; });
+      var appCounts = tallySelections(rows, "t1", ["Other"]);
+      var wishAppCounts = tallySelections(rows, "t1d", ["None of these — I feel set for now"]);
+      var q19Counts = tallySelections(rows, "s2", []);
+      var scoreSum = rows.reduce(function(sum, r) { return sum + (isFinite(r.score) ? r.score : 0); }, 0);
+      var avg = rows.length ? (scoreSum / rows.length) : 0;
+
+      statSubmissions.textContent = String(rows.length);
+      if (!rows.length || avg <= 0) {
+        statAvgScore.textContent = "No data yet";
+      } else {
+        statAvgScore.innerHTML = avg.toFixed(1) + "<br><span style='font-size:14px;font-weight:400;opacity:0.7;'>" + scoreBandLabel(avg) + "</span>";
+      }
+      var tierBandCounts = renderTierBreakdown(tierBreakdown, rows);
+      statTopTier.textContent = topTierLabelFromCounts(tierBandCounts);
+      statTopDomain.textContent = topKey(domainCounts);
+      statTopApp.textContent = topKey(appCounts);
+
+      renderDomainPieChart(domainBreakdown, domainCounts);
+      renderAppIconsRow(appBreakdown, appCounts, 5);
+      renderAppIconsRow(wishAppBreakdown, wishAppCounts, 5);
+      renderBreakdownList(q19Breakdown, q19Counts);
+
+      var autoInsights = buildInsights(rows, tierCounts, domainCounts);
+      renderInsightsList(autoInsights);
+
+      if (rows.length >= 3) {
+        fetchLlmInsights().then(function(llmInsights) {
+          if (llmInsights && llmInsights.length) {
+            var merged = autoInsights.concat(llmInsights).slice(0, 7);
+            renderInsightsList(merged);
+          }
+        }).catch(function() {});
+      }
+    }
+
+    function renderInsightsList(insights) {
+      insightsEl.innerHTML = "";
+      insights.forEach(function(text) {
+        var li = document.createElement("li");
+        li.textContent = text;
+        insightsEl.appendChild(li);
+      });
+    }
+
+    async function fetchLlmInsights() {
+      try {
+        var result = await fetchNotesAnalysis("Look at the quiz responses and find 1-2 genuinely surprising or interesting patterns. Write like a smart colleague sharing an observation over coffee, not a consultant. Be specific and concrete. Bad example: 'Leverage best practices to accelerate learning.' Good example: 'Half the Strategy team already uses Claude daily but almost nobody in Media does — there might be an internal knowledge-sharing opportunity there.'");
+        var analysis = result && result.analysis ? result.analysis : null;
+        if (!analysis) return [];
+        var insights = [];
+        if (analysis.summary && analysis.summary.length < 200) {
+          insights.push(analysis.summary);
+        }
+        if (Array.isArray(analysis.opportunities)) {
+          analysis.opportunities.slice(0, 2).forEach(function(opp) {
+            if (opp && opp.length < 180) insights.push(opp);
+          });
+        }
+        return insights.slice(0, 3);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function renderDocSection(title, pairs) {
+      var html = '<div class="doc-section"><div class="doc-section-title">' + escapeHtml(title) + '</div>';
+      pairs.forEach(function(pair) {
+        html += '<p><strong>' + escapeHtml(pair.label) + ':</strong> ' + escapeHtml(formatValue(pair.value)) + '</p>';
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function formatPercentMap(mix) {
+      var m = mix || {};
+      var keys = ["comfortable", "concerned", "mixed", "unknown"];
+      return keys.map(function(key) {
+        var val = Number(m[key] || 0);
+        return key + ": " + val + "%";
+      }).join(" · ");
+    }
+
+    function renderAnalysisOutput(analysis) {
+      if (!analyzeOutput) return;
+      if (!analysis) {
+        analyzeOutput.innerHTML = "";
+        return;
+      }
+
+      var html = '' +
+        '<div class="analysis-summary"><strong>Summary:</strong> ' + escapeHtml(analysis.summary || "—") + '</div>' +
+        '<div class="analysis-summary"><strong>Sentiment Mix:</strong> ' + escapeHtml(formatPercentMap(analysis.sentimentMix)) + '</div>' +
+        '<div class="analysis-summary"><strong>Coverage:</strong> ' +
+          escapeHtml((analysis.stats && analysis.stats.submissionsAnalyzed) || 0) + ' submissions, ' +
+          escapeHtml((analysis.stats && analysis.stats.notesAnalyzed) || 0) + ' notes' +
+        '</div>';
+
+      var themes = Array.isArray(analysis.themes) ? analysis.themes : [];
+      if (themes.length) {
+        html += '<div class="doc-section-title" style="margin-top:10px;">Themes</div>';
+        themes.forEach(function(theme) {
+          var quotes = Array.isArray(theme.sampleQuotes) ? theme.sampleQuotes : [];
+          html += '' +
+            '<div class="analysis-theme">' +
+              '<div class="analysis-theme-title">' + escapeHtml(theme.theme || "Theme") + ' (' + escapeHtml(Number(theme.evidenceCount || 0)) + ')</div>' +
+              '<div class="meta" style="margin-top:4px;">' + escapeHtml(theme.recommendedAction || "") + '</div>' +
+              (quotes.length
+                ? '<ul>' + quotes.slice(0, 3).map(function(q) { return '<li>' + escapeHtml(q) + '</li>'; }).join("") + '</ul>'
+                : '') +
+            '</div>';
+        });
+      }
+
+      var risks = Array.isArray(analysis.riskSignals) ? analysis.riskSignals : [];
+      if (risks.length) {
+        html += '<div class="doc-section-title" style="margin-top:10px;">Risk Signals</div>';
+        html += '<ul>' + risks.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+      }
+
+      var opportunities = Array.isArray(analysis.opportunities) ? analysis.opportunities : [];
+      if (opportunities.length) {
+        html += '<div class="doc-section-title" style="margin-top:10px;">Opportunities</div>';
+        html += '<ul>' + opportunities.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+      }
+
+      if (analysis.error) {
+        html += '<div class="meta" style="margin-top:8px;color:#ff8f84;">LLM issue: ' + escapeHtml(analysis.error) + '</div>';
+      }
+
+      analyzeOutput.innerHTML = html;
+    }
+
+    function toolLogoDomain(tool) {
+      var map = {
+        "ChatGPT": "openai.com",
+        "Claude": "anthropic.com",
+        "Gemini / Google AI": "gemini.google.com",
+        "Alchemy AI": "alchemy.ai",
+        "Nanobanana": "nanobanana.ai",
+        "Microsoft Copilot": "copilot.microsoft.com",
+        "GitHub Copilot": "github.com",
+        "Cursor": "cursor.com",
+        "Perplexity": "perplexity.ai",
+        "Notion AI": "notion.so",
+        "Grammarly": "grammarly.com",
+        "Jasper": "jasper.ai",
+        "Grok": "x.ai",
+        "Midjourney": "midjourney.com",
+        "Adobe Firefly": "adobe.com",
+        "Runway": "runwayml.com",
+        "Synthesia": "synthesia.io",
+        "Otter AI": "otter.ai",
+        "Canva AI": "canva.com",
+        "Figma AI (Weave)": "figma.com"
+      };
+      return map[tool] || "";
+    }
+
+    function renderToolChips(value) {
+      var items = Array.isArray(value)
+        ? value
+        : (typeof value === "string" && value.trim() ? value.split(";") : []);
+      var cleaned = items.map(function(v) { return String(v || "").trim(); }).filter(Boolean);
+      if (!cleaned.length) return "—";
+      return '<div class="tool-chip-wrap">' + cleaned.map(function(tool) {
+        var domain = toolLogoDomain(tool);
+        var icon = domain
+          ? '<img src="https://www.google.com/s2/favicons?sz=64&domain=' + encodeURIComponent(domain) + '" alt="">'
+          : '';
+        return '<span class="tool-chip">' + icon + '<span>' + escapeHtml(tool) + '</span></span>';
+      }).join("") + '</div>';
+    }
+
+    function buildSubmissionDoc(row) {
+      var r = row.responses;
+      var profile = row.payload.aiProfile || {};
+      return '' +
+        renderDocSection("Roll-up", [
+          { label: "Submitted", value: row.when || "—" },
+          { label: "Score", value: row.score },
+          { label: "Score Meaning", value: scoreInterpretation(row.score) },
+          { label: "Tier", value: row.tier },
+          { label: "Domain", value: row.domain },
+          { label: "Submission ID", value: row.id }
+        ]) +
+        renderDocSection("AI Profile Read", [
+          { label: "Profile", value: profile.sign || "—" },
+          { label: "Summary", value: profile.signature || "—" },
+          { label: "Rising Signal", value: profile.rising || "—" },
+          { label: "Watchout", value: profile.watchout || "—" }
+        ]) +
+        renderDocSection("Core Answers", [
+          { label: "Q1", value: r.q1 },
+          { label: "Q1 Follow-up", value: r.q1a },
+          { label: "Q2 Areas Used", value: r.q2 },
+          { label: "Q2 Comfortable", value: r.q2b },
+          { label: "Q2 Blind Spots", value: r.q2c },
+          { label: "Q2 Prompt Structure", value: r.q2a },
+          { label: "Q2 Prompt Follow-up", value: r.q2a1 },
+          { label: "Q3", value: r.q3 },
+          { label: "Q3 Follow-up", value: r.q3a },
+          { label: "Q4", value: r.q4 },
+          { label: "Q4 Follow-up", value: r.q4a },
+          { label: "Q5", value: r.q5 },
+          { label: "Q5 Follow-up", value: r.q5a },
+          { label: "Q6", value: r.q6 },
+          { label: "Q6 Follow-up", value: r.q6a }
+        ]) +
+        renderDocSection("Tool Profile", [
+          { label: "Tools Used Today", value: r.t1 },
+          { label: "Paid Out Of Pocket", value: r.t1b },
+          { label: "Wants To Learn", value: r.t1d },
+          { label: "Favorites Today", value: r.t1c }
+        ]).replace(
+          '<p><strong>Tools Used Today:</strong> ' + escapeHtml(formatValue(r.t1)) + '</p>',
+          '<p><strong>Tools Used Today:</strong> ' + renderToolChips(r.t1) + '</p>'
+        ).replace(
+          '<p><strong>Paid Out Of Pocket:</strong> ' + escapeHtml(formatValue(r.t1b)) + '</p>',
+          '<p><strong>Paid Out Of Pocket:</strong> ' + renderToolChips(r.t1b) + '</p>'
+        ).replace(
+          '<p><strong>Wants To Learn:</strong> ' + escapeHtml(formatValue(r.t1d)) + '</p>',
+          '<p><strong>Wants To Learn:</strong> ' + renderToolChips(r.t1d) + '</p>'
+        ).replace(
+          '<p><strong>Favorites Today:</strong> ' + escapeHtml(formatValue(r.t1c)) + '</p>',
+          '<p><strong>Favorites Today:</strong> ' + renderToolChips(r.t1c) + '</p>'
+        ) +
+        renderDocSection("Calibration & Signals", [
+          { label: "C1", value: r.c1 },
+          { label: "C2", value: r.c2 },
+          { label: "S0", value: r.s0 },
+          { label: "S1", value: r.s1 },
+          { label: "S2", value: r.s2 },
+          { label: "Domain Specialty", value: r.d1_specialty },
+          { label: "Astrology Feedback", value: r.astro_feedback_choice },
+          { label: "Astrology Feedback Note", value: r.astro_feedback_note }
+        ]) +
+        renderDocSection("Clarifications", [
+          { label: "Q1 Note", value: r.q1_note },
+          { label: "Q2 Note", value: r.q2_note },
+          { label: "Q2b Note", value: r.q2b_note },
+          { label: "Q2c Note", value: r.q2c_note },
+          { label: "Q2a Note", value: r.q2a_note },
+          { label: "Q3 Note", value: r.q3_note },
+          { label: "Q4 Note", value: r.q4_note },
+          { label: "Q5 Note", value: r.q5_note },
+          { label: "Q6 Note", value: r.q6_note },
+          { label: "C1 Note", value: r.c1_note },
+          { label: "C2 Note", value: r.c2_note },
+          { label: "S0 Note", value: r.s0_note },
+          { label: "S1 Note", value: r.s1_note },
+          { label: "S2 Note", value: r.s2_note },
+          { label: "Domain Note", value: r.d1_note }
+        ]);
+    }
+
+    function renderEntries(rows) {
+      entries.innerHTML = "";
+      rows.slice().reverse().forEach(function(row) {
+        var normalized = normalizeSubmission(row, entries.children.length + 1);
+        var open = Boolean(entryOpenState[normalized.id]);
+        var div = document.createElement("div");
+        div.className = "entry";
+        div.innerHTML =
+          "<div class=\"entry-head\">" +
+            "<div>" +
+              "<div class=\"entry-title\">" + escapeHtml(normalized.domain) + (normalized.subdomain ? " · " + escapeHtml(normalized.subdomain) : "") + "</div>" +
+              "<div class=\"entry-meta\">Score " + escapeHtml(normalized.score.toFixed(1)) + " · " + escapeHtml(normalized.tier) + " · " + escapeHtml(normalized.when || "") + "</div>" +
+            "</div>" +
+            "<div class=\"row\">" +
+              "<button type=\"button\" data-toggle-entry=\"" + escapeHtml(normalized.id) + "\">" + (open ? "Collapse" : "Expand") + "</button>" +
+              "<button type=\"button\" class=\"btn-edit\" data-edit-entry=\"" + escapeHtml(normalized.id) + "\">" + (entryEditState[normalized.id] ? "Close Edit" : "Edit") + "</button>" +
+              "<button type=\"button\" class=\"btn-danger\" data-delete-entry=\"" + escapeHtml(normalized.id) + "\">Delete</button>" +
+            "</div>" +
+          "</div>" +
+          "<div class=\"entry-detail" + (open ? " open" : "") + "\" data-entry-detail=\"" + escapeHtml(normalized.id) + "\">" +
+            buildSubmissionDoc(normalized) +
+            "<div class=\"edit-wrap" + (entryEditState[normalized.id] ? " open" : "") + "\" data-edit-wrap=\"" + escapeHtml(normalized.id) + "\">" +
+              "<div class=\"doc-section-title\">Edit Payload JSON</div>" +
+              "<textarea data-edit-json=\"" + escapeHtml(normalized.id) + "\">" + escapeHtml(JSON.stringify(normalized.payload, null, 2)) + "</textarea>" +
+              "<div class=\"row\" style=\"margin-top:8px;\">" +
+                "<button type=\"button\" class=\"btn-primary\" data-save-entry=\"" + escapeHtml(normalized.id) + "\">Save</button>" +
+                "<button type=\"button\" data-cancel-edit=\"" + escapeHtml(normalized.id) + "\">Cancel</button>" +
+              "</div>" +
+              "<div class=\"entry-meta\" data-edit-status=\"" + escapeHtml(normalized.id) + "\"></div>" +
+            "</div>" +
+          "</div>" +
+          "<div class=\"entry-meta\" style=\"margin-top:8px;\">ID: " + escapeHtml(normalized.id) + "</div>";
+        entries.appendChild(div);
+      });
+
+      entries.querySelectorAll("[data-toggle-entry]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-toggle-entry");
+          entryOpenState[id] = !entryOpenState[id];
+          renderEntries(latestData.submissions || []);
+        });
+      });
+
+      entries.querySelectorAll("[data-edit-entry]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-edit-entry");
+          entryEditState[id] = !entryEditState[id];
+          entryOpenState[id] = true;
+          renderEntries(latestData.submissions || []);
+        });
+      });
+
+      entries.querySelectorAll("[data-cancel-edit]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-cancel-edit");
+          entryEditState[id] = false;
+          renderEntries(latestData.submissions || []);
+        });
+      });
+
+      entries.querySelectorAll("[data-save-entry]").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+          var id = btn.getAttribute("data-save-entry");
+          var textarea = entries.querySelector('[data-edit-json="' + id + '"]');
+          var status = entries.querySelector('[data-edit-status="' + id + '"]');
+          if (!textarea) return;
+
+          var parsed;
+          try {
+            parsed = JSON.parse(textarea.value || "{}");
+          } catch (e) {
+            if (status) status.textContent = "Invalid JSON.";
+            return;
+          }
+          if (!parsed || typeof parsed !== "object" || !parsed.responses || typeof parsed.responses !== "object") {
+            if (status) status.textContent = "Payload must include a responses object.";
+            return;
+          }
+
+          btn.disabled = true;
+          if (status) status.textContent = "Saving...";
+          try {
+            await updateSubmission(id, parsed);
+            if (status) status.textContent = "Saved.";
+            setStatus("Entry updated.");
+            entryEditState[id] = false;
+            await loadData();
+          } catch (err) {
+            if (status) status.textContent = err && err.message ? err.message : "Save failed.";
+            btn.disabled = false;
+          }
+        });
+      });
+
+      entries.querySelectorAll("[data-delete-entry]").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+          var id = btn.getAttribute("data-delete-entry");
+          var ok = window.confirm("Are you sure you want to delete this entry? This cannot be undone.");
+          if (!ok) return;
+          btn.disabled = true;
+          try {
+            await deleteSubmission(id);
+            setStatus("Entry deleted.");
+            await loadData();
+          } catch (err) {
+            setStatus(err && err.message ? err.message : "Delete failed", true);
+            btn.disabled = false;
+          }
+        });
+      });
+    }
+
+    async function fetchSubmissions() {
+      var res = await fetch("/api/submissions?key=" + encodeURIComponent(apiKey), { method: "GET" });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        throw new Error("Request failed");
+      }
+      return res.json();
+    }
+
+    async function fetchNotesAnalysis(focus) {
+      var res = await fetch("/api/analyze-notes?key=" + encodeURIComponent(apiKey), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ focus: focus || "" })
+      });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && (errBody.details || errBody.error) ? (errBody.details || errBody.error) : "Analysis failed");
+      }
+      return res.json();
+    }
+
+    async function fetchPersonaConfig() {
+      var res = await fetch("/api/persona-config", { method: "GET" });
+      if (!res.ok) throw new Error("Failed to load persona config");
+      return res.json();
+    }
+
+    async function updatePersonaConfig(config) {
+      var res = await fetch("/api/persona-config?key=" + encodeURIComponent(apiKey), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config)
+      });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && errBody.error ? errBody.error : "Persona config update failed");
+      }
+      return res.json();
+    }
+
+    async function loadPersonaConfigEditor() {
+      try {
+        var config = await fetchPersonaConfig();
+        personaConfigInput.value = JSON.stringify(config, null, 2);
+        setPersonaConfigStatus("Persona config loaded.");
+      } catch (err) {
+        setPersonaConfigStatus(err && err.message ? err.message : "Failed to load persona config", true);
+      }
+    }
+
+    async function updateSubmission(id, payload) {
+      var url = "/api/submissions?key=" + encodeURIComponent(apiKey);
+      var res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id, payload: payload })
+      });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        if (res.status === 404) throw new Error("Submission not found");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && errBody.error ? errBody.error : "Update failed");
+      }
+      return res.json();
+    }
+
+    async function deleteSubmission(id) {
+      var url = "/api/submissions?id=" + encodeURIComponent(id) + "&key=" + encodeURIComponent(apiKey);
+      var res = await fetch(url, { method: "DELETE" });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        if (res.status === 404) throw new Error("Submission not found");
+        throw new Error("Delete failed");
+      }
+      return res.json();
+    }
+
+    async function loadData() {
+      try {
+        var data = await fetchSubmissions();
+        var submissions = Array.isArray(data && data.submissions) ? data.submissions : [];
+        var revisedSubmissions = submissions.filter(isRevisedSubmission);
+        latestData = {
+          count: revisedSubmissions.length,
+          submissions: revisedSubmissions
+        };
+        var normalized = latestData.submissions.map(function(row, idx) { return normalizeSubmission(row, idx); });
+        countText.textContent = latestData.count + " revised responses";
+        rawEl.value = JSON.stringify({ count: latestData.count, submissions: latestData.submissions }, null, 2);
+        renderDashboard(normalized);
+        renderEntries(latestData.submissions);
+        lastSync.textContent = "Synced " + new Date().toLocaleString();
+        setStatus("");
+      } catch (err) {
+        setStatus(err && err.message ? err.message : "Failed to load", true);
+      }
+    }
+
+    function openPanel(key) {
+      apiKey = key;
+      sessionStorage.setItem(ADMIN_SESSION_KEY, key);
+      loginCard.classList.add("hidden");
+      panel.classList.remove("hidden");
+      renderQuestionCatalog();
+      loadData();
+      loadPersonaConfigEditor();
+    }
+
+    unlockBtn.addEventListener("click", async function() {
+      var candidate = (passwordInput.value || "").trim();
+      if (!candidate) {
+        setStatus("Enter passphrase", true);
+        return;
+      }
+      apiKey = candidate;
+      try {
+        await fetchSubmissions();
+        openPanel(candidate);
+      } catch (err) {
+        setStatus("Access denied", true);
+      }
+    });
+
+    passwordInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") unlockBtn.click();
+    });
+
+    refreshBtn.addEventListener("click", loadData);
+
+    if (personaConfigToggle && personaConfigBody && personaConfigExpandBtn) {
+      personaConfigToggle.addEventListener("click", function() {
+        var isHidden = personaConfigBody.classList.contains("hidden");
+        if (isHidden) {
+          personaConfigBody.classList.remove("hidden");
+          personaConfigExpandBtn.textContent = "Collapse";
+        } else {
+          personaConfigBody.classList.add("hidden");
+          personaConfigExpandBtn.textContent = "Expand";
+        }
+      });
+    }
+
+    if (reloadPersonaConfigBtn) {
+      reloadPersonaConfigBtn.addEventListener("click", function() {
+        loadPersonaConfigEditor();
+      });
+    }
+
+    if (savePersonaConfigBtn) {
+      savePersonaConfigBtn.addEventListener("click", async function() {
+        var parsed;
+        try {
+          parsed = JSON.parse(personaConfigInput.value || "{}");
+        } catch (e) {
+          setPersonaConfigStatus("Invalid JSON.", true);
+          return;
+        }
+        if (!isValidPersonaConfig(parsed)) {
+          setPersonaConfigStatus("Invalid schema. Expected personaGrid with 4 rows x 5 personas and required fields.", true);
+          return;
+        }
+        savePersonaConfigBtn.disabled = true;
+        setPersonaConfigStatus("Saving...");
+        try {
+          await updatePersonaConfig(parsed);
+          setPersonaConfigStatus("Persona config saved. New quiz reads will use this copy.");
+        } catch (err) {
+          setPersonaConfigStatus(err && err.message ? err.message : "Save failed", true);
+        } finally {
+          savePersonaConfigBtn.disabled = false;
+        }
+      });
+    }
+
+    copyBtn.addEventListener("click", async function() {
+      try {
+        await navigator.clipboard.writeText(rawEl.value || "");
+        lastSync.textContent = "JSON copied " + new Date().toLocaleTimeString();
+      } catch (e) {
+        setStatus("Clipboard blocked by browser", true);
+      }
+    });
+
+    downloadBtn.addEventListener("click", function() {
+      var blob = new Blob([rawEl.value || "{}"], { type: "application/json;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "gale-submissions-admin.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      lastSync.textContent = "JSON downloaded " + new Date().toLocaleTimeString();
+    });
+
+    toggleRawBtn.addEventListener("click", function() {
+      var showing = !rawWrap.classList.contains("hidden");
+      if (showing) {
+        rawWrap.classList.add("hidden");
+        toggleRawBtn.textContent = "Show Raw";
+      } else {
+        rawWrap.classList.remove("hidden");
+        toggleRawBtn.textContent = "Hide Raw";
+      }
+    });
+
+    if (analyzeNotesBtn) {
+      analyzeNotesBtn.addEventListener("click", async function() {
+        var focus = analyzeFocusInput ? analyzeFocusInput.value : "";
+        analyzeNotesBtn.disabled = true;
+        if (analyzeStatus) analyzeStatus.textContent = "Analyzing notes...";
+        try {
+          var result = await fetchNotesAnalysis(focus);
+          renderAnalysisOutput(result && result.analysis ? result.analysis : null);
+          if (analyzeStatus) analyzeStatus.textContent = "Analysis complete.";
+        } catch (err) {
+          if (analyzeStatus) analyzeStatus.textContent = (err && err.message) ? err.message : "Analysis failed";
+        } finally {
+          analyzeNotesBtn.disabled = false;
+        }
+      });
+    }
+
+    var stored = sessionStorage.getItem(ADMIN_SESSION_KEY);
+    if (stored) {
+      openPanel(stored);
+    }
+  </script>
+</body>
+</html>

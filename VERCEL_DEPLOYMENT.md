@@ -4,7 +4,7 @@
 
 - Frontend posts each completed submission to `POST /api/submissions`.
 - The API route is implemented in `api/submissions.js`.
-- Vercel root path `/` rewrites to `gale-quiz_Version2.html` via `vercel.json`.
+- Vercel root path `/` rewrites to `gale-quiz.html` via `vercel.json`.
 
 ## 1) Create/connect your Vercel project
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ops Console</title>
+  <title>Ops Console Revised</title>
   <style>
     :root {
       --bg: #0a0a0a;
@@ -42,6 +42,18 @@
     input, textarea { width: 100%; }
     button { cursor: pointer; }
     .btn-primary { border-color: var(--accent); background: var(--accent); color: #111; }
+    .btn-danger {
+      border-color: rgba(255,99,99,0.7);
+      color: #ff9a9a;
+      background: rgba(255,99,99,0.08);
+    }
+    .btn-danger:hover { background: rgba(255,99,99,0.16); }
+    .btn-edit {
+      border-color: rgba(120,190,255,0.7);
+      color: #9dd3ff;
+      background: rgba(120,190,255,0.1);
+    }
+    .btn-edit:hover { background: rgba(120,190,255,0.18); }
     .meta { color: var(--muted); font-size: 12px; }
     .pill {
       display: inline-block;
@@ -65,7 +77,7 @@
       padding: 12px;
     }
     .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-    .stat-value { margin-top: 4px; font-size: 24px; font-weight: 600; }
+    .stat-value { margin-top: 4px; font-size: 24px; font-weight: 600; line-height: 1.2; }
     .split {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -103,10 +115,346 @@
     .doc-section { margin-top: 10px; }
     .doc-section-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
     .doc-section p { margin: 6px 0; line-height: 1.35; }
+    .score-guide {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      padding: 10px;
+    }
+    .score-guide p { margin: 6px 0; line-height: 1.4; }
+    .edit-wrap {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      display: none;
+    }
+    .edit-wrap.open { display: block; }
+    .edit-wrap textarea {
+      min-height: 220px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
     .hidden { display: none; }
     #status { min-height: 18px; color: var(--muted); }
     .raw-wrap { margin-top: 10px; }
     #raw { min-height: 180px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    #personaConfigInput {
+      min-height: 320px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .analysis-wrap {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .analysis-wrap ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    .analysis-wrap li { margin: 6px 0; }
+    .analysis-summary { margin-top: 8px; line-height: 1.45; }
+    .tier-insights-list {
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+    .tier-insights-list li {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 8px 10px;
+      line-height: 1.35;
+    }
+    .tier-insight-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .tier-insight-bullets {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 2px;
+    }
+    .tier-insights-list li.tier-priority {
+      border-color: rgba(253,100,83,0.45);
+      background: rgba(253,100,83,0.08);
+    }
+    .analysis-output {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+    .analysis-metrics {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 6px;
+      align-items: stretch;
+    }
+    .analysis-metric {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 8px;
+    }
+    .analysis-metric-stack {
+      display: grid;
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      min-height: 0;
+    }
+    .analysis-metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--muted);
+    }
+    .analysis-metric-value {
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    .analysis-section {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      padding: 8px;
+    }
+    .analysis-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .analysis-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .analysis-theme {
+      margin-top: 6px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+    }
+    .analysis-theme-title { font-weight: 600; }
+    .tool-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+    .tool-chip img {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: block;
+    }
+    .app-icons-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      align-content: flex-start;
+    }
+    .app-icon-large {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .app-icon-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .app-icon-large img.tool-icon-github {
+      background: #fff;
+      object-fit: contain;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+    .app-icon-large .fallback {
+      font-size: 18px;
+      color: var(--muted);
+    }
+    .tool-chip img.tool-icon-github {
+      background: #fff;
+      padding: 2px;
+      box-sizing: border-box;
+    }
+    .pie-wrap {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .pie-chart {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: #222;
+      flex: 0 0 auto;
+    }
+    .pie-legend {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-width: 170px;
+    }
+    .pie-legend li {
+      margin: 6px 0;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pie-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+    .bar-chart {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+      align-content: flex-start;
+    }
+    .bar-row {
+      display: grid;
+      gap: 3px;
+    }
+    .bar-row-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .bar-row-head span:first-child {
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bar-row-head span:last-child {
+      flex: 0 0 auto;
+    }
+    .bar-track {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(253,100,83,0.55), rgba(253,100,83,0.95));
+    }
+    .support-strip {
+      margin-top: 10px;
+    }
+    #appBreakdown,
+    #blockersBreakdown {
+      min-height: 116px;
+    }
+    .support-row {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .support-pill {
+      border: 1px solid rgba(253,100,83,0.35);
+      background: rgba(253,100,83,0.1);
+      color: #ffd5cf;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      line-height: 1.2;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .support-count {
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 999px;
+      padding: 2px 7px;
+      color: #fff;
+      font-size: 11px;
+      min-width: 22px;
+      text-align: center;
+    }
+    .question-catalog {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+    .question-item {
+      border: 1px solid var(--line);
+      background: #0f0f0f;
+      padding: 10px;
+    }
+    .question-item-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+    .question-item-prompt {
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .question-item ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .question-item li {
+      margin: 4px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 860px) {
+      .analysis-metrics {
+        grid-template-columns: 1fr;
+      }
+      .analysis-metric-stack {
+        grid-template-rows: auto;
+      }
+      .tier-insights-list li,
+      .analysis-metric,
+      .analysis-section {
+        padding: 7px 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -124,11 +472,12 @@
       <div class="card">
         <div class="row" style="justify-content:space-between;">
           <div>
-            <span class="pill">Ops</span>
+            <span class="pill">Ops Console</span>
             <span id="countText">0 responses</span>
           </div>
           <div class="row">
             <button id="refresh">Refresh</button>
+            <button id="rescoreAll">Rescore All</button>
             <button id="copyJson">Copy JSON</button>
             <button id="downloadJson">Download JSON</button>
             <button id="toggleRaw">Show Raw</button>
@@ -141,31 +490,90 @@
           <div class="stat"><div class="stat-label">Average Score</div><div id="statAvgScore" class="stat-value">0.0</div></div>
           <div class="stat"><div class="stat-label">Most Common Tier</div><div id="statTopTier" class="stat-value">—</div></div>
           <div class="stat"><div class="stat-label">Most Common Domain</div><div id="statTopDomain" class="stat-value">—</div></div>
-          <div class="stat"><div class="stat-label">Use AI More At Home</div><div id="statMoreAtHome" class="stat-value">0%</div></div>
+          <div class="stat"><div class="stat-label">Top App In Use</div><div id="statTopApp" class="stat-value">—</div></div>
         </div>
 
         <div class="split">
           <div class="panel-soft">
             <div class="stat-label">Tier Breakdown</div>
             <ul id="tierBreakdown" class="list-inline"></ul>
+            <div class="meta" style="margin-top:10px;border-top:1px solid var(--line);padding-top:10px;">
+              <strong>Tier 1:</strong> 21.0+ · <strong>Tier 2:</strong> 14.0–20.9 · <strong>Tier 3:</strong> &lt;14.0
+            </div>
           </div>
           <div class="panel-soft">
             <div class="stat-label">Domain Breakdown</div>
-            <ul id="domainBreakdown" class="list-inline"></ul>
+            <div id="domainBreakdown"></div>
           </div>
         </div>
 
-        <div class="panel-soft" style="margin-top:10px;">
-          <div class="stat-label">Interesting Insights (Auto)</div>
-          <ul id="insights" class="list-inline"></ul>
+        <div class="split">
+          <div class="panel-soft">
+            <div class="stat-label">Top Apps In Use</div>
+            <div id="appBreakdown" class="app-icons-row"></div>
+          </div>
+          <div class="panel-soft">
+            <div class="stat-label">Top Blockers</div>
+            <div id="blockersBreakdown" class="bar-chart"></div>
+          </div>
         </div>
+
+        <div class="panel-soft support-strip">
+          <div class="stat-label">Top Support Requests</div>
+          <div id="q19Breakdown" class="support-row"></div>
+        </div>
+
+        <div class="panel-soft" style="margin-top:10px;">
+          <div class="stat-label">What Each Tier Wants</div>
+          <ul id="insights" class="tier-insights-list"></ul>
+        </div>
+
+        <div class="analysis-wrap">
+          <div class="row" style="justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div class="stat-label">Ask Alchemy Anything</div>
+              <div class="meta" style="margin-top:6px; max-width:700px;">Ask a question about all quiz responses and answers.</div>
+            </div>
+            <button id="analyzeNotes" class="btn-primary">Ask</button>
+          </div>
+          <textarea id="analyzeFocus" rows="2" placeholder="e.g. Any interesting patterns in the notes? Which domains seem most ready for advanced training?" style="margin-top:8px;"></textarea>
+          <div id="analyzeStatus" class="meta" style="margin-top:8px;"></div>
+          <div id="analyzeOutput" style="margin-top:8px;"></div>
+        </div>
+
       </div>
 
       <div class="card raw-wrap hidden" id="rawWrap">
         <textarea id="raw" rows="10" readonly></textarea>
       </div>
 
+      <div class="card" id="questionCatalogCard">
+        <div class="row" style="justify-content:space-between; align-items:center; cursor:pointer;" id="questionCatalogToggle">
+          <div class="stat-label">Questions & Options Reference</div>
+          <button type="button" id="questionCatalogExpandBtn" style="padding:4px 10px;font-size:12px;">Expand</button>
+        </div>
+        <div id="questionCatalogBody" class="hidden">
+          <div id="questionCatalog" class="question-catalog"></div>
+        </div>
+      </div>
+
       <div class="list" id="entries"></div>
+
+      <div class="card" id="personaConfigCard">
+        <div class="row" style="justify-content:space-between; align-items:center; cursor:pointer;" id="personaConfigToggle">
+          <div class="stat-label">Persona Copy Config</div>
+          <button type="button" id="personaConfigExpandBtn" style="padding:4px 10px;font-size:12px;">Expand</button>
+        </div>
+        <div id="personaConfigBody" class="hidden">
+          <div class="meta" style="margin-top:8px; max-width:700px;">Edit persona names, emojis, and copy used by the astrology result. Save to apply immediately for new reads.</div>
+          <div class="row" style="margin-top:10px;">
+            <button id="reloadPersonaConfig">Reload Config</button>
+            <button id="savePersonaConfig" class="btn-primary">Save Persona Config</button>
+          </div>
+          <textarea id="personaConfigInput" rows="14" placeholder='{"personaGrid": [...]} ' style="margin-top:10px;"></textarea>
+          <div id="personaConfigStatus" class="meta" style="margin-top:8px;"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -176,11 +584,22 @@
     var panel = document.getElementById("panel");
     var statusEl = document.getElementById("status");
     var refreshBtn = document.getElementById("refresh");
+    var rescoreAllBtn = document.getElementById("rescoreAll");
     var copyBtn = document.getElementById("copyJson");
     var downloadBtn = document.getElementById("downloadJson");
     var toggleRawBtn = document.getElementById("toggleRaw");
     var rawEl = document.getElementById("raw");
     var rawWrap = document.getElementById("rawWrap");
+    var personaConfigInput = document.getElementById("personaConfigInput");
+    var personaConfigStatus = document.getElementById("personaConfigStatus");
+    var reloadPersonaConfigBtn = document.getElementById("reloadPersonaConfig");
+    var savePersonaConfigBtn = document.getElementById("savePersonaConfig");
+    var personaConfigToggle = document.getElementById("personaConfigToggle");
+    var personaConfigBody = document.getElementById("personaConfigBody");
+    var personaConfigExpandBtn = document.getElementById("personaConfigExpandBtn");
+    var questionCatalogToggle = document.getElementById("questionCatalogToggle");
+    var questionCatalogBody = document.getElementById("questionCatalogBody");
+    var questionCatalogExpandBtn = document.getElementById("questionCatalogExpandBtn");
     var countText = document.getElementById("countText");
     var lastSync = document.getElementById("lastSync");
     var entries = document.getElementById("entries");
@@ -188,15 +607,232 @@
     var statAvgScore = document.getElementById("statAvgScore");
     var statTopTier = document.getElementById("statTopTier");
     var statTopDomain = document.getElementById("statTopDomain");
-    var statMoreAtHome = document.getElementById("statMoreAtHome");
+    var statTopApp = document.getElementById("statTopApp");
     var tierBreakdown = document.getElementById("tierBreakdown");
     var domainBreakdown = document.getElementById("domainBreakdown");
+    var appBreakdown = document.getElementById("appBreakdown");
+    var blockersBreakdown = document.getElementById("blockersBreakdown");
+    var q19Breakdown = document.getElementById("q19Breakdown");
+    var questionCatalogEl = document.getElementById("questionCatalog");
     var insightsEl = document.getElementById("insights");
+    var analyzeNotesBtn = document.getElementById("analyzeNotes");
+    var analyzeFocusInput = document.getElementById("analyzeFocus");
+    var analyzeStatus = document.getElementById("analyzeStatus");
+    var analyzeOutput = document.getElementById("analyzeOutput");
 
     var ADMIN_SESSION_KEY = "galeOpsPanelAuth";
+    var REVISED_QUIZ_VERSION = "revised";
+    var REVISED_SCORE_MODEL = "revised_v1";
+    var REVISED_LOCAL_SUBMISSION_KEY = "galeQuizRevisedSubmissionsV1";
+    var AUTO_REFRESH_MS = 30000;
+    var PERSONA_CONFIG_LOCAL_KEY = "galePersonaConfigLocalDraft";
     var apiKey = "";
     var latestData = { count: 0, submissions: [] };
     var entryOpenState = {};
+    var entryEditState = {};
+    var autoInsightLoaded = false;
+    var autoRefreshTimer = null;
+
+    function canUseApiRoutes() {
+      return typeof window !== "undefined" && /^https?:$/.test(window.location.protocol || "");
+    }
+
+    function apiUnavailableError() {
+      return new Error("API unavailable from this page origin. Open the deployed app (http/https) to use persona + LLM features.");
+    }
+
+    function isRevisedSubmission(entry) {
+      var payload = entry && entry.payload ? entry.payload : (entry || {});
+      return payload && (payload.quizVersion === REVISED_QUIZ_VERSION || payload.scoreModel === REVISED_SCORE_MODEL);
+    }
+
+    function buildLocalSeedRows() {
+      var base = "FOR TEST ONLY";
+      var seeds = [
+        {
+          id: "console-seed-001",
+          score: 24.1,
+          tier: "Tier 1",
+          responses: {
+            d1: "Other", d1_other_text: base,
+            c1: "Deep end — agents, APIs, vibe coding, the works",
+            q1: "Constantly — it's woven into how I work",
+            t1: ["ChatGPT", "Claude", "Microsoft Copilot", "GitHub Copilot", "NotebookLM"],
+            q2: ["Coding or building tools", "Research and synthesis", "Client work and deliverables"],
+            q2b: ["Coding or building tools", "Research and synthesis"],
+            q2a: "Prescriptive — detailed prompts with examples, format specs, the works",
+            q3: "Yes", q4: "Yes",
+            qv1: "Verify against original sources/materials before proceeding",
+            s0: ["Campaign reporting or performance summary"],
+            s1: ["Use AI as part of recurring workflows", "Connect AI to other tools or automations", "Write code that calls AI APIs"],
+            blockers: ["Nothing's blocking me — I just want to go deeper"],
+            program_topics: ["Agentic AI and autonomous workflows", "RAG, knowledge graphs, and context systems"],
+            s2: ["A library of GALE-built Skills and workflows"],
+            q15: ["Hands-on workshops where I build something"],
+            feedback_change: "Add advanced implementation clinics.",
+            share_segment_name: "Seed Persona A",
+            share_segment_idea: "Demo an agentic campaign QA loop.",
+            feedback_other: ""
+          }
+        },
+        {
+          id: "console-seed-002",
+          score: 17.3,
+          tier: "Tier 2",
+          responses: {
+            d1: "Other", d1_other_text: base,
+            c1: "Comfortable — it's part of my regular workflow",
+            q1: "Daily for specific tasks",
+            t1: ["ChatGPT", "Claude", "Microsoft Copilot", "Notion AI", "Canva AI"],
+            q2: ["Writing and editing", "Research and synthesis", "Slides, docs, decks"],
+            q2b: ["Writing and editing", "Research and synthesis"],
+            q2a: "Structured — I usually give it context, role, and constraints",
+            q3: "Sometimes", q4: "Yes",
+            qv1: "Ask AI to rerun with tighter constraints, then review carefully",
+            s0: ["Media brief or creative brief"],
+            s1: ["Use role/context-rich prompts (beyond basic ask/answer)", "Turn AI output into deliverables shared with others"],
+            blockers: ["Can't tell if the output is good"],
+            program_topics: ["Prompt engineering and craft", "Tool comparisons and what's new"],
+            s2: ["Curated tool recommendations for my role", "Templates and starter prompts I can steal"],
+            q15: ["Guided tutorials with takeaway materials"],
+            feedback_change: "Would love role-based templates.",
+            share_segment_name: "",
+            share_segment_idea: "",
+            feedback_other: ""
+          }
+        },
+        {
+          id: "console-seed-003",
+          score: 11.2,
+          tier: "Tier 3",
+          responses: {
+            d1: "Other", d1_other_text: base,
+            c1: "Just getting started — still figuring out what to use it for",
+            q1: "Rarely / not yet",
+            q1a: "I’ve tried them a couple of times but they didn’t stick",
+            t1: ["ChatGPT"],
+            q2: ["Conversational Q&A", "Research and synthesis"],
+            q2b: ["None of these"],
+            q2a: "Honestly, I don't have a style yet",
+            q2a1: "I usually keep prompts short and unstructured",
+            q3: "No",
+            q3a: "I usually accept the first result or stop there",
+            q4: "No",
+            q4a: "I didn’t realize AI could work well with files/data for this",
+            qv1: "Abandon AI and do it another way",
+            s0: ["None of these yet"],
+            s1: ["None of these yet"],
+            blockers: ["Don't know where to start", "My prompts don't get great results"],
+            program_topics: ["AI fundamentals and the basics"],
+            s2: ["Templates and starter prompts I can steal"],
+            q15: ["Short tactical tips (5-min segments)"],
+            feedback_change: "Need more beginner examples.",
+            share_segment_name: "",
+            share_segment_idea: "",
+            feedback_other: ""
+          }
+        },
+        {
+          id: "console-seed-004",
+          score: 15.4,
+          tier: "Tier 2",
+          responses: {
+            d1: "Other", d1_other_text: base,
+            c1: "Dabbling — I use it for some things, mostly the basics",
+            q1: "A few times a week",
+            t1: ["ChatGPT", "Midjourney", "Adobe Firefly", "Canva AI", "Figma AI (Weave)"],
+            q2: ["Writing and editing", "Brainstorming and ideation", "Image, video, or design generation"],
+            q2b: ["Writing and editing", "Brainstorming and ideation"],
+            q2a: "Go with the flow — I start loose and refine as I go",
+            q2a1: "I add some detail, but not consistently",
+            q3: "Sometimes", q4: "No",
+            q4a: "I’ve tried once or twice, but it’s not repeatable yet",
+            qv1: "Ask a teammate for a quick sense-check before deciding",
+            s0: ["Media brief or creative brief"],
+            s1: ["Turn AI output into deliverables shared with others"],
+            blockers: ["Tools change too fast to keep up"],
+            program_topics: ["Image, video, and multimodal generation", "Slides, docs, and content creation"],
+            s2: ["Recordings of past sessions"],
+            q15: ["Show-and-tell from GALE colleagues"],
+            feedback_change: "More creative showcases would help.",
+            share_segment_name: "Seed Persona D",
+            share_segment_idea: "Can share a creative prompt chain.",
+            feedback_other: ""
+          }
+        },
+        {
+          id: "console-seed-005",
+          score: 22.0,
+          tier: "Tier 1",
+          responses: {
+            d1: "Other", d1_other_text: base,
+            c1: "Building — I'm making things with it (prompts, workflows, tools, code)",
+            q1: "Daily for specific tasks",
+            t1: ["ChatGPT", "Claude", "Perplexity", "NotebookLM", "Microsoft Copilot", "GitHub Copilot"],
+            q2: ["Research and synthesis", "Data analysis or spreadsheets", "Client work and deliverables"],
+            q2b: ["Research and synthesis", "Data analysis or spreadsheets"],
+            q2a: "Structured — I usually give it context, role, and constraints",
+            q3: "Yes", q4: "Yes",
+            qv1: "Verify against original sources/materials before proceeding",
+            s0: ["Competitive or market research synthesis", "Campaign reporting or performance summary"],
+            s1: ["Use AI with documents or data to produce analysis or recommendations", "Connect AI to other tools or automations"],
+            blockers: ["Not sure what's safe for client work"],
+            program_topics: ["Best practices and frameworks", "Legal, ethics, IP, and disclosure"],
+            s2: ["1:1 office hours with someone more advanced", "A Teams channel for ongoing questions"],
+            q15: ["Live demos of tools and workflows"],
+            feedback_change: "Need more policy + implementation examples.",
+            share_segment_name: "Seed Persona E",
+            share_segment_idea: "Walk through a client-safe AI QA checklist.",
+            feedback_other: ""
+          }
+        }
+      ];
+      return seeds.map(function(seed, idx) {
+        var submittedAt = new Date(Date.now() - (idx * 60000)).toISOString();
+        return {
+          id: seed.id,
+          respondentKey: seed.id,
+          receivedAt: submittedAt,
+          payload: {
+            submittedAt: submittedAt,
+            respondentKey: seed.id,
+            quizVersion: "revised",
+            scoreModel: "revised_v1",
+            score: seed.score,
+            tier: seed.tier,
+            tierLabel: seed.tier,
+            flags: [],
+            subtags: [],
+            responses: seed.responses
+          }
+        };
+      });
+    }
+
+    if (questionCatalogToggle && questionCatalogBody && questionCatalogExpandBtn) {
+      questionCatalogToggle.addEventListener("click", function() {
+        var isHidden = questionCatalogBody.classList.contains("hidden");
+        if (isHidden) {
+          questionCatalogBody.classList.remove("hidden");
+          questionCatalogExpandBtn.textContent = "Collapse";
+        } else {
+          questionCatalogBody.classList.add("hidden");
+          questionCatalogExpandBtn.textContent = "Expand";
+        }
+      });
+    }
+
+    function mergeWithSeedRows(submissions) {
+      var rows = Array.isArray(submissions) ? submissions.slice() : [];
+      if (rows.length) return rows;
+      var hasTestOnly = rows.some(function(entry) {
+        var payload = entry && entry.payload ? entry.payload : (entry || {});
+        var responses = payload && payload.responses && typeof payload.responses === "object" ? payload.responses : {};
+        return String(responses.d1_other_text || "").trim().toUpperCase() === "FOR TEST ONLY";
+      });
+      if (hasTestOnly) return rows;
+      return rows.concat(buildLocalSeedRows());
+    }
 
     function setStatus(text, isError) {
       statusEl.textContent = text || "";
@@ -218,6 +854,52 @@
       return String(val);
     }
 
+    function scoreInterpretation(score) {
+      var n = Number(score || 0);
+      if (n >= 21) {
+        return "21.0+ => Tier 1 (Advanced): systems-level application and robust quality controls.";
+      }
+      if (n >= 14) {
+        return "14.0–20.9 => Tier 2 (Intermediate): consistent practical use with room to scale.";
+      }
+      return "<14.0 => Tier 3 (Foundational): build repeatable core workflows and quality habits.";
+    }
+
+    function scoreBandLabel(score) {
+      var n = Number(score || 0);
+      if (n >= 21) return "high-tier 1";
+      if (n >= 14) return "mid-tier 2";
+      return "low-tier 3";
+    }
+
+    function setPersonaConfigStatus(text, isError) {
+      personaConfigStatus.textContent = text || "";
+      personaConfigStatus.style.color = isError ? "#ff8f84" : "rgba(255,255,255,0.68)";
+    }
+
+    function isValidPersonaConfig(config) {
+      if (!config || typeof config !== "object") return false;
+      var grid = config.personaGrid;
+      if (!Array.isArray(grid) || grid.length !== 4) return false;
+      var valid = true;
+      grid.forEach(function(row) {
+        if (!Array.isArray(row) || row.length !== 5) {
+          valid = false;
+          return;
+        }
+        row.forEach(function(p) {
+          if (!p || typeof p !== "object") {
+            valid = false;
+            return;
+          }
+          if (!p.name || !p.emoji || !p.spotlight || !p.superpower || !p.nextMove || !p.mantra) {
+            valid = false;
+          }
+        });
+      });
+      return valid;
+    }
+
     function normalizeSubmission(entry, index) {
       var payload = entry && entry.payload ? entry.payload : (entry || {});
       var responses = payload.responses && typeof payload.responses === "object" ? payload.responses : {};
@@ -228,6 +910,10 @@
         tier: payload.tier || "—",
         when: payload.submittedAt || (entry && (entry.updatedAt || entry.receivedAt || entry.createdAt)) || "",
         domain: responses.d1 || "Unknown",
+        subdomain: responses.d1_subdomain || "",
+        quizVersion: payload.quizVersion || "",
+        scoreModel: payload.scoreModel || "",
+        trackRecommendation: payload.trackRecommendation || "",
         payload: payload,
         responses: responses
       };
@@ -254,6 +940,50 @@
       return best;
     }
 
+    function getQuestionCatalog() {
+      return [
+        { id: "Q1 (d1)", prompt: "What's your primary role at GALE?", options: ["Strategy", "Creative / Design", "Product Management", "Engineering / Development", "Data Science / Analytics", "Marketing", "Account / Client Services", "Operations", "Leadership", "Other"] },
+        { id: "Q2 (c1)", prompt: "Where are you on the AI curve right now?", options: ["Just getting started — still figuring out what to use it for", "Dabbling — I use it for some things, mostly the basics", "Comfortable — it's part of my regular workflow", "Building — I'm making things with it (prompts, workflows, tools, code)", "Deep end — agents, APIs, vibe coding, the works"] },
+        { id: "Q3 (q1)", prompt: "How often are you using AI in a typical work week?", options: ["Rarely / not yet", "A few times a week", "Daily for specific tasks", "Constantly — it's woven into how I work"] },
+        { id: "Q3a (q1a follow-up)", prompt: "Which best describes where you are?", options: ["I haven’t really had the chance to try AI tools yet", "I’ve tried them a couple of times but they didn’t stick", "I use them for personal stuff but not for work"] },
+        { id: "Q4 (t1)", prompt: "Which AI tools do you actually use?", options: ["ChatGPT", "Claude", "Gemini", "Perplexity", "Microsoft Copilot", "GitHub Copilot", "ALCHEMY AI", "Midjourney", "Adobe Firefly", "Nano Banana", "Weavy", "NotebookLM", "Notion AI", "Grammarly", "Canva AI", "Figma AI (Weave)", "Cursor / Claude Code / other coding tools", "Other"] },
+        { id: "Q5 (q2)", prompt: "What are you using AI for right now?", options: ["Writing and editing", "Research and synthesis", "Brainstorming and ideation", "Image, video, or design generation", "Slides, docs, decks", "Data analysis or spreadsheets", "Coding or building tools", "Client work and deliverables", "Internal ops (notes, summaries, emails)", "Personal stuff outside work"] },
+        { id: "Q6 (q2b)", prompt: "From your selected use cases, which ones do you feel confident doing in real work today?", options: ["(Options are based on Q5 selections)", "None of these"] },
+        { id: "Q7 (q2a)", prompt: "How would you describe your prompting style?", options: ["Casual and conversational — I just talk to it like a person", "Go with the flow — I start loose and refine as I go", "Structured — I usually give it context, role, and constraints", "Prescriptive — detailed prompts with examples, format specs, the works", "Honestly, I don't have a style yet"] },
+        { id: "Q7a (q2a1 follow-up)", prompt: "Which sounds most like your current prompting style?", options: ["I usually keep prompts short and unstructured", "I add some detail, but not consistently", "I include some structure, but I’m still refining what works"] },
+        { id: "Q8 (q3)", prompt: "When AI gives you a weak result, do you rewrite your prompt — changing what you asked for or how you asked it — rather than just trying again?", options: ["Yes", "Sometimes", "No"] },
+        { id: "Q8a (q3a follow-up)", prompt: "What do you usually do with a bad result?", options: ["I usually accept the first result or stop there", "I retry sometimes, but mostly with minor wording tweaks", "I intentionally revise instructions/context, but not consistently"] },
+        { id: "Q9 (q4)", prompt: "Have you given AI a document, spreadsheet, or dataset and used the output in actual work — not just tested it?", options: ["Yes", "No"] },
+        { id: "Q9a (q4a follow-up)", prompt: "Which is closest?", options: ["I didn’t realize AI could work well with files/data for this", "I’ve tried once or twice, but it’s not repeatable yet", "I can do this in limited cases, but not consistently"] },
+        { id: "Q10 (s0)", prompt: "Which GALE-relevant work outputs have you used AI to help produce in real work?", options: ["Media brief or creative brief", "Competitive or market research synthesis", "Campaign reporting or performance summary", "Audience segmentation or persona draft", "None of these yet"] },
+        { id: "Q11 (s1)", prompt: "Which of these applied AI activities have you done in real work?", options: ["Use role/context-rich prompts (beyond basic ask/answer)", "Use AI with documents or data to produce analysis or recommendations", "Turn AI output into deliverables shared with others", "Use AI as part of recurring workflows", "Connect AI to other tools or automations", "Write code that calls AI APIs", "Build custom tools/apps powered by AI", "None of these yet"] },
+        { id: "Q12 (blockers)", prompt: "whats actually blocking you from doing more at work?", options: ["Don't know where to start", "Don't know which tool to use when", "My prompts don't get great results", "Not sure what's safe for client work", "Can't tell if the output is good", "Tools change too fast to keep up", "Nothing's blocking me — I just want to go deeper", "Other"] },
+        { id: "Q13 (program_topics)", prompt: "What topics do you want GWP to cover?", options: ["AI fundamentals and the basics", "Prompt engineering and craft", "GALE tools and ALCHEMY AI", "Image, video, and multimodal generation", "Slides, docs, and content creation", "Agentic AI and autonomous workflows", "Vibe coding and building tools", "Claude Code specifically", "Claude Skills, Projects, and memory", "RAG, knowledge graphs, and context systems", "Best practices and frameworks", "Legal, ethics, IP, and disclosure", "AI in society and where it's headed", "Tool comparisons and what's new", "Industry-specific applications", "Other"] },
+        { id: "Q14 (s2)", prompt: "What support would be most useful next?", options: ["1:1 office hours with someone more advanced", "Curated tool recommendations for my role", "Templates and starter prompts I can steal", "A Teams channel for ongoing questions", "Recordings of past sessions", "A library of GALE-built Skills and workflows", "Cohort-based learning (small group, multiple sessions)", "Just keep doing what you're doing", "I am used to AI tools I can't use at work", "Other"] },
+        { id: "Astrology Read", prompt: "AI Astrology read is shown here before feedback and before submit.", options: ["Persona read + optional feedback"] },
+        { id: "Q15 (q14)", prompt: "What are your near-term concerns about AI?", options: ["Job displacement and role changes", "Quality and accuracy of output", "Client confidentiality and data privacy", "Copyright, IP, and ownership questions", "Regulation and legal exposure", "Loss of craft and original thinking", "Misinformation and deepfakes", "Tools changing too fast to keep up", "Honestly, not that worried right now", "Other"] },
+        { id: "Q16 (q15)", prompt: "what would be the most helpful format to learn this?", options: ["State of the Union briefings on what's new", "Live demos of tools and workflows", "Hands-on workshops where I build something", "Show-and-tell from GALE colleagues", "Guided tutorials with takeaway materials", "Discussion and Q&A", "Guest speakers from outside GALE", "Short tactical tips (5-min segments)", "Other"] }
+      ];
+    }
+
+    function renderQuestionCatalog() {
+      if (!questionCatalogEl) return;
+      var items = getQuestionCatalog();
+      questionCatalogEl.innerHTML = "";
+      items.forEach(function(item) {
+        var block = document.createElement("div");
+        block.className = "question-item";
+        var optionsHtml = (item.options || []).map(function(opt) {
+          return "<li>" + escapeHtml(opt) + "</li>";
+        }).join("");
+        block.innerHTML =
+          '<div class="question-item-title">' + escapeHtml(item.id || "Question") + '</div>' +
+          '<div class="question-item-prompt">' + escapeHtml(item.prompt || "") + '</div>' +
+          '<ul>' + optionsHtml + '</ul>';
+        questionCatalogEl.appendChild(block);
+      });
+    }
+
     function renderBreakdownList(el, counts) {
       var keys = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
       el.innerHTML = keys.length ? "" : "<li>No data yet.</li>";
@@ -264,85 +994,377 @@
       });
     }
 
-    function buildInsights(rows, tierCounts, domainCounts) {
-      var insights = [];
-      var total = rows.length || 1;
+    function renderBarChart(container, counts, maxItems) {
+      if (!container) return;
+      var keys = Object.keys(counts || {}).sort(function(a, b) { return counts[b] - counts[a]; }).slice(0, maxItems || 6);
+      if (!keys.length) {
+        container.innerHTML = '<div class="meta">No data yet</div>';
+        return;
+      }
+      var max = Math.max.apply(null, keys.map(function(k) { return counts[k] || 0; })) || 1;
+      container.innerHTML = keys.map(function(label) {
+        var count = counts[label] || 0;
+        var width = Math.max(6, Math.round((count / max) * 100));
+        return '' +
+          '<div class="bar-row">' +
+            '<div class="bar-row-head"><span>' + escapeHtml(label) + '</span><span>' + String(count) + '</span></div>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + String(width) + '%"></div></div>' +
+          '</div>';
+      }).join('');
+    }
 
-      Object.keys(domainCounts).forEach(function(domain) {
-        var domainRows = rows.filter(function(r) { return r.domain === domain; });
-        if (!domainRows.length) return;
-        var early = domainRows.filter(function(r) { return r.tier === "Tier 0" || r.tier === "Tier 1"; }).length;
-        var earlyRatio = early / domainRows.length;
-        if (earlyRatio >= 0.65 && /people|hr/i.test(domain)) {
-          insights.push(domain + " currently skews beginner-heavy, suggesting high upside from foundational training tracks.");
-        }
+    function renderSupportPills(container, counts, maxItems) {
+      if (!container) return;
+      var keys = Object.keys(counts || {}).sort(function(a, b) { return counts[b] - counts[a]; }).slice(0, maxItems || 10);
+      if (!keys.length) {
+        container.innerHTML = '<span class="meta">No data yet</span>';
+        return;
+      }
+      container.innerHTML = keys.map(function(label) {
+        return '' +
+          '<span class="support-pill">' +
+            '<span>' + escapeHtml(label) + '</span>' +
+            '<span class="support-count">' + String(counts[label] || 0) + '</span>' +
+          '</span>';
+      }).join('');
+    }
 
-        var contentCreators = domainRows.filter(function(r) {
-          var q2 = Array.isArray(r.responses.q2) ? r.responses.q2 : [];
-          return q2.indexOf("Creative content generation") >= 0;
-        }).length;
-        if (contentCreators / domainRows.length >= 0.5 && /programmatic|engineering|marketing|communications/i.test(domain)) {
-          insights.push(domain + " shows stronger-than-expected content generation use in day-to-day workflows.");
+    function tierBandFromScore(score) {
+      var n = Number(score || 0);
+      if (n >= 21) return "Tier 1 (Advanced)";
+      if (n >= 14) return "Tier 2 (Intermediate)";
+      return "Tier 3 (Foundational)";
+    }
+
+    function renderTierBreakdown(el, rows) {
+      var counts = {
+        "Tier 1 (Advanced)": 0,
+        "Tier 2 (Intermediate)": 0,
+        "Tier 3 (Foundational)": 0
+      };
+      rows.forEach(function(row) {
+        var tier = tierBandFromScore(row.score);
+        counts[tier] += 1;
+      });
+      el.innerHTML = "";
+      ["Tier 1 (Advanced)", "Tier 2 (Intermediate)", "Tier 3 (Foundational)"].forEach(function(label) {
+        var li = document.createElement("li");
+        li.textContent = label + ": " + counts[label];
+        el.appendChild(li);
+      });
+      return counts;
+    }
+
+    function renderDomainPieChart(container, counts) {
+      var keys = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      if (!keys.length) {
+        container.innerHTML = '<div class="meta">No data yet.</div>';
+        return;
+      }
+      var colors = ["#fd6453", "#42b3ff", "#ffd166", "#7bd389", "#c792ea", "#ff8fab", "#9ad1d4", "#f4a261"];
+      var total = keys.reduce(function(sum, key) { return sum + counts[key]; }, 0);
+      var cursor = 0;
+      var parts = [];
+      var legendHtml = "";
+      keys.forEach(function(key, idx) {
+        var value = counts[key];
+        var start = (cursor / total) * 360;
+        cursor += value;
+        var end = (cursor / total) * 360;
+        var color = colors[idx % colors.length];
+        parts.push(color + " " + start.toFixed(2) + "deg " + end.toFixed(2) + "deg");
+        legendHtml += '<li><span class="pie-dot" style="background:' + color + '"></span>' + escapeHtml(key) + ': ' + value + '</li>';
+      });
+      container.innerHTML =
+        '<div class="pie-wrap">' +
+          '<div class="pie-chart" style="background:conic-gradient(' + parts.join(",") + ')"></div>' +
+          '<ul class="pie-legend">' + legendHtml + '</ul>' +
+        '</div>';
+    }
+
+    function topTierLabelFromCounts(counts) {
+      var ordered = ["Tier 1 (Advanced)", "Tier 2 (Intermediate)", "Tier 3 (Foundational)"];
+      var best = ordered[0];
+      var max = -1;
+      ordered.forEach(function(label) {
+        if ((counts[label] || 0) > max) {
+          max = counts[label] || 0;
+          best = label;
         }
       });
+      return best;
+    }
 
-      var promptingNeed = rows.filter(function(r) {
-        var s2 = Array.isArray(r.responses.s2) ? r.responses.s2 : [];
-        return s2.indexOf("Prompting and instruction design") >= 0;
-      }).length;
-      if (promptingNeed / total >= 0.4) {
-        insights.push("Prompting support is a frequent request; a focused instruction-design module would likely have broad impact.");
-      }
+    function normalizeToolLabel(raw) {
+      var value = String(raw || "").replace(/\s+/g, " ").trim();
+      var key = value.toLowerCase();
+      var aliases = {
+        "alchemy": "ALCHEMY AI",
+        "alchemy ai": "ALCHEMY AI",
+        "alchemyai": "ALCHEMY AI",
+        "google gemini": "Gemini",
+        "gemini / google ai": "Gemini",
+        "nanobanana": "Nano Banana",
+        "copilot (microsoft / github)": "Microsoft Copilot"
+      };
+      return aliases[key] || value;
+    }
 
-      var verificationNeed = rows.filter(function(r) {
-        var s2 = Array.isArray(r.responses.s2) ? r.responses.s2 : [];
-        return s2.indexOf("Quality verification and trust") >= 0;
-      }).length;
-      if (verificationNeed / total >= 0.35) {
-        insights.push("Trust and verification appears repeatedly, indicating appetite for practical QA checklists and review habits.");
-      }
+    function isTestOnlySubmissionEntry(entry) {
+      var payload = entry && entry.payload ? entry.payload : (entry || {});
+      var responses = payload && payload.responses && typeof payload.responses === "object" ? payload.responses : {};
+      var marker = String(responses.d1_other_text || "").trim().toUpperCase();
+      var entryId = String((entry && entry.id) || payload.respondentKey || "").trim();
+      return marker === "FOR TEST ONLY" || /^seed-rev-/i.test(entryId) || /^console-seed-/i.test(entryId);
+    }
 
-      var topDomain = topKey(domainCounts);
-      if (topDomain !== "—" && domainCounts[topDomain] / total >= 0.3) {
-        insights.push(topDomain + " is currently the largest response segment; consider making this your first domain-specific pilot cohort.");
-      }
+    function isArchivedSubmissionEntry(entry) {
+      var payload = entry && entry.payload ? entry.payload : (entry || {});
+      if (!payload || typeof payload !== "object") return false;
+      if (payload.archived === true) return true;
+      if (String(payload.status || "").toLowerCase() === "archived") return true;
+      return false;
+    }
+
+    function isGitHubCopilotTool(tool) {
+      return normalizeToolLabel(tool) === "GitHub Copilot";
+    }
+
+    function toolLocalLogoPath(tool) {
+      return normalizeToolLabel(tool) === "ALCHEMY AI" ? "/assets/alchemy-ai.png" : "";
+    }
+
+    function toolFaviconSrc(tool, size) {
+      if (normalizeToolLabel(tool) === "ALCHEMY AI") return "";
+      var domain = toolLogoDomain(tool);
+      if (!domain) return "";
+      return "https://www.google.com/s2/favicons?sz=" + encodeURIComponent(String(size || 64)) + "&domain=" + encodeURIComponent(domain);
+    }
+
+    function tallySelections(rows, key, excludes) {
+      var skip = Array.isArray(excludes) ? excludes : [];
+      var counts = {};
+      rows.forEach(function(row) {
+        var values = row && row.responses && row.responses[key];
+        if (!Array.isArray(values)) return;
+        values.forEach(function(raw) {
+          var value = String(raw || "").trim();
+          if (key === "t1") value = normalizeToolLabel(value);
+          if (!value || skip.indexOf(value) >= 0) return;
+          counts[value] = (counts[value] || 0) + 1;
+        });
+      });
+      return counts;
+    }
+
+    function groupedSupportForRows(rows) {
+      var counts = tallySelections(rows, "s2", []);
+      var ordered = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      if (!ordered.length) return ["No clear support pattern yet"];
+      return ordered.map(function(label) {
+        return label + " (" + String(counts[label] || 0) + ")";
+      });
+    }
+
+    function buildInsights(rows, tierCounts) {
+      var insights = [];
+
+      var tier1Rows = rows.filter(function(r) { return r.tier === "Tier 1"; });
+      var tier2Rows = rows.filter(function(r) { return r.tier === "Tier 2"; });
+      var tier3Rows = rows.filter(function(r) { return r.tier === "Tier 3"; });
+
+      insights.push({ tier: "Tier 1", items: groupedSupportForRows(tier1Rows) });
+      insights.push({ tier: "Tier 2", items: groupedSupportForRows(tier2Rows) });
+      insights.push({ tier: "Tier 3", items: groupedSupportForRows(tier3Rows) });
 
       if (!insights.length) {
-        insights.push("More submissions will sharpen pattern detection. Current data is still too sparse for strong directional insights.");
+        insights.push({ tier: "Insights", items: ["More submissions will sharpen tier demand patterns. Current data is still too sparse for directional planning."] });
       }
 
-      return insights.slice(0, 5);
+      return insights.slice(0, 3);
+    }
+
+    function renderAppIconsRow(container, counts, limit) {
+      container.innerHTML = "";
+      var sorted = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+      sorted.slice(0, limit || 5).forEach(function(tool) {
+        var isNanoBanana = /^nano\s*banana$/i.test(String(tool || "").trim()) || /^nanobanana$/i.test(String(tool || "").trim());
+        var isGitHub = isGitHubCopilotTool(tool);
+        var localSrc = toolLocalLogoPath(tool);
+        var fallbackSrc = toolFaviconSrc(tool, 64);
+        var hasIcon = Boolean(localSrc || fallbackSrc);
+        var div = document.createElement("div");
+        div.className = "app-icon-large";
+        div.title = tool + " (" + counts[tool] + ")";
+        if (isNanoBanana) {
+          var banana = document.createElement("span");
+          banana.className = "fallback plain-emoji";
+          banana.textContent = "🍌";
+          div.appendChild(banana);
+        } else if (hasIcon) {
+          var img = document.createElement("img");
+          img.src = localSrc || fallbackSrc;
+          img.alt = tool;
+          if (isGitHub) img.classList.add("tool-icon-github");
+          img.addEventListener("error", function() {
+            if (fallbackSrc && img.src !== fallbackSrc) {
+              img.src = fallbackSrc;
+              return;
+            }
+            if (img.dataset.fallbackTried === "1") {
+              var span = document.createElement("span");
+              span.className = "fallback";
+              span.textContent = tool.charAt(0);
+              if (img.parentNode) img.parentNode.replaceChild(span, img);
+              return;
+            }
+            img.dataset.fallbackTried = "1";
+            if (fallbackSrc) {
+              img.src = fallbackSrc;
+              return;
+            }
+            var fallbackSpan = document.createElement("span");
+            fallbackSpan.className = "fallback";
+            fallbackSpan.textContent = tool.charAt(0);
+            if (img.parentNode) img.parentNode.replaceChild(fallbackSpan, img);
+          });
+          div.appendChild(img);
+        } else {
+          var span = document.createElement("span");
+          span.className = "fallback";
+          span.textContent = tool.charAt(0);
+          div.appendChild(span);
+        }
+        container.appendChild(div);
+      });
+      if (!sorted.length) {
+        container.innerHTML = '<span class="meta">No data yet</span>';
+      }
+    }
+
+    async function runAutoInsightOnLoad() {
+      if (autoInsightLoaded || !analyzeNotesBtn || !analyzeFocusInput) return;
+      if (!canUseApiRoutes()) {
+        if (analyzeStatus) analyzeStatus.textContent = "LLM insight auto-run disabled (API unavailable on this origin).";
+        return;
+      }
+      autoInsightLoaded = true;
+      analyzeFocusInput.value = "Find one specific, non-obvious pattern in these submissions and explain why it matters for training priorities.";
+      analyzeNotesBtn.disabled = true;
+      if (analyzeStatus) analyzeStatus.textContent = "Running example insight...";
+      try {
+        var result = await fetchNotesAnalysis(analyzeFocusInput.value);
+        renderAnalysisOutput(result && result.analysis ? result.analysis : null);
+        if (analyzeStatus) analyzeStatus.textContent = "Example insight loaded.";
+      } catch (err) {
+        if (analyzeStatus) analyzeStatus.textContent = (err && err.message) ? err.message : "Example insight failed";
+      } finally {
+        analyzeNotesBtn.disabled = false;
+      }
+    }
+
+    function renderTopAppStat(counts) {
+      var topApp = topKey(counts);
+      if (!topApp || topApp === "—") {
+        statTopApp.textContent = "—";
+        return;
+      }
+      var isNanoBanana = /^nano\s*banana$/i.test(String(topApp || "").trim()) || /^nanobanana$/i.test(String(topApp || "").trim());
+      var isGitHub = isGitHubCopilotTool(topApp);
+      var localSrc = toolLocalLogoPath(topApp);
+      var fallbackSrc = toolFaviconSrc(topApp, 128);
+      var iconSrc = localSrc || fallbackSrc;
+      if (isNanoBanana) {
+        statTopApp.textContent = "🍌";
+        statTopApp.style.fontSize = "46px";
+        statTopApp.style.lineHeight = "1";
+        statTopApp.title = topApp;
+      } else if (iconSrc) {
+        var githubStyle = isGitHub ? 'background:#fff;padding:6px;box-sizing:border-box;object-fit:contain;' : '';
+        statTopApp.innerHTML = '<img src="' + escapeHtml(iconSrc) + '" alt="" style="width:46px;height:46px;border-radius:10px;' + githubStyle + '">';
+        var topAppImg = statTopApp.querySelector("img");
+        if (topAppImg && fallbackSrc && localSrc) {
+          topAppImg.addEventListener("error", function() {
+            if (topAppImg.src !== fallbackSrc) {
+              topAppImg.src = fallbackSrc;
+              return;
+            }
+            statTopApp.textContent = topApp.charAt(0).toUpperCase();
+          });
+        }
+        statTopApp.title = topApp;
+      } else {
+        statTopApp.textContent = topApp.charAt(0).toUpperCase();
+        statTopApp.style.fontSize = "42px";
+        statTopApp.style.lineHeight = "1";
+        statTopApp.title = topApp;
+      }
     }
 
     function renderDashboard(rows) {
       var tierCounts = tallyBy(rows, function(r) { return r.tier || "Unknown"; });
       var domainCounts = tallyBy(rows, function(r) { return r.domain || "Unknown"; });
+      var appCounts = tallySelections(rows, "t1", ["Other"]);
+      var blockersCounts = tallySelections(rows, "blockers", ["Other"]);
+      var q19Counts = tallySelections(rows, "s2", []);
       var scoreSum = rows.reduce(function(sum, r) { return sum + (isFinite(r.score) ? r.score : 0); }, 0);
       var avg = rows.length ? (scoreSum / rows.length) : 0;
-      var moreAtHomeCount = rows.filter(function(r) {
-        return r.responses && (
-          r.responses.q1b === "Much more at home than at work" ||
-          r.responses.q1b === "Somewhat more at home than at work"
-        );
-      }).length;
-      var moreAtHomePct = rows.length ? Math.round((moreAtHomeCount / rows.length) * 100) : 0;
 
       statSubmissions.textContent = String(rows.length);
-      statAvgScore.textContent = avg.toFixed(1);
-      statTopTier.textContent = topKey(tierCounts);
+      if (!rows.length || avg <= 0) {
+        statAvgScore.textContent = "No data yet";
+      } else {
+        statAvgScore.innerHTML = avg.toFixed(1) + "<br><span style='font-size:14px;font-weight:400;opacity:0.7;'>" + scoreBandLabel(avg) + "</span>";
+      }
+      var tierBandCounts = renderTierBreakdown(tierBreakdown, rows);
+      statTopTier.textContent = topTierLabelFromCounts(tierBandCounts);
       statTopDomain.textContent = topKey(domainCounts);
-      statMoreAtHome.textContent = moreAtHomePct + "%";
+      renderTopAppStat(appCounts);
 
-      renderBreakdownList(tierBreakdown, tierCounts);
-      renderBreakdownList(domainBreakdown, domainCounts);
+      renderDomainPieChart(domainBreakdown, domainCounts);
+      renderAppIconsRow(appBreakdown, appCounts, 6);
+      renderBarChart(blockersBreakdown, blockersCounts, 3);
+      renderSupportPills(q19Breakdown, q19Counts, 10);
 
-      var insights = buildInsights(rows, tierCounts, domainCounts);
+      var autoInsights = buildInsights(rows, tierCounts);
+      renderInsightsList(autoInsights);
+    }
+
+    function renderInsightsList(insights) {
       insightsEl.innerHTML = "";
-      insights.forEach(function(text) {
+      insights.forEach(function(group) {
         var li = document.createElement("li");
-        li.textContent = text;
+        var title = group && group.tier ? String(group.tier) + " wants" : "Insights";
+        var items = group && Array.isArray(group.items) ? group.items : [];
+        li.innerHTML =
+          '<div class="tier-insight-title">' + escapeHtml(title) + '</div>' +
+          '<ul class="tier-insight-bullets">' +
+            (items.length
+              ? items.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("")
+              : '<li>No clear support pattern yet</li>') +
+          '</ul>';
         insightsEl.appendChild(li);
       });
+    }
+
+    async function fetchLlmInsights() {
+      try {
+        var result = await fetchNotesAnalysis("Look at the quiz responses and find 1-2 genuinely surprising or interesting patterns. Write like a smart colleague sharing an observation over coffee, not a consultant. Be specific and concrete. Bad example: 'Leverage best practices to accelerate learning.' Good example: 'Half the Strategy team already uses Claude daily but almost nobody in Media does — there might be an internal knowledge-sharing opportunity there.'");
+        var analysis = result && result.analysis ? result.analysis : null;
+        if (!analysis) return [];
+        var insights = [];
+        if (analysis.summary && analysis.summary.length < 200) {
+          insights.push(analysis.summary);
+        }
+        if (Array.isArray(analysis.opportunities)) {
+          analysis.opportunities.slice(0, 2).forEach(function(opp) {
+            if (opp && opp.length < 180) insights.push(opp);
+          });
+        }
+        return insights.slice(0, 3);
+      } catch (e) {
+        return [];
+      }
     }
 
     function renderDocSection(title, pairs) {
@@ -354,6 +1376,162 @@
       return html;
     }
 
+    function formatPercentMap(mix) {
+      var keys = ["comfortable", "concerned", "mixed", "unknown"];
+      var m = mix || {};
+      var values = keys.map(function(key) {
+        var raw = Number(m[key]);
+        return Number.isFinite(raw) && raw > 0 ? raw : 0;
+      });
+      var total = values.reduce(function(sum, val) { return sum + val; }, 0);
+
+      if (total <= 0) {
+        return "comfortable: 0% · concerned: 0% · mixed: 0% · unknown: 100%";
+      }
+
+      var normalizedRaw = values.map(function(val) {
+        return (val / total) * 100;
+      });
+      var rounded = normalizedRaw.map(function(val) { return Math.floor(val); });
+      var remainder = 100 - rounded.reduce(function(sum, val) { return sum + val; }, 0);
+      var rankedRemainders = normalizedRaw.map(function(val, idx) {
+        return { idx: idx, rem: val - Math.floor(val) };
+      }).sort(function(a, b) { return b.rem - a.rem; });
+
+      for (var i = 0; i < remainder; i += 1) {
+        rounded[rankedRemainders[i % rankedRemainders.length].idx] += 1;
+      }
+
+      return keys.map(function(key) {
+        return key + ": " + rounded[keys.indexOf(key)] + "%";
+      }).join(" · ");
+    }
+
+    function renderAnalysisOutput(analysis) {
+      if (!analyzeOutput) return;
+      if (!analysis) {
+        analyzeOutput.innerHTML = "";
+        return;
+      }
+
+      var html = '' +
+        '<div class="analysis-output">' +
+          '<div class="analysis-metrics">' +
+            '<div class="analysis-metric">' +
+              '<div class="analysis-metric-label">Summary</div>' +
+              '<div class="analysis-metric-value">' + escapeHtml(analysis.summary || "—") + '</div>' +
+            '</div>' +
+            '<div class="analysis-metric-stack">' +
+              '<div class="analysis-metric">' +
+                '<div class="analysis-metric-label">Coverage</div>' +
+                '<div class="analysis-metric-value">' +
+                  escapeHtml((analysis.stats && analysis.stats.submissionsAnalyzed) || 0) + ' submissions, ' +
+                  escapeHtml((analysis.stats && analysis.stats.notesAnalyzed) || 0) + ' notes' +
+                '</div>' +
+              '</div>' +
+              '<div class="analysis-metric">' +
+                '<div class="analysis-metric-label">Sentiment Mix</div>' +
+                '<div class="analysis-metric-value">' + escapeHtml(formatPercentMap(analysis.sentimentMix)) + '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+      var themes = Array.isArray(analysis.themes) ? analysis.themes : [];
+      if (themes.length) {
+        html += '<div class="analysis-section"><div class="analysis-section-title">Themes</div>';
+        themes.forEach(function(theme) {
+          var quotes = Array.isArray(theme.sampleQuotes) ? theme.sampleQuotes : [];
+          html += '' +
+            '<div class="analysis-theme">' +
+              '<div class="analysis-theme-title">' + escapeHtml(theme.theme || "Theme") + ' (' + escapeHtml(Number(theme.evidenceCount || 0)) + ')</div>' +
+              '<div class="meta" style="margin-top:4px;">' + escapeHtml(theme.recommendedAction || "") + '</div>' +
+              (quotes.length
+                ? '<ul class="analysis-list">' + quotes.slice(0, 3).map(function(q) { return '<li>' + escapeHtml(q) + '</li>'; }).join("") + '</ul>'
+                : '') +
+            '</div>';
+        });
+        html += '</div>';
+      }
+
+      var risks = Array.isArray(analysis.riskSignals) ? analysis.riskSignals : [];
+      if (risks.length) {
+        html += '<div class="analysis-section">';
+        html += '<div class="analysis-section-title">Risk Signals</div>';
+        html += '<ul class="analysis-list">' + risks.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+        html += '</div>';
+      }
+
+      var opportunities = Array.isArray(analysis.opportunities) ? analysis.opportunities : [];
+      if (opportunities.length) {
+        html += '<div class="analysis-section">';
+        html += '<div class="analysis-section-title">Opportunities</div>';
+        html += '<ul class="analysis-list">' + opportunities.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+        html += '</div>';
+      }
+
+      if (analysis.error) {
+        html += '<div class="meta" style="margin-top:8px;color:#ff8f84;">LLM issue: ' + escapeHtml(analysis.error) + '</div>';
+      }
+
+      html += '</div>';
+
+      analyzeOutput.innerHTML = html;
+    }
+
+    function toolLogoDomain(tool) {
+      var key = normalizeToolLabel(tool).toLowerCase();
+      var map = {
+        "chatgpt": "openai.com",
+        "claude": "claude.ai",
+        "gemini": "gemini.google.com",
+        "google gemini": "gemini.google.com",
+        "gemini / google ai": "gemini.google.com",
+        "alchemy ai": "alchemy.ai",
+        "nano banana": "nanobanana.ai",
+        "nanobanana": "nanobanana.ai",
+        "microsoft copilot": "copilot.microsoft.com",
+        "copilot (microsoft / github)": "copilot.microsoft.com",
+        "github copilot": "github.com",
+        "cursor": "cursor.com",
+        "cursor / claude code / other coding tools": "cursor.com",
+        "perplexity": "perplexity.ai",
+        "notion ai": "notion.so",
+        "grammarly": "grammarly.com",
+        "jasper": "jasper.ai",
+        "grok": "x.ai",
+        "midjourney": "midjourney.com",
+        "adobe firefly": "adobe.com",
+        "runway": "runwayml.com",
+        "synthesia": "synthesia.io",
+        "otter ai": "otter.ai",
+        "notebooklm": "notebooklm.google",
+        "canva ai": "canva.com",
+        "figma ai (weave)": "figma.com",
+        "weavy": "weavy.com"
+      };
+      return map[key] || "";
+    }
+
+    function renderToolChips(value) {
+      var items = Array.isArray(value)
+        ? value
+        : (typeof value === "string" && value.trim() ? value.split(";") : []);
+      var cleaned = items.map(function(v) { return String(v || "").trim(); }).filter(Boolean);
+      if (!cleaned.length) return "—";
+      return '<div class="tool-chip-wrap">' + cleaned.map(function(tool) {
+        var isNanoBanana = /^nano\s*banana$/i.test(tool) || /^nanobanana$/i.test(tool);
+        var isGitHub = isGitHubCopilotTool(tool);
+        var localSrc = toolLocalLogoPath(tool);
+        var iconSrc = localSrc || toolFaviconSrc(tool, 64);
+        var icon = isNanoBanana
+          ? '<span style="font-size:14px;line-height:1;">🍌</span>'
+          : (iconSrc
+            ? '<img class="' + (isGitHub ? 'tool-icon-github' : '') + '" src="' + escapeHtml(iconSrc) + '" alt="">'
+            : '');
+        return '<span class="tool-chip">' + icon + '<span>' + escapeHtml(tool) + '</span></span>';
+      }).join("") + '</div>';
+    }
+
     function buildSubmissionDoc(row) {
       var r = row.responses;
       var profile = row.payload.aiProfile || {};
@@ -361,6 +1539,7 @@
         renderDocSection("Roll-up", [
           { label: "Submitted", value: row.when || "—" },
           { label: "Score", value: row.score },
+          { label: "Score Meaning", value: scoreInterpretation(row.score) },
           { label: "Tier", value: row.tier },
           { label: "Domain", value: row.domain },
           { label: "Submission ID", value: row.id }
@@ -388,6 +1567,24 @@
           { label: "Q6", value: r.q6 },
           { label: "Q6 Follow-up", value: r.q6a }
         ]) +
+        renderDocSection("Tool Profile", [
+          { label: "Tools Used Today", value: r.t1 },
+          { label: "Paid Out Of Pocket", value: r.t1b },
+          { label: "Wants To Learn", value: r.t1d },
+          { label: "Favorites Today", value: r.t1c }
+        ]).replace(
+          '<p><strong>Tools Used Today:</strong> ' + escapeHtml(formatValue(r.t1)) + '</p>',
+          '<p><strong>Tools Used Today:</strong> ' + renderToolChips(r.t1) + '</p>'
+        ).replace(
+          '<p><strong>Paid Out Of Pocket:</strong> ' + escapeHtml(formatValue(r.t1b)) + '</p>',
+          '<p><strong>Paid Out Of Pocket:</strong> ' + renderToolChips(r.t1b) + '</p>'
+        ).replace(
+          '<p><strong>Wants To Learn:</strong> ' + escapeHtml(formatValue(r.t1d)) + '</p>',
+          '<p><strong>Wants To Learn:</strong> ' + renderToolChips(r.t1d) + '</p>'
+        ).replace(
+          '<p><strong>Favorites Today:</strong> ' + escapeHtml(formatValue(r.t1c)) + '</p>',
+          '<p><strong>Favorites Today:</strong> ' + renderToolChips(r.t1c) + '</p>'
+        ) +
         renderDocSection("Calibration & Signals", [
           { label: "C1", value: r.c1 },
           { label: "C2", value: r.c2 },
@@ -427,13 +1624,26 @@
         div.innerHTML =
           "<div class=\"entry-head\">" +
             "<div>" +
-              "<div class=\"entry-title\">" + escapeHtml(normalized.domain) + "</div>" +
+              "<div class=\"entry-title\">" + escapeHtml(normalized.domain) + (normalized.subdomain ? " · " + escapeHtml(normalized.subdomain) : "") + "</div>" +
               "<div class=\"entry-meta\">Score " + escapeHtml(normalized.score.toFixed(1)) + " · " + escapeHtml(normalized.tier) + " · " + escapeHtml(normalized.when || "") + "</div>" +
             "</div>" +
-            "<button type=\"button\" data-toggle-entry=\"" + escapeHtml(normalized.id) + "\">" + (open ? "Collapse" : "Expand") + "</button>" +
+            "<div class=\"row\">" +
+              "<button type=\"button\" data-toggle-entry=\"" + escapeHtml(normalized.id) + "\">" + (open ? "Collapse" : "Expand") + "</button>" +
+              "<button type=\"button\" class=\"btn-edit\" data-edit-entry=\"" + escapeHtml(normalized.id) + "\">" + (entryEditState[normalized.id] ? "Close Edit" : "Edit") + "</button>" +
+              "<button type=\"button\" class=\"btn-danger\" data-delete-entry=\"" + escapeHtml(normalized.id) + "\">Delete</button>" +
+            "</div>" +
           "</div>" +
           "<div class=\"entry-detail" + (open ? " open" : "") + "\" data-entry-detail=\"" + escapeHtml(normalized.id) + "\">" +
             buildSubmissionDoc(normalized) +
+            "<div class=\"edit-wrap" + (entryEditState[normalized.id] ? " open" : "") + "\" data-edit-wrap=\"" + escapeHtml(normalized.id) + "\">" +
+              "<div class=\"doc-section-title\">Edit Payload JSON</div>" +
+              "<textarea data-edit-json=\"" + escapeHtml(normalized.id) + "\">" + escapeHtml(JSON.stringify(normalized.payload, null, 2)) + "</textarea>" +
+              "<div class=\"row\" style=\"margin-top:8px;\">" +
+                "<button type=\"button\" class=\"btn-primary\" data-save-entry=\"" + escapeHtml(normalized.id) + "\">Save</button>" +
+                "<button type=\"button\" data-cancel-edit=\"" + escapeHtml(normalized.id) + "\">Cancel</button>" +
+              "</div>" +
+              "<div class=\"entry-meta\" data-edit-status=\"" + escapeHtml(normalized.id) + "\"></div>" +
+            "</div>" +
           "</div>" +
           "<div class=\"entry-meta\" style=\"margin-top:8px;\">ID: " + escapeHtml(normalized.id) + "</div>";
         entries.appendChild(div);
@@ -446,13 +1656,216 @@
           renderEntries(latestData.submissions || []);
         });
       });
+
+      entries.querySelectorAll("[data-edit-entry]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-edit-entry");
+          entryEditState[id] = !entryEditState[id];
+          entryOpenState[id] = true;
+          renderEntries(latestData.submissions || []);
+        });
+      });
+
+      entries.querySelectorAll("[data-cancel-edit]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-cancel-edit");
+          entryEditState[id] = false;
+          renderEntries(latestData.submissions || []);
+        });
+      });
+
+      entries.querySelectorAll("[data-save-entry]").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+          var id = btn.getAttribute("data-save-entry");
+          var textarea = entries.querySelector('[data-edit-json="' + id + '"]');
+          var status = entries.querySelector('[data-edit-status="' + id + '"]');
+          if (!textarea) return;
+
+          var parsed;
+          try {
+            parsed = JSON.parse(textarea.value || "{}");
+          } catch (e) {
+            if (status) status.textContent = "Invalid JSON.";
+            return;
+          }
+          if (!parsed || typeof parsed !== "object" || !parsed.responses || typeof parsed.responses !== "object") {
+            if (status) status.textContent = "Payload must include a responses object.";
+            return;
+          }
+
+          btn.disabled = true;
+          if (status) status.textContent = "Saving...";
+          try {
+            await updateSubmission(id, parsed);
+            if (status) status.textContent = "Saved.";
+            setStatus("Entry updated.");
+            entryEditState[id] = false;
+            await loadData();
+          } catch (err) {
+            if (status) status.textContent = err && err.message ? err.message : "Save failed.";
+            btn.disabled = false;
+          }
+        });
+      });
+
+      entries.querySelectorAll("[data-delete-entry]").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+          var id = btn.getAttribute("data-delete-entry");
+          var ok = window.confirm("Are you sure you want to delete this entry? This cannot be undone.");
+          if (!ok) return;
+          btn.disabled = true;
+          try {
+            await deleteSubmission(id);
+            setStatus("Entry deleted.");
+            await loadData();
+          } catch (err) {
+            setStatus(err && err.message ? err.message : "Delete failed", true);
+            btn.disabled = false;
+          }
+        });
+      });
     }
 
     async function fetchSubmissions() {
-      var res = await fetch("/api/submissions?key=" + encodeURIComponent(apiKey), { method: "GET" });
+      function localFallback() {
+        try {
+          var raw = localStorage.getItem(REVISED_LOCAL_SUBMISSION_KEY) || "[]";
+          var parsed = JSON.parse(raw);
+          var rows = Array.isArray(parsed) ? parsed.map(function(payload, idx) {
+            var p = payload && typeof payload === "object" ? payload : {};
+            var id = p.respondentKey || p.id || ("local-revised-" + idx);
+            return {
+              id: id,
+              respondentKey: p.respondentKey || id,
+              receivedAt: p.submittedAt || "",
+              payload: p
+            };
+          }) : [];
+          if (!rows.length) rows = buildLocalSeedRows();
+          return { count: rows.length, submissions: rows, source: "localStorage" };
+        } catch (e) {
+          var seeded = buildLocalSeedRows();
+          return { count: seeded.length, submissions: seeded, source: "localStorage" };
+        }
+      }
+
+      try {
+        var res = await fetch("/api/submissions?key=" + encodeURIComponent(apiKey), { method: "GET" });
+        if (!res.ok) {
+          if (res.status === 401) throw new Error("Access denied");
+          var errBody = await res.json().catch(function() { return {}; });
+          throw new Error(errBody && (errBody.details || errBody.error) ? (errBody.details || errBody.error) : "Request failed");
+        }
+        return res.json();
+      } catch (err) {
+        var fallback = localFallback();
+        if (fallback.submissions.length) return fallback;
+        throw err;
+      }
+    }
+
+    async function fetchNotesAnalysis(focus) {
+      if (!canUseApiRoutes()) throw apiUnavailableError();
+      var res = await fetch("/api/analyze-notes?key=" + encodeURIComponent(apiKey), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ focus: focus || "" })
+      });
       if (!res.ok) {
         if (res.status === 401) throw new Error("Access denied");
-        throw new Error("Request failed");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && (errBody.details || errBody.error) ? (errBody.details || errBody.error) : "Analysis failed");
+      }
+      return res.json();
+    }
+
+    async function rescoreAllSubmissions() {
+      var res = await fetch("/api/submissions?key=" + encodeURIComponent(apiKey), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "rescore_all" })
+      });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && errBody.error ? errBody.error : "Bulk rescore failed");
+      }
+      return res.json();
+    }
+
+    async function fetchPersonaConfig() {
+      if (!canUseApiRoutes()) throw apiUnavailableError();
+      var res = await fetch("/api/persona-config", { method: "GET" });
+      if (!res.ok) throw new Error("Failed to load persona config");
+      return res.json();
+    }
+
+    async function updatePersonaConfig(config) {
+      if (!canUseApiRoutes()) throw apiUnavailableError();
+      var res = await fetch("/api/persona-config?key=" + encodeURIComponent(apiKey), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config)
+      });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && errBody.error ? errBody.error : "Persona config update failed");
+      }
+      return res.json();
+    }
+
+    async function loadPersonaConfigEditor() {
+      try {
+        var config = await fetchPersonaConfig();
+        personaConfigInput.value = JSON.stringify(config, null, 2);
+        try {
+          localStorage.setItem(PERSONA_CONFIG_LOCAL_KEY, JSON.stringify(config));
+        } catch (e) {}
+        setPersonaConfigStatus("Persona config loaded.");
+      } catch (err) {
+        try {
+          var rawLocal = localStorage.getItem(PERSONA_CONFIG_LOCAL_KEY) || "";
+          if (rawLocal) {
+            var parsedLocal = JSON.parse(rawLocal);
+            personaConfigInput.value = JSON.stringify(parsedLocal, null, 2);
+            setPersonaConfigStatus("API unavailable. Loaded local persona config draft.", true);
+            return;
+          }
+        } catch (e2) {}
+        if (!personaConfigInput.value || !personaConfigInput.value.trim()) {
+          personaConfigInput.value = JSON.stringify({
+            version: 1,
+            personaGrid: []
+          }, null, 2);
+        }
+        setPersonaConfigStatus(err && err.message ? err.message : "Failed to load persona config", true);
+      }
+    }
+
+    async function updateSubmission(id, payload) {
+      var url = "/api/submissions?key=" + encodeURIComponent(apiKey);
+      var res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id, payload: payload })
+      });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        if (res.status === 404) throw new Error("Submission not found");
+        var errBody = await res.json().catch(function() { return {}; });
+        throw new Error(errBody && errBody.error ? errBody.error : "Update failed");
+      }
+      return res.json();
+    }
+
+    async function deleteSubmission(id) {
+      var url = "/api/submissions?id=" + encodeURIComponent(id) + "&key=" + encodeURIComponent(apiKey);
+      var res = await fetch(url, { method: "DELETE" });
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Access denied");
+        if (res.status === 404) throw new Error("Submission not found");
+        throw new Error("Delete failed");
       }
       return res.json();
     }
@@ -460,20 +1873,35 @@
     async function loadData() {
       try {
         var data = await fetchSubmissions();
+        var submissions = Array.isArray(data && data.submissions) ? data.submissions : [];
+        var realSubmissions = submissions
+          .filter(function(entry) { return !isTestOnlySubmissionEntry(entry); })
+          .filter(function(entry) { return !isArchivedSubmissionEntry(entry); });
         latestData = {
-          count: data && data.count ? data.count : 0,
-          submissions: Array.isArray(data && data.submissions) ? data.submissions : []
+          count: realSubmissions.length,
+          submissions: realSubmissions
         };
         var normalized = latestData.submissions.map(function(row, idx) { return normalizeSubmission(row, idx); });
-        countText.textContent = (data.count || 0) + " responses";
-        rawEl.value = JSON.stringify(data, null, 2);
+        countText.textContent = latestData.count + " responses";
+        rawEl.value = JSON.stringify({ count: latestData.count, submissions: latestData.submissions }, null, 2);
         renderDashboard(normalized);
-        renderEntries(latestData.submissions || []);
+        renderEntries(latestData.submissions);
         lastSync.textContent = "Synced " + new Date().toLocaleString();
-        setStatus("");
+        if (data && data.source === "localStorage") {
+          setStatus("API unavailable — showing local revised submissions from this browser.");
+        } else {
+          setStatus("");
+        }
       } catch (err) {
         setStatus(err && err.message ? err.message : "Failed to load", true);
       }
+    }
+
+    function startAutoRefresh() {
+      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+      autoRefreshTimer = setInterval(function() {
+        loadData();
+      }, AUTO_REFRESH_MS);
     }
 
     function openPanel(key) {
@@ -481,7 +1909,11 @@
       sessionStorage.setItem(ADMIN_SESSION_KEY, key);
       loginCard.classList.add("hidden");
       panel.classList.remove("hidden");
+      renderQuestionCatalog();
       loadData();
+      startAutoRefresh();
+      loadPersonaConfigEditor();
+      runAutoInsightOnLoad();
     }
 
     unlockBtn.addEventListener("click", async function() {
@@ -504,6 +1936,72 @@
     });
 
     refreshBtn.addEventListener("click", loadData);
+
+    if (rescoreAllBtn) {
+      rescoreAllBtn.addEventListener("click", async function() {
+        var ok = window.confirm("Rescore all submissions using the current scoring model? This will update stored score/tier values.");
+        if (!ok) return;
+        rescoreAllBtn.disabled = true;
+        setStatus("Rescoring all submissions...");
+        try {
+          var result = await rescoreAllSubmissions();
+          setStatus("Rescore complete: " + String(result && result.rescored || 0) + " updated, " + String(result && result.skipped || 0) + " skipped.");
+          await loadData();
+        } catch (err) {
+          setStatus(err && err.message ? err.message : "Bulk rescore failed", true);
+        } finally {
+          rescoreAllBtn.disabled = false;
+        }
+      });
+    }
+
+    if (personaConfigToggle && personaConfigBody && personaConfigExpandBtn) {
+      personaConfigToggle.addEventListener("click", function() {
+        var isHidden = personaConfigBody.classList.contains("hidden");
+        if (isHidden) {
+          personaConfigBody.classList.remove("hidden");
+          personaConfigExpandBtn.textContent = "Collapse";
+        } else {
+          personaConfigBody.classList.add("hidden");
+          personaConfigExpandBtn.textContent = "Expand";
+        }
+      });
+    }
+
+    if (reloadPersonaConfigBtn) {
+      reloadPersonaConfigBtn.addEventListener("click", function() {
+        loadPersonaConfigEditor();
+      });
+    }
+
+    if (savePersonaConfigBtn) {
+      savePersonaConfigBtn.addEventListener("click", async function() {
+        var parsed;
+        try {
+          parsed = JSON.parse(personaConfigInput.value || "{}");
+        } catch (e) {
+          setPersonaConfigStatus("Invalid JSON.", true);
+          return;
+        }
+        if (!isValidPersonaConfig(parsed)) {
+          setPersonaConfigStatus("Invalid schema. Expected personaGrid with 4 rows x 5 personas and required fields.", true);
+          return;
+        }
+        savePersonaConfigBtn.disabled = true;
+        setPersonaConfigStatus("Saving...");
+        try {
+          await updatePersonaConfig(parsed);
+          try {
+            localStorage.setItem(PERSONA_CONFIG_LOCAL_KEY, JSON.stringify(parsed));
+          } catch (e3) {}
+          setPersonaConfigStatus("Persona config saved. New quiz reads will use this copy.");
+        } catch (err) {
+          setPersonaConfigStatus(err && err.message ? err.message : "Save failed", true);
+        } finally {
+          savePersonaConfigBtn.disabled = false;
+        }
+      });
+    }
 
     copyBtn.addEventListener("click", async function() {
       try {
@@ -537,6 +2035,23 @@
         toggleRawBtn.textContent = "Hide Raw";
       }
     });
+
+    if (analyzeNotesBtn) {
+      analyzeNotesBtn.addEventListener("click", async function() {
+        var focus = analyzeFocusInput ? analyzeFocusInput.value : "";
+        analyzeNotesBtn.disabled = true;
+        if (analyzeStatus) analyzeStatus.textContent = "Analyzing notes...";
+        try {
+          var result = await fetchNotesAnalysis(focus);
+          renderAnalysisOutput(result && result.analysis ? result.analysis : null);
+          if (analyzeStatus) analyzeStatus.textContent = "Analysis complete.";
+        } catch (err) {
+          if (analyzeStatus) analyzeStatus.textContent = (err && err.message) ? err.message : "Analysis failed";
+        } finally {
+          analyzeNotesBtn.disabled = false;
+        }
+      });
+    }
 
     var stored = sessionStorage.getItem(ADMIN_SESSION_KEY);
     if (stored) {
