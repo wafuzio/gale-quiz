@@ -6,7 +6,7 @@
       "respondentKey": "mntam9x7-wu8fhq8dog",
       "fingerprint": "a061bf8dd6894930dbeaa6f610cbe1b0fab5404d1fe9e201cbf8db2ad885df40",
       "createdAt": "2026-04-13T15:48:04.041Z",
-      "updatedAt": "2026-04-14T14:25:36.940Z",
+      "updatedAt": "2026-04-16T05:13:53.842Z",
       "receivedAt": "2026-04-14T14:25:36.940Z",
       "payload": {
         "submittedAt": "2026-04-14T14:25:36.678Z",
@@ -127,7 +127,11 @@
           "domain": "Paid Media / Retail Media",
           "watchout": "Training opportunity: 2 self-identified blind spots",
           "shareText": "```\n________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/\n```\n\n🤖 GALE AI Persona: Orchestration Architect\n\nSignature: You present as Orchestration Architect — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You design workflows that scale beyond one-off personal productivity.\n\nNext Move: Package your strongest system into a team-ready playbook.\n\nMantra: Architect the leverage.\n\nCurrent vibe: Transferring my current skills into an Alchemy AI environment\n\nDomain: Paid Media / Retail Media"
-        }
+        },
+        "archived": true,
+        "status": "archived",
+        "archivedAt": "2026-04-16T05:13:53.753Z",
+        "archivedReason": "Old quiz version"
       }
     },
     {
@@ -135,7 +139,7 @@
       "respondentKey": "mnxj3722-zk0hp0c8dv",
       "fingerprint": "06a82be81ac115cfc541420eeabc00499485eaf1b6399d3b748df653b36f2f4c",
       "createdAt": "2026-04-13T18:30:50.552Z",
-      "updatedAt": "2026-04-13T18:30:50.552Z",
+      "updatedAt": "2026-04-16T05:13:53.759Z",
       "receivedAt": "2026-04-13T18:30:50.552Z",
       "payload": {
         "submittedAt": "2026-04-13T18:30:49.466Z",
@@ -233,7 +237,11 @@
           "domain": "Story / Copy",
           "watchout": "Self-assessment may be ahead of observed behavior",
           "shareText": "```\n  _________ __\n /   _____//  |_  ___________ ___.__.\n \\_____  \\\\   __\\/  _ \\_  __ <   |  |\n /        \\|  | (  <_> )  | \\/\\___  |\n/_______  /|__|  \\____/|__|   / ____|\n        \\/                    \\/\n_________                _____  __\n\\_   ___ \\____________ _/ ____\\/  |_  ___________\n/    \\  \\/\\_  __ \\__  \\\\   __\\\\   __\\/ __ \\_  __ \\\n\\     \\____|  | \\// __ \\|  |   |  | \\  ___/|  | \\/\n \\______  /|__|  (____  /__|   |__|  \\___  >__|\n        \\/            \\/                 \\/\n```\n\n✍️ GALE AI Persona: Story Crafter\n\nSignature: You present as Story Crafter — combining high experimental energy, solid versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong.\n\nSuperpower: You can rapidly shape drafts into audience-ready narratives.\n\nNext Move: Build a prompt kit for your top communication formats.\n\nMantra: Message with purpose.\n\nCurrent vibe: Workflow automation\n\nDomain: Story / Copy"
-        }
+        },
+        "archived": true,
+        "status": "archived",
+        "archivedAt": "2026-04-16T05:13:53.668Z",
+        "archivedReason": "Old quiz version"
       }
     },
     {
@@ -241,7 +249,7 @@
       "respondentKey": "mnxjva7d-hv9ym9tacp",
       "fingerprint": "c7214d741f902ffe5b745ec8a85b5375e9f7634028e4b48e0c92e61ebbb5e32a",
       "createdAt": "2026-04-13T18:52:40.365Z",
-      "updatedAt": "2026-04-13T18:52:40.365Z",
+      "updatedAt": "2026-04-16T05:13:53.593Z",
       "receivedAt": "2026-04-13T18:52:40.365Z",
       "payload": {
         "submittedAt": "2026-04-13T18:52:39.913Z",
@@ -343,7 +351,11 @@
           "domain": "Strategy / Marketing Strategy",
           "watchout": "Potentially underselling current readiness",
           "shareText": "```\n________                .__                     __                 __  .__\n\\_____  \\_______   ____ |  |__   ____   _______/  |_____________ _/  |_|__| ____   ____\n /   |   \\_  __ \\_/ ___\\|  |  \\_/ __ \\ /  ___/\\   __\\_  __ \\__  \\\\   __\\  |/  _ \\ /    \\\n/    |    \\  | \\/\\  \\___|   Y  \\  ___/ \\___ \\  |  |  |  | \\// __ \\|  | |  (  <_> )   |  \\\n\\_______  /__|    \\___  >___|  /\\___  >____  > |__|  |__|  (____  /__| |__|\\____/|___|  /\n        \\/            \\/     \\/     \\/     \\/                   \\/                    \\/\n   _____                .__    .__  __                 __\n  /  _  \\_______   ____ |  |__ |__|/  |_  ____   _____/  |_\n /  /_\\  \\_  __ \\_/ ___\\|  |  \\|  \\   __\\/ __ \\_/ ___\\   __\\\n/    |    \\  | \\/\\  \\___|   Y  \\  ||  | \\  ___/\\  \\___|  |\n\\____|__  /__|    \\___  >___|  /__||__|  \\___  >\\___  >__|\n        \\/            \\/     \\/              \\/     \\/\n```\n\n🤖 GALE AI Persona: Orchestration Architect\n\nSignature: You present as Orchestration Architect — combining steady growth energy, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You design workflows that scale beyond one-off personal productivity.\n\nNext Move: Package your strongest system into a team-ready playbook.\n\nMantra: Architect the leverage.\n\nCurrent vibe: Working with documents and data\n\nDomain: Strategy / Marketing Strategy"
-        }
+        },
+        "archived": true,
+        "status": "archived",
+        "archivedAt": "2026-04-16T05:13:53.499Z",
+        "archivedReason": "Old quiz version"
       }
     },
     {
@@ -351,7 +363,7 @@
       "respondentKey": "mnxjvcc8-g9fdzxwfia",
       "fingerprint": "e41c400217b6767fe67ee5629e1e3bc3ec5d9acd3d1399154f62f98b09ce577c",
       "createdAt": "2026-04-13T18:52:42.984Z",
-      "updatedAt": "2026-04-13T20:50:28.761Z",
+      "updatedAt": "2026-04-16T05:13:53.504Z",
       "receivedAt": "2026-04-13T18:52:42.984Z",
       "payload": {
         "submittedAt": "2026-04-13T18:52:42.680Z",
@@ -454,7 +466,11 @@
           "domain": "Generalist Orbit",
           "watchout": "Potentially underselling current readiness",
           "shareText": "```\n888b    888                                  888    d8b\n8888b   888                                  888    Y8P\n88888b  888                                  888\n888Y88b 888  8888b.  888d888 888d888 8888b.  888888 888 888  888  .d88b.\n888 Y88b888     \"88b 888P\"   888P\"      \"88b 888    888 888  888 d8P  Y8b\n888  Y88888 .d888888 888     888    .d888888 888    888 Y88  88P 88888888\n888   Y8888 888  888 888     888    888  888 Y88b.  888  Y8bd8P  Y8b.\n888    Y888 \"Y888888 888     888    \"Y888888  \"Y888 888   Y88P    \"Y8888\n\n\n\n8888888b.                       888\n888   Y88b                      888\n888    888                      888\n888   d88P 888d888 .d88b.   .d88888 888  888  .d8888b .d88b.  888d888\n8888888P\"  888P\"  d88\"\"88b d88\" 888 888  888 d88P\"   d8P  Y8b 888P\"\n888        888    888  888 888  888 888  888 888     88888888 888\n888        888    Y88..88P Y88b 888 Y88b 888 Y88b.   Y8b.     888\n888        888     \"Y88P\"   \"Y88888  \"Y88888  \"Y8888P \"Y8888  888\n```\n\n🎬 GALE AI Persona: Narrative Producer\n\nSignature: You present as Narrative Producer — combining steady growth energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You generate high-volume content while protecting clarity and quality.\n\nNext Move: Create a quality rubric for fast content review before publishing.\n\nMantra: Creative, but controlled.\n\nCurrent vibe: Prompting and instruction design\n\nDomain: Generalist Orbit"
-        }
+        },
+        "archived": true,
+        "status": "archived",
+        "archivedAt": "2026-04-16T05:13:53.409Z",
+        "archivedReason": "Old quiz version"
       }
     },
     {
@@ -462,7 +478,7 @@
       "respondentKey": "mnyoqtl3-39olt1hdwh",
       "fingerprint": "01e0156f088b132ec7227b295ca6f20bcd31dafaf380c145b72317ff8b26c383",
       "createdAt": "2026-04-14T13:56:56.998Z",
-      "updatedAt": "2026-04-14T13:56:56.998Z",
+      "updatedAt": "2026-04-16T05:13:53.410Z",
       "receivedAt": "2026-04-14T13:56:56.998Z",
       "payload": {
         "submittedAt": "2026-04-14T13:56:56.007Z",
@@ -566,7 +582,11 @@
           "rising": "Workflow automation",
           "domain": "People / HR / Talent",
           "watchout": "Training opportunity: 3 self-identified blind spots"
-        }
+        },
+        "archived": true,
+        "status": "archived",
+        "archivedAt": "2026-04-16T05:13:53.255Z",
+        "archivedReason": "Old quiz version"
       }
     },
     {
@@ -574,7 +594,7 @@
       "respondentKey": "mo05rhtw-y5kw4jbeea",
       "fingerprint": "dc826b79418b7347e775e44b00ca15e0fac12f33616e587b2ee740cfa7391bee",
       "createdAt": "2026-04-15T14:41:08.019Z",
-      "updatedAt": "2026-04-15T14:41:08.019Z",
+      "updatedAt": "2026-04-16T05:13:53.254Z",
       "receivedAt": "2026-04-15T14:41:08.019Z",
       "payload": {
         "submittedAt": "2026-04-15T14:41:07.076Z",
@@ -697,29 +717,33 @@
           "domain": "Strategy / Marketing Strategy",
           "watchout": "Potentially underselling current readiness",
           "shareText": "```\n ██████╗██████╗ ███████╗ █████╗ ████████╗██╗██╗   ██╗███████╗\n██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝\n██║     ██████╔╝█████╗  ███████║   ██║   ██║██║   ██║█████╗\n██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝\n╚██████╗██║  ██║███████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗\n ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝\n\n███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗███████╗\n██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔════╝\n███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║███████╗\n╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║\n███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║███████║\n╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝\n\n██╗     ███████╗ █████╗ ██████╗\n██║     ██╔════╝██╔══██╗██╔══██╗\n██║     █████╗  ███████║██║  ██║\n██║     ██╔══╝  ██╔══██║██║  ██║\n███████╗███████╗██║  ██║██████╔╝\n╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝\n```\n\n🌟 GALE AI Persona: Creative Systems Lead\n\nSignature: You present as Creative Systems Lead — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You can scale content and ideation without losing brand coherence.\n\nNext Move: Codify your creative operating system for cross-team reuse.\n\nMantra: Create at scale.\n\nCurrent vibe: Working with documents and data\n\nDomain: Strategy / Marketing Strategy"
-        }
+        },
+        "archived": true,
+        "status": "archived",
+        "archivedAt": "2026-04-16T05:13:53.152Z",
+        "archivedReason": "Old quiz version"
       }
     },
     {
       "id": "mo0udkew-cw5ylt",
       "respondentKey": "mo0udk3w-xsl3eeidpd",
-      "fingerprint": "06306349d257bdbe4b076c3dd16d435595b49dc87ce61eb8975d58976e0549eb",
+      "fingerprint": "4cb8fa7e0c2187669f3ea13fc26ba4f6e8d301e7d7edd8de10ec6d6c86b1cdc6",
       "createdAt": "2026-04-16T02:10:07.640Z",
-      "updatedAt": "2026-04-16T02:21:38.111Z",
-      "receivedAt": "2026-04-16T02:21:38.111Z",
+      "updatedAt": "2026-04-16T05:04:44.456Z",
+      "receivedAt": "2026-04-16T05:04:44.456Z",
       "payload": {
-        "submittedAt": "2026-04-16T02:21:37.773Z",
+        "submittedAt": "2026-04-16T05:04:44.326Z",
         "respondentKey": "mo0udk3w-xsl3eeidpd",
         "quizVersion": "revised",
         "scoreModel": "revised_v1",
-        "score": 23.8,
+        "score": 23.2,
         "scoreBreakdown": {
           "q1": 2,
-          "q2a": 1,
+          "q2a": 0.9,
           "q3": 1.5,
           "q4": 2.5,
           "qv1": 1.7,
-          "q2_profile": 4,
+          "q2_profile": 3.5,
           "c1_readiness": 1.5,
           "t1_tool_profile": 1.6,
           "s0_outputs": 2.8,
@@ -763,23 +787,22 @@
           "q2": [
             "Conversational Q&A",
             "Research and synthesis",
-            "Slides, docs, decks",
             "Brainstorming and ideation",
-            "Data analysis or spreadsheets",
-            "Internal ops (notes, summaries, emails)",
+            "Slides, docs, decks",
+            "Client work and deliverables",
             "Coding or building tools",
+            "Internal ops (notes, summaries, emails)",
             "Personal stuff outside work",
-            "Client work and deliverables"
+            "Data analysis or spreadsheets"
           ],
           "q2b": [
             "Conversational Q&A",
-            "Data analysis or spreadsheets",
-            "Brainstorming and ideation",
+            "Internal ops (notes, summaries, emails)",
             "Coding or building tools"
           ],
           "q2c": [],
           "q2a": "Go with the flow — I start loose and refine as I go",
-          "q2a1": "I include some structure, but I’m still refining what works",
+          "q2a1": "I add some detail, but not consistently",
           "q3": "Sometimes",
           "q4": "Yes",
           "qv1": "Ask AI to rerun with tighter constraints, then review carefully",
@@ -805,20 +828,21 @@
             "I use it to build things"
           ],
           "blockers": [
-            "I am used to AI tools I can't use at work"
+            "Don't know which tool to use when"
           ],
           "program_topics": [
             "GALE tools and ALCHEMY AI",
-            "Image, video, and multimodal generation",
-            "Agentic AI and autonomous workflows",
             "Claude Code specifically",
             "Claude Skills, Projects, and memory",
-            "RAG, knowledge graphs, and context systems"
+            "RAG, knowledge graphs, and context systems",
+            "Tool comparisons and what's new"
           ],
           "q15": [
             "Hands-on workshops where I build something",
+            "Short tactical tips (5-min segments)",
             "Guided tutorials with takeaway materials"
           ],
+          "q15_note": "people like fun in learning",
           "s2": [
             "1:1 office hours with someone more advanced",
             "Curated tool recommendations for my role",
@@ -826,7 +850,7 @@
             "A library of GALE-built Skills and workflows",
             "Cohort-based learning (small group, multiple sessions)"
           ],
-          "feedback_other": "you guys are the coolest"
+          "feedback_other": "Tell Robbie he needs to be a little more quiet in chat"
         },
         "aiProfile": {
           "sign": "Orchestration Architect",
