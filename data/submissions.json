@@ -1,5 +1,5 @@
 {
-  "count": 9,
+  "count": 10,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -1093,6 +1093,156 @@
           "domain": "Paid Media",
           "watchout": "Prioritize prompt quality coaching",
           "shareText": "```\neee....eee.eeeeee.eeeeeee...eeeeee..eeeeee..eeeeeeeee.eee.eee....eee.eeeeeeeee.eee...eee.\n@@@::::@@@:@@@@@@:@@@@@@@@:@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@:@@@::::@@@:@@@@@@@@@:@@@:::@@@.\n%%%----%%%-%%%----%%%--%%%-%%%-----%%%--%%%----%%%----%%%-%%%----%%%----%%%----%%%---%%%-\n&&&++++&&&+&&&&&++&&&&&&&++&&&&&&++&&&&&&&&++++&&&++++&&&+&&&++++&&&++++&&&+++++&&&&&&&++\n*|||**|||**|||||**||||||****||||||*||||||||****|||****|||*|||****|||****|||******|||||***\n==!!!!!!===!!!====!!!=!!!======!!!=!!!==!!!====!!!====!!!=!!!====!!!====!!!=======!!!====\n###::::####::::::#:::##:::#:::::::#:::##:::####:::####:::#::::::#:::####:::#######:::####\n@@@@..@@@@@......@...@@...@......@@...@@...@@@@...@@@@...@......@...@@@@...@@@@@@@...@@@@\n\neeeeeee...eeeeee..eee....eee.eee..eeeeee...eeeeee..eeeeeeeee..eeeeee..eeeeeee..\n@@@@@@@@:@@@@@@@@:@@@::::@@@:@@@:@@@@@@@@:@@@@@@@@:@@@@@@@@@:@@@@@@@@:@@@@@@@@:\n%%%--%%%-%%%--%%%-%%%----%%%-%%%-%%%------%%%--%%%----%%%----%%%--%%%-%%%--%%%-\n&&&++&&&+&&&&&&&&+&&&++++&&&+&&&+&&&++++++&&&&&&&&++++&&&++++&&&++&&&+&&&&&&&++\n|||**|||*||||||||**|||**|||**|||*|||*||||*||||||||****|||****|||**|||*||||||***\n!!!==!!!=!!!==!!!===!!!!!!===!!!=!!!==!!!=!!!==!!!====!!!====!!!==!!!=!!!=!!!==\n:::##:::#:::##:::####::::####:::#::::::::#:::##:::####:::####::::::::#:::##:::#\n...@@...@...@@...@@@@@..@@@@@...@@......@@...@@...@@@@...@@@@@......@@...@@...@\n```\n\n🌐 GALE AI Persona: Versatility Navigator\n\nSignature: You present as Versatility Navigator — combining steady growth energy, wide versatility, and a chaos-leaning operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You connect different use cases into coherent operating habits.\n\nNext Move: Pick one specialty lane to deepen without losing your broad range.\n\nMantra: Range with precision.\n\nCurrent vibe: Curated tool recommendations for my role\n\nDomain: Paid Media"
+        }
+      }
+    },
+    {
+      "id": "mo7gwgcf-0xxe0h",
+      "respondentKey": "mo7gwfij-op29ibmyi1",
+      "fingerprint": "d63a85d5354e813d875e1d7a5a3495b13ef55666a6b9399e60d307587e349c81",
+      "createdAt": "2026-04-20T17:27:17.439Z",
+      "updatedAt": "2026-04-20T17:27:17.439Z",
+      "receivedAt": "2026-04-20T17:27:17.439Z",
+      "payload": {
+        "submittedAt": "2026-04-20T17:27:16.363Z",
+        "respondentKey": "mo7gwfij-op29ibmyi1",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 26.3,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 1.6,
+          "q3": 1.5,
+          "q4": 2.5,
+          "qv1": 2.4,
+          "q2_profile": 5,
+          "c1_readiness": 1.5,
+          "t1_tool_profile": 3.1,
+          "s0_outputs": 1.9,
+          "s1_activities": 4.8
+        },
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "trackRecommendation": "Advanced builder track",
+        "flags": [],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Code & API depth",
+          "Wants advanced implementation support",
+          "Verification-first",
+          "Prefers hands-on learning",
+          "Wants peer examples"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "d1": "Account / Client Partner",
+          "c1": "Deep end — agents, APIs, vibe coding, the works",
+          "q1": "Constantly — it's woven into how I work",
+          "t1": [
+            "ChatGPT",
+            "Claude",
+            "Gemini",
+            "Perplexity",
+            "Microsoft Copilot",
+            "GitHub Copilot",
+            "ALCHEMY AI",
+            "Midjourney",
+            "Nano Banana",
+            "Weavy",
+            "NotebookLM",
+            "Notion AI",
+            "Canva AI",
+            "Cursor / Claude Code / other coding tools"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "q2": [
+            "Writing and editing",
+            "Brainstorming and ideation",
+            "Internal ops (notes, summaries, emails)",
+            "Personal stuff outside work",
+            "Coding or building tools",
+            "Image, video, or design generation",
+            "Conversational Q&A",
+            "Research and synthesis",
+            "Slides, docs, decks",
+            "Client work and deliverables",
+            "Data analysis or spreadsheets"
+          ],
+          "q2b": [
+            "Writing and editing",
+            "Personal stuff outside work",
+            "Conversational Q&A",
+            "Coding or building tools",
+            "Internal ops (notes, summaries, emails)",
+            "Brainstorming and ideation",
+            "Slides, docs, decks"
+          ],
+          "q2c": [],
+          "q2a": "Structured — I usually give it context, role, and constraints",
+          "q3": "Sometimes",
+          "q3_note": "I also give Claude an earful while i rewrite my prompt about how disappointed in him I am :) ",
+          "q4": "Yes",
+          "qv1": "Verify against original sources/materials before proceeding",
+          "s0": [
+            "Media brief or creative brief",
+            "Competitive or market research synthesis"
+          ],
+          "s1": [
+            "Turn AI output into deliverables shared with others",
+            "Connect AI to other tools or automations",
+            "Build custom tools/apps powered by AI",
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Use AI with documents or data to produce analysis or recommendations"
+          ],
+          "outside_ai": [
+            "I use it to build things",
+            "I use it as a creative outlet",
+            "It's fun to use"
+          ],
+          "blockers": [
+            "I am used to AI tools I can't use at work"
+          ],
+          "program_topics": [
+            "RAG, knowledge graphs, and context systems",
+            "Agentic AI and autonomous workflows",
+            "Claude Code specifically",
+            "Claude Skills, Projects, and memory"
+          ],
+          "q15": [
+            "Short tactical tips (5-min segments)",
+            "Guided tutorials with takeaway materials",
+            "Hands-on workshops where I build something",
+            "Live demos of tools and workflows",
+            "State of the Union briefings on what's new",
+            "Show-and-tell from GALE colleagues",
+            "Discussion and Q&A",
+            "Guest speakers from outside GALE"
+          ],
+          "s2": [
+            "A library of GALE-built Skills and workflows",
+            "Cohort-based learning (small group, multiple sessions)"
+          ]
+        },
+        "aiProfile": {
+          "sign": "Creative Systems Lead",
+          "emoji": "🌟",
+          "asciiArt": " ██████╗██████╗ ███████╗ █████╗ ████████╗██╗██╗   ██╗███████╗\n██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝\n██║     ██████╔╝█████╗  ███████║   ██║   ██║██║   ██║█████╗\n██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝\n╚██████╗██║  ██║███████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗\n ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝\n\n███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗███████╗\n██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔════╝\n███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║███████╗\n╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║\n███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║███████║\n╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝\n\n██╗     ███████╗ █████╗ ██████╗\n██║     ██╔════╝██╔══██╗██╔══██╗\n██║     █████╗  ███████║██║  ██║\n██║     ██╔══╝  ██╔══██║██║  ██║\n███████╗███████╗██║  ██║██████╔╝\n╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝",
+          "signature": "You present as Creative Systems Lead — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
+          "spotlight": "You unify creative experimentation with dependable process.",
+          "superpower": "You can scale content and ideation without losing brand coherence.",
+          "nextMove": "Codify your creative operating system for cross-team reuse.",
+          "mantra": "Create at scale.",
+          "rising": "A library of GALE-built Skills and workflows",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Account / Client Partner",
+          "watchout": "You flagged 1 blocker — focus on one friction point at a time to compound progress quickly.",
+          "shareText": "```\n ██████╗██████╗ ███████╗ █████╗ ████████╗██╗██╗   ██╗███████╗\n██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║██║   ██║██╔════╝\n██║     ██████╔╝█████╗  ███████║   ██║   ██║██║   ██║█████╗\n██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║╚██╗ ██╔╝██╔══╝\n╚██████╗██║  ██║███████╗██║  ██║   ██║   ██║ ╚████╔╝ ███████╗\n ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝\n\n███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗███████╗\n██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔════╝\n███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║███████╗\n╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║╚════██║\n███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║███████║\n╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚══════╝\n\n██╗     ███████╗ █████╗ ██████╗\n██║     ██╔════╝██╔══██╗██╔══██╗\n██║     █████╗  ███████║██║  ██║\n██║     ██╔══╝  ██╔══██║██║  ██║\n███████╗███████╗██║  ██║██████╔╝\n╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝\n```\n\n🌟 GALE AI Persona: Creative Systems Lead\n\nSignature: You present as Creative Systems Lead — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You can scale content and ideation without losing brand coherence.\n\nNext Move: Codify your creative operating system for cross-team reuse.\n\nMantra: Create at scale.\n\nCurrent vibe: A library of GALE-built Skills and workflows\n\nDomain: Account / Client Partner"
         }
       }
     }
