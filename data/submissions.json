@@ -1635,10 +1635,10 @@
       "respondentKey": "molt1g0p-i8gkmjpu1m",
       "fingerprint": "ef6d392ce23288f522de1d315a1ebe52dd1bedf33521dfef70673363f5bbd57e",
       "createdAt": "2026-04-30T18:15:52.845Z",
-      "updatedAt": "2026-04-30T18:15:52.845Z",
-      "receivedAt": "2026-04-30T18:15:52.845Z",
+      "updatedAt": "2026-04-30T21:31:37.094Z",
+      "receivedAt": "2026-04-30T21:31:37.094Z",
       "payload": {
-        "submittedAt": "2026-04-30T18:15:52.153Z",
+        "submittedAt": "2026-04-30T21:31:36.622Z",
         "respondentKey": "molt1g0p-i8gkmjpu1m",
         "quizVersion": "revised",
         "scoreModel": "revised_v1",
@@ -1679,8 +1679,8 @@
           "q1a": "I use them for personal stuff but not for work",
           "q1_note": "Professional usage is tough. From a Legal perspective concerned about intellectual property issues or just general landmines. From a personal perspective, so much going on don’t always have time to dabble. LLMs on my personal computer run locally are the bulk of my experience at the moment.",
           "t1": [
-            "ALCHEMY AI",
             "Microsoft Copilot",
+            "ALCHEMY AI",
             "Other"
           ],
           "t1b": [],
@@ -1753,15 +1753,15 @@
           "emoji": "🚀",
           "asciiArt": "    __  ___                           __\n   /  |/  /___  ____ ___  ___  ____  / /___  ______ ___\n  / /|_/ / __ \\/ __ `__ \\/ _ \\/ __ \\/ __/ / / / __ `__ \\\n / /  / / /_/ / / / / / /  __/ / / / /_/ /_/ / / / / / /\n/_/  /_/\\____/_/ /_/ /_/\\___/_/ /_/\\__/\\__,_/_/ /_/ /_/\n\n    ______           __\n   / ____/  ______  / /___  ________  _____\n  / __/ | |/_/ __ \\/ / __ \\/ ___/ _ \\/ ___/\n / /____>  </ /_/ / / /_/ / /  /  __/ /\n/_____/_/|_/ .___/_/\\____/_/   \\___/_/\n          /_/",
           "signature": "You present as Momentum Explorer — combining early-stage momentum, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong.",
-          "spotlight": "You’re building breadth and starting to consolidate what works.",
-          "superpower": "You maintain forward movement across varied use cases.",
+          "spotlight": "You’re sampling the landscape and starting to find your lanes.",
+          "superpower": "You’ve tested enough to know what’s possible — now it’s about picking where to go deep.",
           "nextMove": "Prioritize the 2 highest-impact use cases and deepen consistency there.",
           "mantra": "Momentum with direction.",
           "rising": "Curated tool recommendations for my role",
           "operatingStyleLabel": "Operating style: quality-first",
           "domain": "Other",
           "watchout": "Prioritize verification and client-safe deployment guidance",
-          "shareText": "```\n    __  ___                           __\n   /  |/  /___  ____ ___  ___  ____  / /___  ______ ___\n  / /|_/ / __ \\/ __ `__ \\/ _ \\/ __ \\/ __/ / / / __ `__ \\\n / /  / / /_/ / / / / / /  __/ / / / /_/ /_/ / / / / / /\n/_/  /_/\\____/_/ /_/ /_/\\___/_/ /_/\\__/\\__,_/_/ /_/ /_/\n\n    ______           __\n   / ____/  ______  / /___  ________  _____\n  / __/ | |/_/ __ \\/ / __ \\/ ___/ _ \\/ ___/\n / /____>  </ /_/ / / /_/ / /  /  __/ /\n/_____/_/|_/ .___/_/\\____/_/   \\___/_/\n          /_/\n```\n\n🚀 GALE AI Persona: Momentum Explorer\n\nSignature: You present as Momentum Explorer — combining early-stage momentum, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong.\n\nSuperpower: You maintain forward movement across varied use cases.\n\nNext Move: Prioritize the 2 highest-impact use cases and deepen consistency there.\n\nMantra: Momentum with direction.\n\nCurrent vibe: Curated tool recommendations for my role\n\nDomain: Other"
+          "shareText": "```\n    __  ___                           __\n   /  |/  /___  ____ ___  ___  ____  / /___  ______ ___\n  / /|_/ / __ \\/ __ `__ \\/ _ \\/ __ \\/ __/ / / / __ `__ \\\n / /  / / /_/ / / / / / /  __/ / / / /_/ /_/ / / / / / /\n/_/  /_/\\____/_/ /_/ /_/\\___/_/ /_/\\__/\\__,_/_/ /_/ /_/\n\n    ______           __\n   / ____/  ______  / /___  ________  _____\n  / __/ | |/_/ __ \\/ / __ \\/ ___/ _ \\/ ___/\n / /____>  </ /_/ / / /_/ / /  /  __/ /\n/_____/_/|_/ .___/_/\\____/_/   \\___/_/\n          /_/\n```\n\n🚀 GALE AI Persona: Momentum Explorer\n\nSignature: You present as Momentum Explorer — combining early-stage momentum, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong.\n\nSuperpower: You’ve tested enough to know what’s possible — now it’s about picking where to go deep.\n\nNext Move: Prioritize the 2 highest-impact use cases and deepen consistency there.\n\nMantra: Momentum with direction.\n\nCurrent vibe: Curated tool recommendations for my role\n\nDomain: Other"
         }
       }
     },
