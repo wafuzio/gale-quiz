@@ -1,5 +1,5 @@
 {
-  "count": 13,
+  "count": 16,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -1627,6 +1627,396 @@
           "domain": "Paid Media",
           "watchout": "You flagged 2 blockers — focus on one friction point at a time to compound progress quickly.",
           "shareText": "```\n________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/\n```\n\n🧠 GALE AI Persona: Decision Analyst\n\nSignature: You present as Decision Analyst — combining high experimental energy, wide versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You combine synthesis, evidence, and execution framing effectively.\n\nNext Move: Scale your analysis patterns into templates the wider team can reuse.\n\nMantra: Insight into action.\n\nCurrent vibe: Templates and starter prompts I can steal\n\nDomain: Paid Media"
+        }
+      }
+    },
+    {
+      "id": "molt1gjx-r1e8i3",
+      "respondentKey": "molt1g0p-i8gkmjpu1m",
+      "fingerprint": "ef6d392ce23288f522de1d315a1ebe52dd1bedf33521dfef70673363f5bbd57e",
+      "createdAt": "2026-04-30T18:15:52.845Z",
+      "updatedAt": "2026-04-30T18:15:52.845Z",
+      "receivedAt": "2026-04-30T18:15:52.845Z",
+      "payload": {
+        "submittedAt": "2026-04-30T18:15:52.153Z",
+        "respondentKey": "molt1g0p-i8gkmjpu1m",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 11.4,
+        "scoreBreakdown": {
+          "q1": 0.9,
+          "q2a": 1,
+          "q3": 3,
+          "q4": 1.3,
+          "qv1": 2.4,
+          "q2_profile": 1.7,
+          "c1_readiness": 0.4,
+          "t1_tool_profile": 0.7,
+          "s0_outputs": 0,
+          "s1_activities": 0
+        },
+        "tier": "Tier 3",
+        "tierLabel": "Foundational: ready to apply core workflows",
+        "tierDesc": "Best fit for foundational skill-building and repeatable quality habits before advanced system-level expansion",
+        "trackRecommendation": "Foundational enablement track",
+        "flags": [
+          "Prioritize verification and client-safe deployment guidance"
+        ],
+        "subtags": [
+          "Wants role-based tool guidance",
+          "Wants advanced implementation support",
+          "Risk-confidence friction",
+          "Verification-first",
+          "Prefers hands-on learning",
+          "Wants peer examples"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "d1": "Other",
+          "d1_other_text": "Business Affairs / Legal",
+          "c1": "Dabbling — I use it for some things, mostly the basics",
+          "q1": "Rarely / not yet",
+          "q1a": "I use them for personal stuff but not for work",
+          "q1_note": "Professional usage is tough. From a Legal perspective concerned about intellectual property issues or just general landmines. From a personal perspective, so much going on don’t always have time to dabble. LLMs on my personal computer run locally are the bulk of my experience at the moment.",
+          "t1": [
+            "ALCHEMY AI",
+            "Microsoft Copilot",
+            "Other"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "t1_note": "LM Studio and downloading LLMs to my computer then running locally through my GPU.",
+          "q2": [
+            "Writing and editing",
+            "Slides, docs, decks",
+            "Personal stuff outside work"
+          ],
+          "q2b": [
+            "Writing and editing",
+            "Personal stuff outside work"
+          ],
+          "q2c": [],
+          "q2a": "Honestly, I don't have a style yet",
+          "q2a1": "I include some structure, but I’m still refining what works",
+          "q3": "Yes",
+          "q4": "No",
+          "q4a": "I can do this in limited cases, but not consistently",
+          "qv1": "Verify against original sources/materials before proceeding",
+          "s0": [
+            "None of these yet"
+          ],
+          "s0_note": "I was able to use AI like I was leading the witness to assist in my discussion of Legal AI Concerns.",
+          "s1": [
+            "None of these yet"
+          ],
+          "outside_ai": [
+            "I am overwhelmed by it",
+            "It's fun to use",
+            "I use it for advice",
+            "Curious but cautious"
+          ],
+          "outside_ai_note": "Just being very real. It’s overwhelming. Don’t know where to start sometimes. However, have been able to produce writing and discussion points with LLMs.\n\nHowever, with an interpretive paralegal professional-life and a creative film/photo personal-life, I want to learn more!",
+          "blockers": [
+            "Don't know where to start",
+            "Not sure what's safe for client work",
+            "Don't know which tool to use when"
+          ],
+          "program_topics": [
+            "GALE tools and ALCHEMY AI",
+            "Image, video, and multimodal generation",
+            "Best practices and frameworks",
+            "Legal, ethics, IP, and disclosure",
+            "Agentic AI and autonomous workflows",
+            "AI fundamentals and the basics"
+          ],
+          "q15": [
+            "Hands-on workshops where I build something",
+            "Live demos of tools and workflows",
+            "State of the Union briefings on what's new",
+            "Show-and-tell from GALE colleagues",
+            "Guided tutorials with takeaway materials"
+          ],
+          "q15_note": "Also guardrails and more info on what is kosher to use for personal vs professional usage.",
+          "s2": [
+            "Curated tool recommendations for my role",
+            "A library of GALE-built Skills and workflows",
+            "Cohort-based learning (small group, multiple sessions)",
+            "1:1 office hours with someone more advanced",
+            "Just keep doing what you're doing"
+          ],
+          "share_segment_name": "Spencer Fiock",
+          "share_segment_idea": "Using AI to assist in designing a plug-and-play 3D Gaussian Splatting or 3D Environment Design App or Tool. Mainly to produce creative backgrounds and environments for virtual production. Something I just thought of exploring. Not far along. But, want something to motivate that urge.\n\nDrinking from the firehose. Biting off more than one can chew. Perhaps there’s an earlier step with which to start.\n\nOn the “related to my job” front - happy to discuss more legal-related issues. And, to discuss the needs and framework of an all encompassing document management system which would be able to do intake, document tracking, rights tracking, metadata storage, precedent and provision research. Etc."
+        },
+        "aiProfile": {
+          "sign": "Momentum Explorer",
+          "emoji": "🚀",
+          "asciiArt": "    __  ___                           __\n   /  |/  /___  ____ ___  ___  ____  / /___  ______ ___\n  / /|_/ / __ \\/ __ `__ \\/ _ \\/ __ \\/ __/ / / / __ `__ \\\n / /  / / /_/ / / / / / /  __/ / / / /_/ /_/ / / / / / /\n/_/  /_/\\____/_/ /_/ /_/\\___/_/ /_/\\__/\\__,_/_/ /_/ /_/\n\n    ______           __\n   / ____/  ______  / /___  ________  _____\n  / __/ | |/_/ __ \\/ / __ \\/ ___/ _ \\/ ___/\n / /____>  </ /_/ / / /_/ / /  /  __/ /\n/_____/_/|_/ .___/_/\\____/_/   \\___/_/\n          /_/",
+          "signature": "You present as Momentum Explorer — combining early-stage momentum, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong.",
+          "spotlight": "You’re building breadth and starting to consolidate what works.",
+          "superpower": "You maintain forward movement across varied use cases.",
+          "nextMove": "Prioritize the 2 highest-impact use cases and deepen consistency there.",
+          "mantra": "Momentum with direction.",
+          "rising": "Curated tool recommendations for my role",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Other",
+          "watchout": "Prioritize verification and client-safe deployment guidance",
+          "shareText": "```\n    __  ___                           __\n   /  |/  /___  ____ ___  ___  ____  / /___  ______ ___\n  / /|_/ / __ \\/ __ `__ \\/ _ \\/ __ \\/ __/ / / / __ `__ \\\n / /  / / /_/ / / / / / /  __/ / / / /_/ /_/ / / / / / /\n/_/  /_/\\____/_/ /_/ /_/\\___/_/ /_/\\__/\\__,_/_/ /_/ /_/\n\n    ______           __\n   / ____/  ______  / /___  ________  _____\n  / __/ | |/_/ __ \\/ / __ \\/ ___/ _ \\/ ___/\n / /____>  </ /_/ / / /_/ / /  /  __/ /\n/_____/_/|_/ .___/_/\\____/_/   \\___/_/\n          /_/\n```\n\n🚀 GALE AI Persona: Momentum Explorer\n\nSignature: You present as Momentum Explorer — combining early-stage momentum, solid versatility, and a pragmatic operating style. Your prompt refinement signal is strong.\n\nSuperpower: You maintain forward movement across varied use cases.\n\nNext Move: Prioritize the 2 highest-impact use cases and deepen consistency there.\n\nMantra: Momentum with direction.\n\nCurrent vibe: Curated tool recommendations for my role\n\nDomain: Other"
+        }
+      }
+    },
+    {
+      "id": "moltemdw-ro7t9g",
+      "respondentKey": "moltelnh-lnm2p7escp",
+      "fingerprint": "ef5390f6926eabb1b561810250b4e1a4473c42a450429124d2b7e3716a88d232",
+      "createdAt": "2026-04-30T18:26:06.932Z",
+      "updatedAt": "2026-04-30T18:26:06.932Z",
+      "receivedAt": "2026-04-30T18:26:06.932Z",
+      "payload": {
+        "submittedAt": "2026-04-30T18:26:05.981Z",
+        "respondentKey": "moltelnh-lnm2p7escp",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 14.2,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 1.6,
+          "q3": 3,
+          "q4": 2.5,
+          "qv1": 2.4,
+          "q2_profile": 0.8,
+          "c1_readiness": 0,
+          "t1_tool_profile": 0.5,
+          "s0_outputs": 0,
+          "s1_activities": 1.4
+        },
+        "tier": "Tier 2",
+        "tierLabel": "Ready to expand current use cases",
+        "tierDesc": "Consistent practical usage with room to scale into stronger cross-team and system-level workflows",
+        "trackRecommendation": "Applied acceleration track",
+        "flags": [],
+        "subtags": [
+          "Data & documents depth",
+          "Wants prompting support",
+          "Wants role-based tool guidance",
+          "Wants advanced implementation support",
+          "Verification-first",
+          "Wants peer examples"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "d1": "Other",
+          "d1_other_text": "Business Affairs Manager ",
+          "d1_note": "I’m a Business Affairs Manager at GALE, working across IP research, contract review and drafting, and legal and rights analysis for talent, influencer, production, and partnership agreements. I also support internal teams with legal and business affairs education and review creative briefs, SOWs, and decks to ensure all relevant terms are properly reflected in contracts.",
+          "c1": "Just getting started — still figuring out what to use it for",
+          "c1_note": "I leverage internal AI tools to support contract analysis and summarization, and have been working on process improvements to streamline capture of key contract and contact details from email communications. In addition, I support teams with ad hoc presentations, including project summaries, IP education materials, and broader business affairs training content.",
+          "q1": "Constantly — it's woven into how I work",
+          "q1_note": "I use AI in my work almost all the time. It’s integrated into my workflow for reviewing deal points, deliverables, and conducting initial analysis for contracts and due diligence.",
+          "t1": [
+            "ALCHEMY AI"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "t1_note": "I use Alchemy AI pretty regularly for diligence work, mainly around client information security and related risk review. For more general legal and rights education content, I would like to use Canvas to help build clearer, more consistent presentation formats.",
+          "q2": [
+            "Research and synthesis"
+          ],
+          "q2b": [
+            "Research and synthesis"
+          ],
+          "q2c": [],
+          "q2_note": "I use it for editing, research, and synthesis. I’d also like to learn how to use it to generate presentations, as well as support data analysis and spreadsheets for budgeting purposes.",
+          "q2a": "Structured — I usually give it context, role, and constraints",
+          "q3": "Yes",
+          "q4": "Yes",
+          "qv1": "Verify against original sources/materials before proceeding",
+          "s0_note": "Contract review and analysis, legal and rights summaries, due diligence (including client and information security review), research synthesis, internal documentation, and support for structuring presentation materials.",
+          "s0": [
+            "None of these yet"
+          ],
+          "s1": [
+            "Use AI with documents or data to produce analysis or recommendations"
+          ],
+          "outside_ai": [
+            "I use it like Google"
+          ],
+          "blockers": [
+            "Don't know which tool to use when"
+          ],
+          "astro_feedback_choice": "nailed_it",
+          "program_topics": [
+            "AI fundamentals and the basics",
+            "GALE tools and ALCHEMY AI",
+            "Image, video, and multimodal generation",
+            "Slides, docs, and content creation",
+            "Claude Code specifically",
+            "Claude Skills, Projects, and memory",
+            "Legal, ethics, IP, and disclosure",
+            "Tool comparisons and what's new"
+          ],
+          "q15": [
+            "State of the Union briefings on what's new",
+            "Live demos of tools and workflows",
+            "Show-and-tell from GALE colleagues",
+            "Guided tutorials with takeaway materials",
+            "Short tactical tips (5-min segments)"
+          ],
+          "s2": [
+            "Curated tool recommendations for my role",
+            "Templates and starter prompts I can steal",
+            "Recordings of past sessions",
+            "A library of GALE-built Skills and workflows"
+          ],
+          "feedback_change": "For those of us who are beginners with AI tools, beginner-level classes are really helpful to build confidence, improve our skills, and learn how to use them more effectively in both our work and ongoing learning.",
+          "share_segment_idea": "I asked earlier for help to build \"Power Automate Email-to-Excel Logging (GALE-compliant)\" Microsoft 365– automation that would capture key sender details from incoming emails and log them into a centralized tracker to support operational follow-up (e.g., invoice review, contract/deal exception packets, and general email follow-ups). The goal was to automatically record who is emailing (sender name + sender email), derive a basic domain/company indicator (e.g., vendor.com → “vendor”) with available contact info, and write the data into an Excel table stored in a controlled M365 location. Although I was able to access the Power Automate interface, I was blocked from creating/running flows because Power Automate shows no accessible Power Platform environment for my account. I would love help to build it, to capture incoming and legacy contacts (backfill flow and ongoing flow). \n\n",
+          "share_segment_name": "Mariola Kalinska",
+          "feedback_other": "I truly enjoy the GWP club and learning. Super helpful. "
+        },
+        "aiProfile": {
+          "sign": "Decision Analyst",
+          "emoji": "🧠",
+          "asciiArt": "________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/",
+          "signature": "You present as Decision Analyst — combining high experimental energy, focused versatility, and a pragmatic operating style. Your prompt refinement signal is strong.",
+          "spotlight": "You operate with strong analytical judgment and practical rigor.",
+          "superpower": "You combine synthesis, evidence, and execution framing effectively.",
+          "nextMove": "Scale your analysis patterns into templates the wider team can reuse.",
+          "mantra": "Insight into action.",
+          "rising": "Curated tool recommendations for my role",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Other",
+          "watchout": "You flagged 1 blocker — focus on one friction point at a time to compound progress quickly.",
+          "shareText": "```\n________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/\n```\n\n🧠 GALE AI Persona: Decision Analyst\n\nSignature: You present as Decision Analyst — combining high experimental energy, focused versatility, and a pragmatic operating style. Your prompt refinement signal is strong.\n\nSuperpower: You combine synthesis, evidence, and execution framing effectively.\n\nNext Move: Scale your analysis patterns into templates the wider team can reuse.\n\nMantra: Insight into action.\n\nCurrent vibe: Curated tool recommendations for my role\n\nDomain: Other"
+        }
+      }
+    },
+    {
+      "id": "molujkxi-u3hd2z",
+      "respondentKey": "molujk1w-qwp5r0foqp",
+      "fingerprint": "d318c9343e5d76fa3e371689c99ffd9dc7a512c95eeb5539525de2a6592a624a",
+      "createdAt": "2026-04-30T18:57:57.942Z",
+      "updatedAt": "2026-04-30T18:57:57.942Z",
+      "receivedAt": "2026-04-30T18:57:57.942Z",
+      "payload": {
+        "submittedAt": "2026-04-30T18:57:56.804Z",
+        "respondentKey": "molujk1w-qwp5r0foqp",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 22,
+        "scoreBreakdown": {
+          "q1": 1.5,
+          "q2a": 1.6,
+          "q3": 1.5,
+          "q4": 2.5,
+          "qv1": 2.4,
+          "q2_profile": 3.1,
+          "c1_readiness": 0.8,
+          "t1_tool_profile": 1.1,
+          "s0_outputs": 1.9,
+          "s1_activities": 4.8,
+          "non_dev_advanced_bonus": 0.8
+        },
+        "tier": "Tier 1",
+        "tierLabel": "Advanced: ready to fully integrate rich experience into GALE systems",
+        "tierDesc": "Strong evidence of advanced application, automation depth, and reliable quality controls",
+        "trackRecommendation": "Advanced builder track",
+        "flags": [],
+        "subtags": [
+          "Agency workflow evidence",
+          "Prompting depth",
+          "Data & documents depth",
+          "Workflow depth",
+          "Wants prompting support",
+          "Wants advanced implementation support",
+          "Verification-first",
+          "Wants peer examples"
+        ],
+        "mergeRecommendation": true,
+        "responses": {
+          "d1": "SEO",
+          "c1": "Comfortable — it's part of my regular workflow",
+          "q1": "Daily for specific tasks",
+          "t1": [
+            "ChatGPT",
+            "ALCHEMY AI",
+            "NotebookLM"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "q2": [
+            "Writing and editing",
+            "Brainstorming and ideation",
+            "Data analysis or spreadsheets",
+            "Client work and deliverables",
+            "Slides, docs, decks",
+            "Image, video, or design generation",
+            "Research and synthesis"
+          ],
+          "q2b": [
+            "Writing and editing",
+            "Brainstorming and ideation",
+            "Research and synthesis"
+          ],
+          "q2c": [],
+          "q2a": "Structured — I usually give it context, role, and constraints",
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "qv1": "Verify against original sources/materials before proceeding",
+          "s0": [
+            "Competitive or market research synthesis",
+            "Media brief or creative brief"
+          ],
+          "s1": [
+            "Use role/context-rich prompts (beyond basic ask/answer)",
+            "Use AI with documents or data to produce analysis or recommendations",
+            "Turn AI output into deliverables shared with others",
+            "Use AI as part of recurring workflows"
+          ],
+          "outside_ai": [
+            "Curious but cautious"
+          ],
+          "blockers": [
+            "Don't know which tool to use when"
+          ],
+          "astro_feedback_choice": "not_quite",
+          "program_topics": [
+            "GALE tools and ALCHEMY AI",
+            "Image, video, and multimodal generation",
+            "Slides, docs, and content creation",
+            "Agentic AI and autonomous workflows",
+            "Best practices and frameworks",
+            "Tool comparisons and what's new",
+            "Vibe coding and building tools"
+          ],
+          "q15": [
+            "State of the Union briefings on what's new",
+            "Live demos of tools and workflows",
+            "Show-and-tell from GALE colleagues",
+            "Guided tutorials with takeaway materials",
+            "Short tactical tips (5-min segments)",
+            "Guest speakers from outside GALE"
+          ],
+          "s2": [
+            "Templates and starter prompts I can steal",
+            "A library of GALE-built Skills and workflows",
+            "Just keep doing what you're doing"
+          ]
+        },
+        "aiProfile": {
+          "sign": "Intelligence Director",
+          "emoji": "🎯",
+          "asciiArt": " ______          __           ___    ___\n/\\__  _\\        /\\ \\__       /\\_ \\  /\\_ \\    __\n\\/_/\\ \\/     ___\\ \\ ,_\\    __\\//\\ \\ \\//\\ \\  /\\_\\     __      __    ___     ___     __\n   \\ \\ \\   /' _ `\\ \\ \\/  /'__`\\\\ \\ \\  \\ \\ \\ \\/\\ \\  /'_ `\\  /'__`\\/' _ `\\  /'___\\ /'__`\\\n    \\_\\ \\__/\\ \\/\\ \\ \\ \\_/\\  __/ \\_\\ \\_ \\_\\ \\_\\ \\ \\/\\ \\L\\ \\/\\  __//\\ \\/\\ \\/\\ \\__//\\  __/\n    /\\_____\\ \\_\\ \\_\\ \\__\\ \\____\\/\\____\\/\\____\\\\ \\_\\ \\____ \\ \\____\\ \\_\\ \\_\\ \\____\\ \\____\\\n    \\/_____/\\/_/\\/_/\\/__/\\/____/\\/____/\\/____/ \\/_/\\/___L\\ \\/____/\\/_/\\/_/\\/____/\\/____/\n                                                     /\\____/\n                                                     \\_/__/\n ____                            __\n/\\  _`\\   __                    /\\ \\__\n\\ \\ \\/\\ \\/\\_\\  _ __    __    ___\\ \\ ,_\\   ___   _ __\n \\ \\ \\ \\ \\/\\ \\/\\`'__\\/'__`\\ /'___\\ \\ \\/  / __`\\/\\`'__\\\n  \\ \\ \\_\\ \\ \\ \\ \\ \\//\\  __//\\ \\__/\\ \\ \\_/\\ \\L\\ \\ \\ \\/\n   \\ \\____/\\ \\_\\ \\_\\\\ \\____\\ \\____\\\\ \\__\\ \\____/\\ \\_\\\n    \\/___/  \\/_/\\/_/ \\/____/\\/____/ \\/__/\\/___/  \\/_/",
+          "signature": "You present as Intelligence Director — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
+          "spotlight": "You lead with evidence and quality control under real delivery pressure.",
+          "superpower": "You raise decision quality while maintaining execution speed.",
+          "nextMove": "Standardize QA checkpoints that others can adopt consistently.",
+          "mantra": "Rigor is a multiplier.",
+          "rising": "Templates and starter prompts I can steal",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "SEO",
+          "watchout": "You flagged 1 blocker — focus on one friction point at a time to compound progress quickly.",
+          "shareText": "```\n ______          __           ___    ___\n/\\__  _\\        /\\ \\__       /\\_ \\  /\\_ \\    __\n\\/_/\\ \\/     ___\\ \\ ,_\\    __\\//\\ \\ \\//\\ \\  /\\_\\     __      __    ___     ___     __\n   \\ \\ \\   /' _ `\\ \\ \\/  /'__`\\\\ \\ \\  \\ \\ \\ \\/\\ \\  /'_ `\\  /'__`\\/' _ `\\  /'___\\ /'__`\\\n    \\_\\ \\__/\\ \\/\\ \\ \\ \\_/\\  __/ \\_\\ \\_ \\_\\ \\_\\ \\ \\/\\ \\L\\ \\/\\  __//\\ \\/\\ \\/\\ \\__//\\  __/\n    /\\_____\\ \\_\\ \\_\\ \\__\\ \\____\\/\\____\\/\\____\\\\ \\_\\ \\____ \\ \\____\\ \\_\\ \\_\\ \\____\\ \\____\\\n    \\/_____/\\/_/\\/_/\\/__/\\/____/\\/____/\\/____/ \\/_/\\/___L\\ \\/____/\\/_/\\/_/\\/____/\\/____/\n                                                     /\\____/\n                                                     \\_/__/\n ____                            __\n/\\  _`\\   __                    /\\ \\__\n\\ \\ \\/\\ \\/\\_\\  _ __    __    ___\\ \\ ,_\\   ___   _ __\n \\ \\ \\ \\ \\/\\ \\/\\`'__\\/'__`\\ /'___\\ \\ \\/  / __`\\/\\`'__\\\n  \\ \\ \\_\\ \\ \\ \\ \\ \\//\\  __//\\ \\__/\\ \\ \\_/\\ \\L\\ \\ \\ \\/\n   \\ \\____/\\ \\_\\ \\_\\\\ \\____\\ \\____\\\\ \\__\\ \\____/\\ \\_\\\n    \\/___/  \\/_/\\/_/ \\/____/\\/____/ \\/__/\\/___/  \\/_/\n```\n\n🎯 GALE AI Persona: Intelligence Director\n\nSignature: You present as Intelligence Director — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You raise decision quality while maintaining execution speed.\n\nNext Move: Standardize QA checkpoints that others can adopt consistently.\n\nMantra: Rigor is a multiplier.\n\nCurrent vibe: Templates and starter prompts I can steal\n\nDomain: SEO"
         }
       }
     }
