@@ -1,5 +1,5 @@
 {
-  "count": 16,
+  "count": 17,
   "submissions": [
     {
       "id": "mnxd9w09-p9vjy9",
@@ -2017,6 +2017,123 @@
           "domain": "SEO",
           "watchout": "You flagged 1 blocker — focus on one friction point at a time to compound progress quickly.",
           "shareText": "```\n ______          __           ___    ___\n/\\__  _\\        /\\ \\__       /\\_ \\  /\\_ \\    __\n\\/_/\\ \\/     ___\\ \\ ,_\\    __\\//\\ \\ \\//\\ \\  /\\_\\     __      __    ___     ___     __\n   \\ \\ \\   /' _ `\\ \\ \\/  /'__`\\\\ \\ \\  \\ \\ \\ \\/\\ \\  /'_ `\\  /'__`\\/' _ `\\  /'___\\ /'__`\\\n    \\_\\ \\__/\\ \\/\\ \\ \\ \\_/\\  __/ \\_\\ \\_ \\_\\ \\_\\ \\ \\/\\ \\L\\ \\/\\  __//\\ \\/\\ \\/\\ \\__//\\  __/\n    /\\_____\\ \\_\\ \\_\\ \\__\\ \\____\\/\\____\\/\\____\\\\ \\_\\ \\____ \\ \\____\\ \\_\\ \\_\\ \\____\\ \\____\\\n    \\/_____/\\/_/\\/_/\\/__/\\/____/\\/____/\\/____/ \\/_/\\/___L\\ \\/____/\\/_/\\/_/\\/____/\\/____/\n                                                     /\\____/\n                                                     \\_/__/\n ____                            __\n/\\  _`\\   __                    /\\ \\__\n\\ \\ \\/\\ \\/\\_\\  _ __    __    ___\\ \\ ,_\\   ___   _ __\n \\ \\ \\ \\ \\/\\ \\/\\`'__\\/'__`\\ /'___\\ \\ \\/  / __`\\/\\`'__\\\n  \\ \\ \\_\\ \\ \\ \\ \\ \\//\\  __//\\ \\__/\\ \\ \\_/\\ \\L\\ \\ \\ \\/\n   \\ \\____/\\ \\_\\ \\_\\\\ \\____\\ \\____\\\\ \\__\\ \\____/\\ \\_\\\n    \\/___/  \\/_/\\/_/ \\/____/\\/____/ \\/__/\\/___/  \\/_/\n```\n\n🎯 GALE AI Persona: Intelligence Director\n\nSignature: You present as Intelligence Director — combining high experimental energy, wide versatility, and a pragmatic operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You raise decision quality while maintaining execution speed.\n\nNext Move: Standardize QA checkpoints that others can adopt consistently.\n\nMantra: Rigor is a multiplier.\n\nCurrent vibe: Templates and starter prompts I can steal\n\nDomain: SEO"
+        }
+      }
+    },
+    {
+      "id": "mom5cmi0-ul20w5",
+      "respondentKey": "mom5clsl-retwged52k",
+      "fingerprint": "0bd3b275bce558465f9c6e3b92fe36dfccb23c773fff7438342b15f210417f64",
+      "createdAt": "2026-05-01T00:00:29.160Z",
+      "updatedAt": "2026-05-01T00:00:29.160Z",
+      "receivedAt": "2026-05-01T00:00:29.160Z",
+      "payload": {
+        "submittedAt": "2026-05-01T00:00:28.245Z",
+        "respondentKey": "mom5clsl-retwged52k",
+        "quizVersion": "revised",
+        "scoreModel": "revised_v1",
+        "score": 17.7,
+        "scoreBreakdown": {
+          "q1": 2,
+          "q2a": 1,
+          "q3": 1.5,
+          "q4": 2.5,
+          "qv1": 2.4,
+          "q2_profile": 2.9,
+          "c1_readiness": 1.2,
+          "t1_tool_profile": 0.6,
+          "s0_outputs": 1,
+          "s1_activities": 2.6
+        },
+        "tier": "Tier 2",
+        "tierLabel": "Ready to expand current use cases",
+        "tierDesc": "Consistent practical usage with room to scale into stronger cross-team and system-level workflows",
+        "trackRecommendation": "Applied acceleration track",
+        "flags": [],
+        "subtags": [
+          "Agency workflow evidence",
+          "Workflow depth",
+          "Wants advanced implementation support",
+          "Verification-first"
+        ],
+        "mergeRecommendation": false,
+        "responses": {
+          "d1": "Data Science and Analytics",
+          "c1": "Building — I'm making things with it (prompts, workflows, tools, code)",
+          "q1": "Constantly — it's woven into how I work",
+          "t1": [
+            "Perplexity",
+            "GitHub Copilot"
+          ],
+          "t1b": [],
+          "t1d": [],
+          "t1c": [],
+          "q2": [
+            "Writing and editing",
+            "Conversational Q&A",
+            "Brainstorming and ideation",
+            "Slides, docs, decks",
+            "Data analysis or spreadsheets",
+            "Client work and deliverables"
+          ],
+          "q2b": [
+            "Data analysis or spreadsheets",
+            "Client work and deliverables",
+            "Slides, docs, decks"
+          ],
+          "q2c": [],
+          "q2a": "Go with the flow — I start loose and refine as I go",
+          "q2a1": "I include some structure, but I’m still refining what works",
+          "q3": "Sometimes",
+          "q4": "Yes",
+          "qv1": "Verify against original sources/materials before proceeding",
+          "s0": [
+            "Campaign reporting or performance summary"
+          ],
+          "s1": [
+            "Use AI as part of recurring workflows",
+            "Turn AI output into deliverables shared with others"
+          ],
+          "outside_ai": [
+            "I am overwhelmed by it",
+            "I use it as a creative outlet"
+          ],
+          "blockers": [
+            "Nothing's blocking me — I just want to go deeper"
+          ],
+          "astro_feedback_choice": "nailed_it",
+          "program_topics": [
+            "GALE tools and ALCHEMY AI",
+            "Slides, docs, and content creation",
+            "Claude Skills, Projects, and memory"
+          ],
+          "q15": [
+            "Live demos of tools and workflows",
+            "Guided tutorials with takeaway materials",
+            "Short tactical tips (5-min segments)"
+          ],
+          "s2": [
+            "1:1 office hours with someone more advanced",
+            "Recordings of past sessions",
+            "A library of GALE-built Skills and workflows"
+          ],
+          "feedback_change": "More hands on examples would greatly help adoption across company",
+          "share_segment_name": ""
+        },
+        "aiProfile": {
+          "sign": "Decision Analyst",
+          "emoji": "🧠",
+          "asciiArt": "________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/",
+          "signature": "You present as Decision Analyst — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.",
+          "spotlight": "You operate with strong analytical judgment and practical rigor.",
+          "superpower": "You combine synthesis, evidence, and execution framing effectively.",
+          "nextMove": "Scale your analysis patterns into templates the wider team can reuse.",
+          "mantra": "Insight into action.",
+          "rising": "1:1 office hours with someone more advanced",
+          "operatingStyleLabel": "Operating style: quality-first",
+          "domain": "Data Science and Analytics",
+          "watchout": "Protect consistency by keeping one clear QA step in every important workflow.",
+          "shareText": "```\n________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/\n```\n\n🧠 GALE AI Persona: Decision Analyst\n\nSignature: You present as Decision Analyst — combining high experimental energy, wide versatility, and a pragmatic operating style. You’re close to a major quality jump with tighter prompt loops. You also show real applied delivery evidence.\n\nSuperpower: You combine synthesis, evidence, and execution framing effectively.\n\nNext Move: Scale your analysis patterns into templates the wider team can reuse.\n\nMantra: Insight into action.\n\nCurrent vibe: 1:1 office hours with someone more advanced\n\nDomain: Data Science and Analytics"
         }
       }
     }
