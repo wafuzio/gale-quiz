@@ -1488,10 +1488,10 @@
       "respondentKey": "molsgpue-b49vk2km1f",
       "fingerprint": "aa0db10bb60b99085cccbdff27df00339727d9010382c7a5061947b810e3dda4",
       "createdAt": "2026-04-30T17:59:45.987Z",
-      "updatedAt": "2026-04-30T17:59:45.987Z",
-      "receivedAt": "2026-04-30T17:59:45.987Z",
+      "updatedAt": "2026-05-06T15:50:35.981Z",
+      "receivedAt": "2026-05-06T15:50:35.981Z",
       "payload": {
-        "submittedAt": "2026-04-30T17:59:45.110Z",
+        "submittedAt": "2026-05-06T15:50:35.141Z",
         "respondentKey": "molsgpue-b49vk2km1f",
         "quizVersion": "revised",
         "scoreModel": "revised_v1",
@@ -1531,8 +1531,8 @@
           "c1_note": "I'm comfortable with chat and use that daily, but I'm still dabbling with projects, skills, apps and integrating it into my workflow, but am actively building here and there. Choosing comfotable since it seems to be the middle choice",
           "q1": "Daily for specific tasks",
           "t1": [
-            "ALCHEMY AI",
-            "Claude"
+            "Claude",
+            "ALCHEMY AI"
           ],
           "t1b": [],
           "t1d": [],
@@ -1618,15 +1618,15 @@
           "emoji": "🧠",
           "asciiArt": "________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/",
           "signature": "You present as Decision Analyst — combining high experimental energy, wide versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.",
-          "spotlight": "You operate with strong analytical judgment and practical rigor.",
-          "superpower": "You combine synthesis, evidence, and execution framing effectively.",
+          "spotlight": "You're developing a reliable instinct for when data needs to drive the decision.",
+          "superpower": "You combine synthesis and evidence to strengthen how you frame recommendations.",
           "nextMove": "Scale your analysis patterns into templates the wider team can reuse.",
           "mantra": "Insight into action.",
           "rising": "Templates and starter prompts I can steal",
           "operatingStyleLabel": "Operating style: speed-first",
           "domain": "Paid Media",
           "watchout": "You flagged 2 blockers — focus on one friction point at a time to compound progress quickly.",
-          "shareText": "```\n________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/\n```\n\n🧠 GALE AI Persona: Decision Analyst\n\nSignature: You present as Decision Analyst — combining high experimental energy, wide versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You combine synthesis, evidence, and execution framing effectively.\n\nNext Move: Scale your analysis patterns into templates the wider team can reuse.\n\nMantra: Insight into action.\n\nCurrent vibe: Templates and starter prompts I can steal\n\nDomain: Paid Media"
+          "shareText": "```\n________                .__       .__\n\\______ \\   ____   ____ |__| _____|__| ____   ____\n |    |  \\_/ __ \\_/ ___\\|  |/  ___/  |/  _ \\ /    \\\n |    `   \\  ___/\\  \\___|  |\\___ \\|  (  <_> )   |  \\\n/_______  /\\___  >\\___  >__/____  >__|\\____/|___|  /\n        \\/     \\/     \\/        \\/               \\/\n   _____                .__                  __\n  /  _  \\   ____ _____  |  | ___.__. _______/  |_\n /  /_\\  \\ /    \\\\__  \\ |  |<   |  |/  ___/\\   __\\\n/    |    \\   |  \\/ __ \\|  |_\\___  |\\___ \\  |  |\n\\____|__  /___|  (____  /____/ ____/____  > |__|\n        \\/     \\/     \\/     \\/         \\/\n```\n\n🧠 GALE AI Persona: Decision Analyst\n\nSignature: You present as Decision Analyst — combining high experimental energy, wide versatility, and a chaos-leaning operating style. Your prompt refinement signal is strong. You also show real applied delivery evidence.\n\nSuperpower: You combine synthesis and evidence to strengthen how you frame recommendations.\n\nNext Move: Scale your analysis patterns into templates the wider team can reuse.\n\nMantra: Insight into action.\n\nCurrent vibe: Templates and starter prompts I can steal\n\nDomain: Paid Media"
         }
       }
     },
